@@ -1,0 +1,26 @@
+{
+  "name": "workspace",
+  "version": "0.0.1",
+  "description": "Storybook Addon to show pseudo states",
+  "main": "index.js",
+  "directories": {
+    "test": "test",
+    "dist": "dist"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "author": "Philipp Schardt",
+  "license": "ISC",
+  "devDependencies": {
+    "@storybook/addons": "^5.1.11",
+    "@storybook/api": "^5.1.11",
+    "@types/node": "^12.7.2",
+    "@types/react": "^16.9.2",
+    "typescript": "^3.5.3"
+  },
+  "peerDependencies": {
+    "react": "^16.9.0"
+  }
+}
