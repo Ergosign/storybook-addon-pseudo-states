@@ -1,24 +1,28 @@
 {
-  "name": "workspace",
+  "name": "@storybook/addon-pseudo-states",
   "version": "0.0.1",
   "description": "Storybook Addon to show pseudo states",
-  "main": "index.js",
+  "main": "dist/index.js",
   "directories": {
     "test": "test",
     "dist": "dist"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "tsc",
+    "watch": "tsc --watch --outDir dist"
   },
   "author": "Philipp Schardt",
   "license": "ISC",
   "devDependencies": {
-    "@storybook/addons": "^5.1.11",
-    "@storybook/api": "^5.1.11",
     "@types/node": "^12.7.2",
     "@types/react": "^16.9.2",
     "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "@storybook/addons": "^5.1.11",
+    "@storybook/api": "^5.1.11",
+    "@storybook/core-events": "^5.1.11"
   },
   "peerDependencies": {
     "react": "^16.9.0"

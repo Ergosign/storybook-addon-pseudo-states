@@ -10,7 +10,7 @@ class PseudoStateGenerator extends React.Component {
     }
 }
 
-export default makeDecorator({
+export const withPseudo = makeDecorator({
     name: 'withPseudo',
     parameterName: 'pseudo',
     // This means don't run this decorator if the withPseudo decorator is not set
@@ -40,7 +40,7 @@ export default makeDecorator({
     // debugger;
         ele.content.firstChild.classList.add('testclass');
         //
-        console.log('after', story, story.getHTML(), story.getTemplateElement());
+        // console.log('after', story, story.getHTML(), story.getTemplateElement());
         // story.strings = [story.strings, story.strings].flat();
 
         // const first = '<PseudoStateGenerator>' + story.strings[0];
@@ -48,10 +48,10 @@ export default makeDecorator({
         //
         // const test = [first, story.strings.slice(1, -1), last].flat();
 
-        return <div> test {story} </div>;
-        //  return story;
+        // return <div> test {story} </div>;
+         return story;
         // return null;
     }
 });
 
-console.log('register decorator');
+console.log('register decorator', 'hiho', 'hohoho');

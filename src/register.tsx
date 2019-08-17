@@ -102,4 +102,4 @@ addons.register(ADDON_ID, (api: API) => {
     // });
 });
 
-console.log('pseudo state addon registerd');
+console.log('pseudo state addon registerd', 'test test wtf');
