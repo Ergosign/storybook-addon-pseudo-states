@@ -1,12 +1,13 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import addons, {makeDecorator} from '@storybook/addons';
+import {html} from "lit-html";
 
-class PseudoStateGenerator extends React.Component {
+class PseudoStateGenerator extends React.Component<any, any> {
 
-    render () {
+    render() {
         console.log('pseudostategenerator');
 
-        return <div>tool test</div>;
+        return <Fragment><div>tool test</div></Fragment>;
     }
 }
 
@@ -16,9 +17,10 @@ export const withPseudo = makeDecorator({
     // This means don't run this decorator if the withPseudo decorator is not set
     skipIfNoParametersOrOptions: false,
     allowDeprecatedUsage: false,
-    wrapper: (getStory, context, {parameters}) => {
+    wrapper: (getStory, context, {options, parameters}) => {
         // Get an instance to the channel where you can communicate with the manager and the preview.
         const channel = addons.getChannel();
+        const story = getStory(context);
 
         // Our simple API above simply sets the notes parameter to a string,
         // which we send to the channel
@@ -29,27 +31,30 @@ export const withPseudo = makeDecorator({
         //  story.classList.add('testclass');
         //  return html`<div> test ${story} </div>`;
 
-        const story = getStory(context);
-        console.log('context', context, parameters);
-
-        // console.log('story', story);
-
-        // console.log('before', story, story.getHTML(), story.getTemplateElement());
-        //
-        const ele = story.getTemplateElement();
-    // debugger;
-        ele.content.firstChild.classList.add('testclass');
-        //
-        // console.log('after', story, story.getHTML(), story.getTemplateElement());
-        // story.strings = [story.strings, story.strings].flat();
-
-        // const first = '<PseudoStateGenerator>' + story.strings[0];
-        // const last = story.strings[story.strings.length - 1] + '</PseudoStateGenerator>';
+        console.log('context', context, options, parameters);
         //
         // const test = [first, story.strings.slice(1, -1), last].flat();
+        const container = document.createElement('div');
+        const tmpl = html`<div> test ${story} </div>`;
+        const tmpl2 = <div>so funktioniert's?</div>;
+        // render(tmpl, container);
+        // return <div>so funktioniert's?</div>;
+        console.log('vgl', story, '2', tmpl, '3', tmpl2);
 
-        // return <div> test {story} </div>;
-         return story;
+        const parser = new DOMParser();
+        // var el = parser.parseFromString(`<div>testing</div>`, "text/html");
+        const el = document.createElement('span');
+        el.innerHTML = 'testing';
+        container.append(tmpl.getTemplateElement());
+
+        // return <PseudoStateGenerator stroy={story}/>;
+
+        const test = <Fragment><div>tool test {getStory(context)}</div></Fragment>;
+
+        console.log('test', test);
+        // return html`<div>lit-html test</div>`;
+        // return () => <Fragment><div>tool test {getStory(context)}</div></Fragment>;
+        return story;
         // return null;
     }
 });
