@@ -1,13 +1,15 @@
 import React, {Fragment} from 'react';
+import ReactDOM from 'react-dom';
 import addons, {makeDecorator} from '@storybook/addons';
-import {html} from "lit-html";
 
 class PseudoStateGenerator extends React.Component<any, any> {
 
     render() {
         console.log('pseudostategenerator');
 
-        return <Fragment><div>tool test</div></Fragment>;
+        return <Fragment>
+            <div>tool test</div>
+        </Fragment>;
     }
 }
 
@@ -30,12 +32,42 @@ export const withPseudo = makeDecorator({
         // plain html
         //  story.classList.add('testclass');
         //  return html`<div> test ${story} </div>`;
+        /*
+                console.log('context', context, options, parameters);
+                //
+                // const test = [first, story.strings.slice(1, -1), last].flat();
+                const container = document.createElement('div');
 
-        console.log('context', context, options, parameters);
-        //
-        // const test = [first, story.strings.slice(1, -1), last].flat();
+                container.append(story.cloneNode(true));
+                story.classList.add('hover');
+
+                container.append(story);
+
+
+                return container;*/
+
+
+        console.log('story', story);
+
+        // const obj = <div></div>;
+        const obj = document.createElement('div');
+        obj.append(story);
+
         const container = document.createElement('div');
-        const tmpl = html`<div> test ${story} </div>`;
+        container.append(obj);
+
+
+        // ReactDOM.render(obj, container);
+
+        // const test2 = html`<div> wtf: ${story}</div>`;
+        //
+        // console.log(story, test2);
+        //
+        // render(test2, container);
+        // // container.innerHTML = 'test';
+        return container;
+
+        /*const tmpl = html`<div> test ${story} </div>`;
         const tmpl2 = <div>so funktioniert's?</div>;
         // render(tmpl, container);
         // return <div>so funktioniert's?</div>;
@@ -54,8 +86,12 @@ export const withPseudo = makeDecorator({
         console.log('test', test);
         // return html`<div>lit-html test</div>`;
         // return () => <Fragment><div>tool test {getStory(context)}</div></Fragment>;
+
+
+
+
         return story;
-        // return null;
+        // return null;*/
     }
 });
 
