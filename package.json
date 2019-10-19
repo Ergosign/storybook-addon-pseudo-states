@@ -2,7 +2,6 @@
   "name": "@storybook/addon-pseudo-states",
   "version": "0.0.1",
   "description": "Storybook Addon to show pseudo states",
-  "main": "dist/index.js",
   "directories": {
     "test": "test",
     "dist": "dist"
@@ -10,30 +9,33 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "watch": "tsc --watch --outDir dist",
-    "storybook": "start-storybook -p 6007",
-    "build-storybook": "build-storybook"
+    "watch": "tsc --watch --outDir dist"
   },
   "author": "philippone",
   "license": "ISC",
+  "files": [
+    "dist/**/*",
+    "*.js",
+    "*.d.ts"
+  ],
+  "main": "dist/index.js",
   "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@storybook/cli": "^5.1.11",
-    "@storybook/html": "^5.1.11",
-    "@types/node": "^12.7.2",
-    "@types/react": "^16.9.2",
-    "@types/react-dom": "^16.8.5",
+    "@babel/core": "^7.6.4",
+    "@storybook/cli": "^5.2.4",
+    "@storybook/html": "^5.2.4",
+    "@types/node": "^12.11.1",
+    "@types/react": "^16.9.9",
+    "@types/react-dom": "^16.9.2",
     "babel-loader": "^8.0.6",
-    "typescript": "^3.5.3"
+    "typescript": "^3.6.4"
   },
   "dependencies": {
-    "@storybook/addons": "^5.1.11",
-    "@storybook/api": "^5.1.11",
-    "@storybook/core-events": "^5.1.11",
-    "lit-html": "^1.1.2",
-    "react-dom": "^16.9.0"
+    "@storybook/addons": "^5.2.4",
+    "@storybook/api": "^5.2.4",
+    "@storybook/core-events": "^5.2.4"
   },
   "peerDependencies": {
-    "react": "^16.9.0"
+    "react": "^16.10.2",
+    "@storybook/addons": "^5.2.4"
   }
 }
