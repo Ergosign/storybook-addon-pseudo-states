@@ -1,25 +1,18 @@
-import { makeDecorator, StoryContext, StoryFn, StoryGetter, WrapperSettings } from '@storybook/addons';
+import { makeDecorator, MakeDecoratorResult, StoryContext, StoryFn, StoryGetter, WrapperSettings } from '@storybook/addons';
 import parameters from './parameters';
 
 
-function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: WrapperSettings) {
-  const metadata = getStory(context);
+function pseudoStateFn(getStory: StoryGetter,
+                       context: StoryContext,
+                       settings: WrapperSettings): MakeDecoratorResult {
 
-  const retStory = {
-    // @ts-ignore
-    ...metadata
-  };
-  console.log('withPseudoFn', metadata, retStory);
+  console.log(getStory, context, settings);
+  const story = getStory(context);
 
-  return metadata;
 
-  // template: getTemplate(metadata),
-  // moduleMetadata: getModuleMetadata(metadata),
-  // props: {
-  //   ...metadata.props
-  // styles,
-  // }
-// };
+  // TODO do something
+
+  return story;
 }
 
 export const withPseudo = makeDecorator({
@@ -27,5 +20,9 @@ export const withPseudo = makeDecorator({
   wrapper: (getStory: StoryGetter, context: StoryContext, settings: WrapperSettings) => pseudoStateFn(getStory, context, settings)
 });
 
+if (module && module.hot && module.hot.decline) {
+  module.hot.decline();
+}
 
-console.log('load html addon');
+
+console.log('load angular addon');
