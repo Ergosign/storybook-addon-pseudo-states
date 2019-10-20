@@ -14,29 +14,23 @@ export type PseudoState = PseudoStateEnum | string;
 export type AttributeState = AttributeStatesEnum | string;
 
 export type StatesComposition = {
-  pseudo?: { [key: string]: boolean },
-  attributes?: { [key: string]: boolean }
+  pseudo?: Array<PseudoState>,
+  attributes?: Array<AttributeState>
 }
 
-
-export const PseudoStateOrder: Array<PseudoStateEnum | string> = [
+export const PseudoStateOrderDefault: Array<PseudoState> = [
   PseudoStateEnum.FOCUS, PseudoStateEnum.HOVER, PseudoStateEnum.ACTIVE
 ];
+export const AttributesStateOrderDefault: Array<AttributeState> = [
+  AttributeStatesEnum.DISABLED, AttributeStatesEnum.READONLY
+];
 
-export const StatesDefaultComposition: StatesComposition = {
-  pseudo: {
-    'focus': true,
-    'focus-within': false,
-    'hover': true,
-    'active': true
-  },
-  attributes: {
-    'disabled': true,
-    'readonly': false
-  }
+export const StatesCompositionDefault: StatesComposition = {
+  pseudo: PseudoStateOrderDefault,
+  attributes: AttributesStateOrderDefault
 };
 
-export const StatesDefaultInputComposition = {
+export const StatesCompositionDefaultInputC = {
   pseudo: {
     'focus': true,
     'focus-within': false,
