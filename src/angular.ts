@@ -1,14 +1,17 @@
-import { makeDecorator, MakeDecoratorResult, StoryContext, StoryFn, StoryGetter, WrapperSettings } from '@storybook/addons';
+import { makeDecorator, StoryContext, StoryGetter, StoryFn, WrapperSettings } from '@storybook/addons';
 import parameters from './parameters';
+import { WrapperPseudoStateSettings } from './types';
+import { StoryFnAngularReturnType } from '@storybook/angular/dist/client/preview/types';
 
 
 function pseudoStateFn(getStory: StoryGetter,
                        context: StoryContext,
-                       settings: WrapperSettings): MakeDecoratorResult {
+                       settings: WrapperPseudoStateSettings): StoryFnAngularReturnType {
 
   console.log(getStory, context, settings);
-  const story = getStory(context);
+  const story: StoryFnAngularReturnType = getStory(context);
 
+  console.log(story);
 
   // TODO do something
 
@@ -17,6 +20,7 @@ function pseudoStateFn(getStory: StoryGetter,
 
 export const withPseudo = makeDecorator({
   ...parameters,
+  // wrapper: (getStory: StoryGetter, context: StoryContext, settings: WrapperSettings) => test(getStory as StoryFn)
   wrapper: (getStory: StoryGetter, context: StoryContext, settings: WrapperSettings) => pseudoStateFn(getStory, context, settings)
 });
 

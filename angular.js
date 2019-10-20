@@ -1,3 +1,3 @@
-import fromWithPseudo from './dist/angular';
+import {withPseudo as ps} from './dist/angular';
 
-export const withPseudo = fromWithPseudo;
+export const withPseudo = ps;

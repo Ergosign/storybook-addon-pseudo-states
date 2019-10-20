@@ -94,6 +94,7 @@
 //
 // console.log('register decorator', 'hiho', 'hohoho');
 
+/*
 import { deprecate } from 'util';
 
 
@@ -114,3 +115,4 @@ export default withPseudo;
 if (module && module.hot && module.hot.decline) {
   module.hot.decline();
 }
+*/

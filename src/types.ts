@@ -1,3 +1,5 @@
+import { WrapperSettings } from '@storybook/addons';
+
 export enum PseudoStateEnum {
   HOVER = 'hover',
   ACTIVE = 'active',
@@ -14,9 +16,9 @@ export enum AttributeStatesEnum {
 export type PseudoState = PseudoStateEnum | string;
 export type AttributeState = AttributeStatesEnum | string;
 
-export type StatesComposition = {
-  pseudo?: Array<PseudoState>,
-  attributes?: Array<AttributeState>
+export interface StatesComposition {
+  pseudo?: Array<PseudoState>;
+  attributes?: Array<AttributeState>;
 }
 
 export const PseudoStateOrderDefault: Array<PseudoState> = [
@@ -38,3 +40,14 @@ export const StatesCompositionDefaultInputC = {
   pseudo: PseudoStateOrderDefault,
   attributes: AttributesStateOrderInputDefault
 };
+
+export interface WrapperPseudoStateSettings extends WrapperSettings {
+  parameters: PseudoStatesParameters
+}
+
+export interface PseudoStatesParameters {
+  disabled?: boolean;
+  selector?: string;
+  stateComposition?: StatesComposition;
+  // [key: string]: any;
+}

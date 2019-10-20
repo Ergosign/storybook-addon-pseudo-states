@@ -3,7 +3,7 @@ import parameters from './parameters';
 import {
   AttributeState,
   PseudoState,
-  StatesComposition, StatesCompositionDefault
+  StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings
 } from './types';
 import { style_ps_container } from './styles';
 
@@ -12,7 +12,6 @@ function enablePseudoState(story: any, pseudoState: PseudoState, selector: strin
   let element = story.cloneNode(true);
 
   let stateHostElement: HTMLElement = element;
-  console.log('selector:', selector);
   if (selector) {
     stateHostElement = element.querySelector(selector);
   }
@@ -26,7 +25,6 @@ function enableAttributeState(story: any, attribute: AttributeState, selector: s
   let element = story.cloneNode(true);
 
   let stateHostElement: HTMLElement = element;
-  console.log('selector:', selector);
   if (selector) {
     stateHostElement = element.querySelector(selector);
   }
@@ -57,17 +55,16 @@ function wrapStoryinStateContainer(story: HTMLElement, state: PseudoState | Attr
 
 function pseudoStateFn(getStory: StoryGetter,
                        context: StoryContext,
-                       settings: WrapperSettings) {
+                       settings: WrapperPseudoStateSettings) {
 
-
-  //console.log(getStory, context, settings);
   const story = getStory(context);
 
   const addonDisabled = settings?.parameters?.disabled;
+  // when disabled return default story
   if (addonDisabled) {
     return story;
   }
-  
+
   const container = getStoryContainer();
 
   // use selector form parameters or if not set use settings selector or null
@@ -87,7 +84,6 @@ function pseudoStateFn(getStory: StoryGetter,
     for (const state of composition?.pseudo) {
       const elementWithPseudo = enablePseudoState(story, state, selector);
       container.appendChild(wrapStoryinStateContainer(elementWithPseudo, state));
-      console.log(elementWithPseudo);
     }
   }
 
@@ -96,16 +92,10 @@ function pseudoStateFn(getStory: StoryGetter,
     for (const state of composition?.attributes) {
       const elementWithPseudo = enableAttributeState(story, state, selector);
       container.appendChild(wrapStoryinStateContainer(elementWithPseudo, state));
-      console.log(elementWithPseudo);
     }
   }
 
-
-  if (container.hasChildNodes()) {
-    return container;
-  }
-
-  return story;
+  return container;
 }
 
 export const withPseudo = makeDecorator({

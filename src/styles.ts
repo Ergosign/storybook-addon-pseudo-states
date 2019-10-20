@@ -1,6 +1,6 @@
 export const style_ps_container = {
   style: {
-    display: 'flex',
+    display: 'inline-flex',
     flexDirection: 'column'
   }
 };
