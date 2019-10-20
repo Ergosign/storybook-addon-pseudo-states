@@ -1,9 +1,11 @@
 import { makeDecorator, MakeDecoratorResult, StoryContext, StoryGetter, WrapperSettings } from '@storybook/addons';
 import parameters from './parameters';
 import {
+  AttributeState,
   PseudoState,
   StatesComposition, StatesCompositionDefault
 } from './types';
+import { style_ps_container } from './styles';
 
 function enablePseudoState(story: any, pseudoState: PseudoState, selector: string | null) {
 
@@ -19,6 +21,40 @@ function enablePseudoState(story: any, pseudoState: PseudoState, selector: strin
   return element;
 }
 
+function enableAttributeState(story: any, attribute: AttributeState, selector: string | null) {
+
+  let element = story.cloneNode(true);
+
+  let stateHostElement: HTMLElement = element;
+  console.log('selector:', selector);
+  if (selector) {
+    stateHostElement = element.querySelector(selector);
+  }
+  stateHostElement.setAttribute(attribute, 'true');
+
+  return element;
+}
+
+function getStoryContainer() {
+  const container = document.createElement('div');
+  // container.classList.add('pseudo-states__container');
+  Object.assign(container.style, style_ps_container.style);
+  return container;
+}
+
+function wrapStoryinStateContainer(story: HTMLElement, state: PseudoState | AttributeState) {
+  const stateContainer = document.createElement('div');
+  const header = document.createElement('div');
+  header.innerHTML = state;
+  stateContainer.appendChild(header);
+
+  const content = document.createElement('div');
+  content.appendChild(story);
+  stateContainer.appendChild(content);
+
+  return stateContainer;
+}
+
 function pseudoStateFn(getStory: StoryGetter,
                        context: StoryContext,
                        settings: WrapperSettings) {
@@ -26,7 +62,13 @@ function pseudoStateFn(getStory: StoryGetter,
 
   //console.log(getStory, context, settings);
   const story = getStory(context);
-  const container = document.createElement('div');
+
+  const addonDisabled = settings?.parameters?.disabled;
+  if (addonDisabled) {
+    return story;
+  }
+  
+  const container = getStoryContainer();
 
   // use selector form parameters or if not set use settings selector or null
   const selector: string | null =
@@ -36,19 +78,28 @@ function pseudoStateFn(getStory: StoryGetter,
     settings?.parameters.stateComposition || StatesCompositionDefault;
 
   // show default story at first
+  if (composition?.pseudo && composition?.pseudo.length > 0) {
+    container.appendChild(wrapStoryinStateContainer(story, 'Default'));
+  }
+
   if (composition?.pseudo) {
-
-    if (composition?.pseudo.length > 0) {
-      container.appendChild(story);
-    }
-
     // create pseudo states of story
     for (const state of composition?.pseudo) {
       const elementWithPseudo = enablePseudoState(story, state, selector);
-      container.appendChild(elementWithPseudo);
+      container.appendChild(wrapStoryinStateContainer(elementWithPseudo, state));
       console.log(elementWithPseudo);
     }
   }
+
+  if (composition?.attributes) {
+    // create attribute states of story
+    for (const state of composition?.attributes) {
+      const elementWithPseudo = enableAttributeState(story, state, selector);
+      container.appendChild(wrapStoryinStateContainer(elementWithPseudo, state));
+      console.log(elementWithPseudo);
+    }
+  }
+
 
   if (container.hasChildNodes()) {
     return container;

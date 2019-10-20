@@ -1,8 +1,9 @@
 export enum PseudoStateEnum {
-  FOCUS = 'focus',
   HOVER = 'hover',
+  ACTIVE = 'active',
+  FOCUS = 'focus',
   FOCUS_WITHIN = 'focus-within',
-  ACTIVE = 'active'
+  VISITED = 'visited'
 }
 
 export enum AttributeStatesEnum {
@@ -22,6 +23,9 @@ export const PseudoStateOrderDefault: Array<PseudoState> = [
   PseudoStateEnum.FOCUS, PseudoStateEnum.HOVER, PseudoStateEnum.ACTIVE
 ];
 export const AttributesStateOrderDefault: Array<AttributeState> = [
+  AttributeStatesEnum.DISABLED
+];
+export const AttributesStateOrderInputDefault: Array<AttributeState> = [
   AttributeStatesEnum.DISABLED, AttributeStatesEnum.READONLY
 ];
 
@@ -31,14 +35,6 @@ export const StatesCompositionDefault: StatesComposition = {
 };
 
 export const StatesCompositionDefaultInputC = {
-  pseudo: {
-    'focus': true,
-    'focus-within': false,
-    'hover': true,
-    'active': true
-  },
-  attributes: {
-    'disabled': true,
-    'readonly': true
-  }
+  pseudo: PseudoStateOrderDefault,
+  attributes: AttributesStateOrderInputDefault
 };
