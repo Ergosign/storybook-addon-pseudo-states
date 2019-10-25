@@ -1,5 +1,5 @@
 import React from 'react';
-import { ADDON_ID } from './register';
+import { ADDON_ID } from '../register';
 
 export const TOOL_ID = `${ADDON_ID}/tool`;
 

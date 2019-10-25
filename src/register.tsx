@@ -1,9 +1,7 @@
-
 import React from 'react';
 import addons, { RenderOptions, types } from '@storybook/addons';
 import { API } from '@storybook/api';
-import { PANEL_ID, PseudoStatePanel } from './PseudoStatePanel';
-import { PseudoStateTool, TOOL_ID } from './PseudoStateTool';
+
 
 export const ADDON_ID = 'pseudo-states';
 const PREVIEW_ID = `${ADDON_ID}/preview`;

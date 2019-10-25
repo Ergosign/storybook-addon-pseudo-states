@@ -5,7 +5,7 @@ import {
   Input, Renderer2,
   TemplateRef, ViewChild
 } from '@angular/core';
-import { PseudoState, PseudoStateEnum, StatesComposition } from "./types";
+import { PseudoState, PseudoStateEnum, StatesComposition } from "../share/types";
 
 
 @Component({
