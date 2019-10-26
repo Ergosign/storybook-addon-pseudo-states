@@ -4,7 +4,7 @@ import { style_ps_container } from '../share/styles';
 import parameters from '../share/parameters';
 
 
-function enablePseudoState(story: any, pseudoState: PseudoState, selector: string | Array<string> | null) {
+function enablePseudoState(story: any, pseudoState: PseudoState, selector: string | Array<string> | null, prefix: string | null) {
 
   let element = story.cloneNode(true);
 
@@ -12,7 +12,8 @@ function enablePseudoState(story: any, pseudoState: PseudoState, selector: strin
   if (selector) {
     stateHostElement = element.querySelector(selector);
   }
-  stateHostElement?.classList?.add(pseudoState);
+  const stateClass = prefix ? prefix : '' + pseudoState;
+  stateHostElement?.classList?.add(stateClass);
 
   return element;
 }
@@ -26,6 +27,9 @@ function enableAttributeState(story: any, attribute: AttributeState, selector: s
     stateHostElement = element.querySelector(selector);
   }
   stateHostElement.setAttribute(attribute, 'true');
+
+  // set on host too
+  element.setAttribute(attribute, 'true');
 
   return element;
 }
@@ -72,6 +76,8 @@ function pseudoStateFn(getStory: StoryGetter,
   const composition: StatesComposition =
     settings?.parameters.stateComposition || StatesCompositionDefault;
 
+  const prefix : string | null = settings?.parameters?.prefix || null;
+
   // show default story at first
   if (composition?.pseudo && composition?.pseudo.length > 0) {
     container.appendChild(wrapStoryinStateContainer(story, 'Default'));
@@ -80,7 +86,7 @@ function pseudoStateFn(getStory: StoryGetter,
   if (composition?.pseudo) {
     // create pseudo states of story
     for (const state of composition?.pseudo) {
-      const elementWithPseudo = enablePseudoState(story, state, selector);
+      const elementWithPseudo = enablePseudoState(story, state, selector, prefix);
       container.appendChild(wrapStoryinStateContainer(elementWithPseudo, state));
     }
   }
@@ -104,6 +110,3 @@ export const withPseudo = makeDecorator({
 if (module && module.hot && module.hot.decline) {
   module.hot.decline();
 }
-
-
-console.log('load html addon');

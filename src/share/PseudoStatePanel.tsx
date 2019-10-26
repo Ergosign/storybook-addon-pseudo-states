@@ -1,11 +1,10 @@
 import { STORY_CHANGED } from '@storybook/core-events';
 import React from 'react';
 import { RenderOptions } from '@storybook/addons';
-import { API } from '@storybook/api';
 import { ADDON_ID } from '../register';
 
 export interface PanelProps extends RenderOptions {
-  api: API;
+  api: any;
 }
 
 export const PANEL_ID = `${ADDON_ID}/panel`;

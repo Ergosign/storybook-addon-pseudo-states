@@ -79,7 +79,6 @@ export class PseudoStateWrapperContainer implements OnInit, AfterViewInit {
     } else {
       hostElement = this.story.nativeElement.querySelector(this.componentSelector);
     }
-    console.log('hostElement', hostElement);
 
     if (this.isAttribute) {
       this.renderer.setAttribute(hostElement, this.pseudoState, 'true');
@@ -89,7 +88,6 @@ export class PseudoStateWrapperContainer implements OnInit, AfterViewInit {
           this.pseudoState, 'true');
       }
     } else {
-      console.log('addClass', this.pseudoState, this.parameters?.prefix, `${this.parameters?.prefix}${this.pseudoState}`);
       this.renderer.addClass(hostElement, `${this.parameters?.prefix}${this.pseudoState}`);
     }
   }

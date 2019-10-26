@@ -59,9 +59,22 @@ export const withPseudo = makeDecorator({
       storyComponent = escape(JSON.stringify(story.component.__annotations__[0]));
     }
 
-    const newTemplate = story.template ?
-      // TODO component parameters are lost
-      story.template : `<${compInternal.selector}>${compInternal.template}</${compInternal.selector}>`;
+    let newTemplate = story.template;
+    // if story has no template, set up component with provided proerties
+    if (!newTemplate ) {
+      let propertyString = ``;
+
+      for (const property in story?.props) {
+        // check if component has property with the same key
+        const componentProperty = story?.component?.__prop__metadata__[property];
+
+        if (componentProperty) {
+          propertyString += `[${property}]="${property}" `;
+        }
+      }
+
+      newTemplate = `<${compInternal.selector} ${propertyString}>${compInternal.template}</${compInternal.selector}>`
+    }
 
 
     return {
