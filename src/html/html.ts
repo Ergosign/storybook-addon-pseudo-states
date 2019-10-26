@@ -1,7 +1,10 @@
-import { makeDecorator, StoryContext, StoryGetter, WrapperSettings } from '@storybook/addons';
+import { addons, makeDecorator, StoryContext, StoryGetter, WrapperSettings } from '@storybook/addons';
 import { AttributeState, PseudoState, StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
 import { style_ps_container } from '../share/styles';
 import parameters from '../share/parameters';
+import { PseudoStateEventsEnum } from '../share/events';
+import { API, useChannel } from '@storybook/api';
+import { forceReRender } from '@storybook/html';
 
 
 function enablePseudoState(story: any, pseudoState: PseudoState, selector: string | Array<string> | null, prefix: string | null) {
@@ -58,9 +61,18 @@ function pseudoStateFn(getStory: StoryGetter,
                        context: StoryContext,
                        settings: WrapperPseudoStateSettings) {
 
+  const channel = addons.getChannel();
+
+
+
   const story = getStory(context);
 
-  const addonDisabled = settings?.parameters?.disabled;
+  let addonDisabled = settings?.parameters?.disabled || false;
+  channel.on('saps/toolbutton-click', (value) => {
+    console.log('button clicked emitted to addon', value);
+    addonDisabled = value;
+  });
+  channel.emit(PseudoStateEventsEnum.INIT_PSEUDO_STATES, addonDisabled);
   // when disabled return default story
   if (addonDisabled) {
     return story;
@@ -76,7 +88,7 @@ function pseudoStateFn(getStory: StoryGetter,
   const composition: StatesComposition =
     settings?.parameters.stateComposition || StatesCompositionDefault;
 
-  const prefix : string | null = settings?.parameters?.prefix || null;
+  const prefix: string | null = settings?.parameters?.prefix || null;
 
   // show default story at first
   if (composition?.pseudo && composition?.pseudo.length > 0) {

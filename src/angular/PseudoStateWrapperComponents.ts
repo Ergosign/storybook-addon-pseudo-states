@@ -1,5 +1,17 @@
-import { AfterViewInit, Component, ContentChild, ElementRef, Input, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ContentChild,
+  ElementRef,
+  Input, OnDestroy,
+  OnInit,
+  Renderer2,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { PseudoState, PseudoStatesParameters } from '../share/types';
+import { addons } from '@storybook/addons';
 
 
 @Component({
@@ -103,28 +115,30 @@ export class PseudoStateWrapperContainer implements OnInit, AfterViewInit {
                                            [parameters]="storyParams"
                                            [pseudoState]="'Normal'">
           </pseudoe-state-wrapper-container>
-          <ng-container *ngFor="let state of pseudoStates">
-              <pseudoe-state-wrapper-container [template]="storyTempl"
-                                               [selector]="selector"
-                                               [componentSelector]="componentSelector"
-                                               [parameters]="storyParams"
-                                               [pseudoState]="state">
-              </pseudoe-state-wrapper-container>
-          </ng-container>
-          <ng-container *ngFor="let attrState of attributeStates">
-              <pseudoe-state-wrapper-container [template]="storyTempl"
-                                               [selector]="selector"
-                                               [componentSelector]="componentSelector"
-                                               [parameters]="storyParams"
-                                               [isAttribute]="true"
-                                               [pseudoState]="attrState">
-              </pseudoe-state-wrapper-container>
+          isDisabled:{{isDisabled}}
+          <ng-container *ngIf="!isDisabled">
+              <ng-container *ngFor="let state of pseudoStates">
+                  <pseudoe-state-wrapper-container [template]="storyTempl"
+                                                   [selector]="selector"
+                                                   [componentSelector]="componentSelector"
+                                                   [parameters]="storyParams"
+                                                   [pseudoState]="state">
+                  </pseudoe-state-wrapper-container>
+              </ng-container>
+              <ng-container *ngFor="let attrState of attributeStates">
+                  <pseudoe-state-wrapper-container [template]="storyTempl"
+                                                   [selector]="selector"
+                                                   [componentSelector]="componentSelector"
+                                                   [parameters]="storyParams"
+                                                   [isAttribute]="true"
+                                                   [pseudoState]="attrState">
+                  </pseudoe-state-wrapper-container>
+              </ng-container>
           </ng-container>
       </div>`,
   styles: []
 })
-export class PseudoStateWrapperComponent {
-
+export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
 
   @Input()
   get parameters(): string {
@@ -143,7 +157,6 @@ export class PseudoStateWrapperComponent {
 
   private _parameters: string;
 
-
   @Input()
   get storyComponent(): string {
     return this._storyComponent;
@@ -156,8 +169,31 @@ export class PseudoStateWrapperComponent {
       this.componentSelector = tmpStoryComponent?.selector;
     }
   }
-
   private _storyComponent: string;
+
+  @Input() isDisabled = false;
+  private channel = addons.getChannel();
+
+  constructor(/*private _cdRef: ChangeDetectorRef*/) {
+  }
+
+  _buttobClickedHandler(value: boolean) {
+    console.log('button clicked emitted to addon', value);
+    this.isDisabled = value;
+    // this._cdRef.markForCheck();
+    // this._cdRef.detectChanges();
+    // this._cdRef.checkNoChanges();
+  }
+
+  ngOnInit(): void {
+    // this._cdRef.detach();
+
+    this.channel.on('saps/toolbutton-click', this._buttobClickedHandler.bind(this));
+  }
+
+  ngOnDestroy() {
+    this.channel.removeListener('saps/toolbutton-click', this._buttobClickedHandler.bind(this));
+  }
 
   /**
    * all pseudo states to be rendered
