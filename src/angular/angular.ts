@@ -1,5 +1,5 @@
-import { makeDecorator } from '@storybook/addons';
-import { StatesComposition, StatesCompositionDefault } from '../share/types';
+import { makeDecorator, OptionsParameter, StoryContext, StoryGetter, WrapperSettings } from '@storybook/addons';
+import { PseudoStatesParameters, StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
 import { PseudoStateWrapperComponent, PseudoStateWrapperContainer } from './PseudoStateWrapperComponents';
 
 
@@ -15,6 +15,7 @@ function getModuleMetadata(metadata: any) {
   if (component && moduleMetadata) {
     return {
       ...moduleMetadata,
+      // add own wrapper components
       declarations: [...moduleMetadata.declarations, metadata.component, PseudoStateWrapperComponent, PseudoStateWrapperContainer]
     };
   }
@@ -22,26 +23,52 @@ function getModuleMetadata(metadata: any) {
   return moduleMetadata;
 }
 
-
 export const withPseudo = makeDecorator({
   name: 'withPseudo',
   parameterName: 'withPseudo',
   // This means don't run this decorator if the withPseudo decorator is not set
   skipIfNoParametersOrOptions: false,
   allowDeprecatedUsage: false,
-  wrapper: (getStory, context, settings) => {
+  wrapper: (getStory: StoryGetter, context: StoryContext, settings: WrapperPseudoStateSettings) => {
     const metadata = getStory(context);
     const story = getStory(context);
 
     const compInternal = story.component.__annotations__[0];
-    const composition: StatesComposition = StatesCompositionDefault;
 
-    const newTemplate = story.template ? story.template : `<${compInternal.selector}>${compInternal.template}</${compInternal.selector}>`;
+    // are options set by user
+    const options: OptionsParameter = settings?.options;
+
+    // are parameters set by user
+    const parameters: PseudoStatesParameters = settings?.parameters || {};
+
+    if (parameters?.disabled) {
+      return story;
+    }
+
+    let storyParameters = null;
+
+    // use user values or default
+    parameters.stateComposition = parameters.stateComposition || StatesCompositionDefault;
+    if (parameters.prefix || options?.prefix) {
+      parameters.prefix = parameters.prefix || options.prefix;
+    }
+    storyParameters = escape(JSON.stringify(parameters));
+
+    let storyComponent = null;
+    if (story.component && story.component.__annotations__[0]) {
+      storyComponent = escape(JSON.stringify(story.component.__annotations__[0]));
+    }
+
+    const newTemplate = story.template ?
+      // TODO component parameters are lost
+      story.template : `<${compInternal.selector}>${compInternal.template}</${compInternal.selector}>`;
+
 
     return {
       ...metadata,
       template: `<pseudo-state-wrapper 
-                       [statesComposition]="'${escape(JSON.stringify(composition))}'"
+                        [parameters]="'${storyParameters}'"
+                        [storyComponent]="'${storyComponent}'"
                     ><ng-template #storyTmpl>      
                         ${newTemplate}
                         </ng-template>

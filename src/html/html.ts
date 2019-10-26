@@ -1,10 +1,10 @@
-import { makeDecorator, MakeDecoratorResult, StoryContext, StoryGetter, WrapperSettings } from '@storybook/addons';
+import { makeDecorator, StoryContext, StoryGetter, WrapperSettings } from '@storybook/addons';
 import { AttributeState, PseudoState, StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
 import { style_ps_container } from '../share/styles';
 import parameters from '../share/parameters';
 
 
-function enablePseudoState(story: any, pseudoState: PseudoState, selector: string | null) {
+function enablePseudoState(story: any, pseudoState: PseudoState, selector: string | Array<string> | null) {
 
   let element = story.cloneNode(true);
 
@@ -17,7 +17,7 @@ function enablePseudoState(story: any, pseudoState: PseudoState, selector: strin
   return element;
 }
 
-function enableAttributeState(story: any, attribute: AttributeState, selector: string | null) {
+function enableAttributeState(story: any, attribute: AttributeState, selector: string | Array<string> | null) {
 
   let element = story.cloneNode(true);
 
@@ -65,8 +65,9 @@ function pseudoStateFn(getStory: StoryGetter,
   const container = getStoryContainer();
 
   // use selector form parameters or if not set use settings selector or null
-  const selector: string | null =
-    settings?.parameters?.selector || settings?.options?.selector;
+  const selector: string | Array<string> | null =
+    settings?.parameters?.selector || null/*|| settings?.options?.selector*/;
+  // TODO support Array<string>
 
   const composition: StatesComposition =
     settings?.parameters.stateComposition || StatesCompositionDefault;
@@ -97,7 +98,7 @@ function pseudoStateFn(getStory: StoryGetter,
 
 export const withPseudo = makeDecorator({
   ...parameters,
-  wrapper: (getStory: StoryGetter, context: StoryContext, settings: WrapperSettings) => pseudoStateFn(getStory, context, settings)
+  wrapper: (getStory: StoryGetter, context: StoryContext, settings: WrapperPseudoStateSettings) => pseudoStateFn(getStory, context, settings)
 });
 
 if (module && module.hot && module.hot.decline) {

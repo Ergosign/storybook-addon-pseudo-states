@@ -47,7 +47,10 @@ export interface WrapperPseudoStateSettings extends WrapperSettings {
 
 export interface PseudoStatesParameters {
   disabled?: boolean;
-  selector?: string;
+  // query for selector to host element[s] that have to be modified
+  selector?: string | Array<string>;
+  // prefix for state classes that will be added to host element
+  prefix?: string;
   stateComposition?: StatesComposition;
   // [key: string]: any;
 }
