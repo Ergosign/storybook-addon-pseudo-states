@@ -62,9 +62,6 @@ function pseudoStateFn(getStory: StoryGetter,
                        settings: WrapperPseudoStateSettings) {
 
   const channel = addons.getChannel();
-
-
-
   const story = getStory(context);
 
   let addonDisabled = settings?.parameters?.disabled || false;
@@ -86,7 +83,7 @@ function pseudoStateFn(getStory: StoryGetter,
   // TODO support Array<string>
 
   const composition: StatesComposition =
-    settings?.parameters.stateComposition || StatesCompositionDefault;
+    settings?.parameters?.stateComposition || StatesCompositionDefault;
 
   const prefix: string | null = settings?.parameters?.prefix || null;
 
