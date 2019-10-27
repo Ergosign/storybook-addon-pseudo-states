@@ -1,7 +1,7 @@
 import { addons, makeDecorator, StoryContext, StoryGetter, WrapperSettings } from '@storybook/addons';
 import parameters from '../share/parameters';
 import { PseudoState, StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
-import { html, TemplateResult } from 'lit-html';
+import { directive, html, render, TemplateResult } from 'lit-html';
 import { PseudoStateEventsEnum } from '../share/events';
 
 
@@ -95,12 +95,37 @@ const generatePseudoStates = (story: TemplateResult,
                               selector: string | Array<string> | null,
                               prefix: string | null): TemplateResult => {
 
-  const container = html`
-        <div class="pseudo-states-addon__container">
-            ${modifyState(story, 'Normal', null, null)}
-            ${displayStates(story, composition, selector, prefix)}
-        </div>
+  let addonDisabled = false;
+  const channel = addons.getChannel();
+
+
+  // const forceWrite = directive((value) => (part: any) => {
+  //   part.setValue(value);
+  // });
+
+  const tmpl = html`
+        ${modifyState(story, 'Normal', null, null)}
+        ${displayStates(story, composition, selector, prefix)}
     `;
+
+  const container = html`<div class="pseudo-states-addon__container">${tmpl}</div>`;
+
+
+  channel.on('saps/toolbutton-click', (value) => {
+
+    const containerRef = document.querySelector('.pseudo-states-addon__container');
+    console.log('button clicked emitted to addon', value, containerRef);
+
+    addonDisabled = value;
+
+    if (containerRef) {
+      if (value) {
+        render(story, containerRef);
+      } else {
+        render(tmpl, containerRef);
+      }
+    }
+  });
 
   console.log('withPseudo', 'container', container);
 
