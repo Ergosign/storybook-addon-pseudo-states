@@ -119,12 +119,14 @@ import "@storybook/addon-pseudo-states/register";
 ```
 
 ### Usage
-At the moment, only [Component Story Format](https://storybook.js.org/docs/formats/component-story-format/) is supported.
+
 
 > **WARNING**: `withPseudo` should always the first element in your `decorators` array because it alters the template of the story.
 
 
 #### With Angular
+
+At the moment, only [Component Story Format](https://storybook.js.org/docs/formats/component-story-format/) is supported.
 
 ```js
 import { withPseudo } from "@storybook/addon-pseudo-states/angular";
@@ -137,30 +139,78 @@ const section = {
     imports: [CommonModule]
   },
   decorators: [
+    // ButtonComponent's styling has prefixed pseudo-states styling
     withPseudo({ prefix: "pseudoclass--" })
   ],
   parameters: {
-    withPseudo: {selector: 'button'}
+    // <button> exists inside of angular component ButtonComponent 
+    withPseudo: {selector: 'button'} 
   },
 };
 export default section;
 
-const normalButton = {
-  component: ButtonComponent,
-  props: { ...defaultProps },
-  declarations: [ButtonComponent],
-  moduleMetadata: {
-    declarations: [ButtonComponent],
-    imports: [CommonModule]
-  },
-  template: `<test-button [label]="label" [primary]="'primary'" style="display: flex;"></test-button>`
-
+export const Story = () => {
+    return {
+        component: ButtonComponent,
+        moduleMetadata: {
+            declarations: [ButtonComponent],
+            imports: [CommonModule]
+        },
+        // ButtonComponent has same properties as props' keys
+        props: { 
+            label: 'Test Label',
+            anotherProperty: true
+      },
+    };
 };
-export const Normal = () => normalButton;
+
+export const StoryWithTemplate = () => {
+    return {
+        // always provide component!
+        component: ButtonComponent,
+        moduleMetadata: {
+            entryComponents: [ButtonComponent], // required to support other addons, like knobs addon
+            declarations: [ButtonComponent],
+            imports: [CommonModule]
+        },
+        template: `<test-button [label]="label" [anotherProperty]="anotherProperty"></test-button>`,
+        props: { 
+            label: 'Test Label',
+            anotherProperty: true
+      },
+    };
+};
 
 ```
 
 #### With HTML
+
+```js
+storiesOf('Demo', module)
+    .addDecorator(withPseudo)
+    .addParameters({withPseudo: {selector: null}})
+    .add('story1', () => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.innerText = 'Hello World!';
+            button.addEventListener('click', e => console.log(e));
+            return button;
+        }
+    )
+    // story with selecotr on inner element
+    .addParameters({withPseudo: {selector: 'span'}} )
+    .add('story2', () => {
+            const headline = document.createElement('h1');
+            const span = document.createElement('span');
+            span.innerHTML = 'Hello World';
+
+            headline.appendChild(span);
+
+            return headline;
+        }
+    );
+   
+```
 
 
 ## Parameters
