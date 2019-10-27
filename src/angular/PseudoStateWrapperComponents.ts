@@ -197,10 +197,14 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // this._cdRef.detach();
 
+    console.log('oninit');
+    this.channel.
+
     this.channel.on('saps/toolbutton-click', this._buttobClickedHandler.bind(this));
   }
 
   ngOnDestroy() {
+    console.log('onDestroy');
     this.channel.removeListener('saps/toolbutton-click', this._buttobClickedHandler.bind(this));
   }
 
