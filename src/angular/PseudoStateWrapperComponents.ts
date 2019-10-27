@@ -1,14 +1,16 @@
 import {
   AfterViewInit,
-  ChangeDetectorRef,
   Component,
   ContentChild,
   ElementRef,
-  Input, NgZone, OnDestroy,
+  Input,
+  NgZone,
+  OnDestroy,
   OnInit,
   Renderer2,
   TemplateRef,
-  ViewChild
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
 import { PseudoState, PseudoStatesParameters } from '../share/types';
 import { addons } from '@storybook/addons';
@@ -18,7 +20,9 @@ import { addons } from '@storybook/addons';
   selector: 'pseudoe-state-wrapper-container',
   template: `
       <div class="container">
-          <div class="header" *ngIf="!addonDisabled">{{pseudoState}}:</div>
+          <div class="header"
+               *ngIf="!addonDisabled">{{pseudoState}}:
+          </div>
           <div class="story"
                [class.addonDisabled]="addonDisabled"
                #origStoryWrapper>
@@ -26,11 +30,14 @@ import { addons } from '@storybook/addons';
           </div>
       </div>
   `,
+  // TODO allow styling from outside
+  // encapsulation: ViewEncapsulation.None
   styles: [
       `
-      :host {
-          display: flex;
-      }
+		  :host {
+			  display: flex;
+		  }
+
 		  .container:not(.addonDisabled) {
 			  padding: 10px;
 		  }
@@ -85,6 +92,12 @@ export class PseudoStateWrapperContainer implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * add pseudo state/attribute state to host or element found by selector
+   *
+   * @param selector
+   * @private
+   */
   private _modifyStateClass(selector: string | null) {
 
     if (!selector && !this.componentSelector) {
@@ -145,6 +158,14 @@ export class PseudoStateWrapperContainer implements OnInit, AfterViewInit {
 })
 export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
 
+  /**
+   * storybook channel for communication between tool and component
+   */
+  private channel = addons.getChannel();
+
+  /**
+   * Parameters of story passed to the component
+   */
   @Input()
   get parameters(): string {
     return this._parameters;
@@ -162,6 +183,9 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
 
   private _parameters: string;
 
+  /**
+   * Story's component
+   */
   @Input()
   get storyComponent(): string {
     return this._storyComponent;
@@ -171,20 +195,26 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
     this._storyComponent = value;
     if (value) {
       const tmpStoryComponent = JSON.parse(unescape(value));
+      // extract selector
       this.componentSelector = tmpStoryComponent?.selector;
     }
   }
 
   private _storyComponent: string;
 
+
   @Input() isDisabled = false;
-  private channel = addons.getChannel();
 
   constructor(/*private _cdRef: ChangeDetectorRef*/private ngZone: NgZone) {
   }
 
-  _buttobClickedHandler(value: boolean) {
-    console.log('button clicked emitted to addon', value);
+  /**
+   * update disabled state when received toolbutton-click event
+   * @param value
+   * @private
+   */
+  _onDisabledStateChangedHandler(value: boolean) {
+
     // TODO is ngZone best solution?
     this.ngZone.run(() => {
       this.isDisabled = value;
@@ -194,18 +224,15 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
     // this._cdRef.checkNoChanges();
   }
 
+  boundButtonClickHandler = this._onDisabledStateChangedHandler.bind(this);
+
   ngOnInit(): void {
     // this._cdRef.detach();
-
-    console.log('oninit');
-    this.channel.
-
-    this.channel.on('saps/toolbutton-click', this._buttobClickedHandler.bind(this));
+    this.channel.on('saps/toolbutton-click', this.boundButtonClickHandler);
   }
 
   ngOnDestroy() {
-    console.log('onDestroy');
-    this.channel.removeListener('saps/toolbutton-click', this._buttobClickedHandler.bind(this));
+    this.channel.removeListener('saps/toolbutton-click', this.boundButtonClickHandler);
   }
 
   /**
@@ -233,6 +260,9 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
    */
   componentSelector: string;
 
+  /**
+   * TemplateRef of story teamplate
+   */
   @ContentChild('storyTmpl', {static: true}) storyTempl: TemplateRef<any>;
 
 }

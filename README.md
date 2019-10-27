@@ -121,7 +121,7 @@ import "@storybook/addon-pseudo-states/register";
 ### Usage
 At the moment, only [Component Story Format](https://storybook.js.org/docs/formats/component-story-format/) is supported.
 
-> **WARNING**: `withPseudo` should always the first element in your `decorators` array
+> **WARNING**: `withPseudo` should always the first element in your `decorators` array because it alters the template of the story.
 
 
 #### With Angular
