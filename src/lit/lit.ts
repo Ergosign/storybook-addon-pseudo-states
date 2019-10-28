@@ -1,8 +1,9 @@
 import { addons, makeDecorator, StoryContext, StoryGetter, WrapperSettings } from '@storybook/addons';
 import parameters from '../share/parameters';
 import { PseudoState, StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
-import { directive, html, render, TemplateResult } from 'lit-html';
-import { PseudoStateEventsEnum } from '../share/events';
+import { html, render, TemplateResult } from 'lit-html';
+import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
+import { STORY_CHANGED } from '@storybook/core-events';
 
 
 const displayStates = (story: TemplateResult,
@@ -83,13 +84,14 @@ const addStateClass = (host: Element,
         .add(newClass);
     }
   } else if (Array.isArray(selector)) {
-    // TODO
+    for (const s of selector) {
+      addStateClass(host, state, s, prefix);
+    }
   }
 
 };
 
 
-// TODO support Array<string>
 const generatePseudoStates = (story: TemplateResult,
                               composition: StatesComposition,
                               selector: string | Array<string> | null,
@@ -98,23 +100,16 @@ const generatePseudoStates = (story: TemplateResult,
   let addonDisabled = false;
   const channel = addons.getChannel();
 
-
-  // const forceWrite = directive((value) => (part: any) => {
-  //   part.setValue(value);
-  // });
-
   const tmpl = html`
         ${modifyState(story, 'Normal', null, null)}
         ${displayStates(story, composition, selector, prefix)}
     `;
-
   const container = html`<div class="pseudo-states-addon__container">${tmpl}</div>`;
 
 
-  channel.on('saps/toolbutton-click', (value) => {
+  const handleDisableState = (value: boolean) => {
 
     const containerRef = document.querySelector('.pseudo-states-addon__container');
-    console.log('button clicked emitted to addon', value, containerRef);
 
     addonDisabled = value;
 
@@ -125,32 +120,32 @@ const generatePseudoStates = (story: TemplateResult,
         render(tmpl, containerRef);
       }
     }
-  });
+  };
 
-  console.log('withPseudo', 'container', container);
+  // listen for toobar button click
+  channel.on(SAPS_BUTTON_CLICK, handleDisableState);
+
+  // remove listener when story changed
+  const storyChangedListener = channel.once(STORY_CHANGED, () => {
+    channel.removeListener(SAPS_BUTTON_CLICK, handleDisableState);
+    channel.removeAllListeners(SAPS_BUTTON_CLICK);
+  });
 
 
   return container;
 };
 
+
 const pseudoStateFn = (getStory: StoryGetter,
                        context: StoryContext,
                        settings: WrapperPseudoStateSettings): any => {
 
-  console.log(getStory, context, settings);
-
   const channel = addons.getChannel();
   const story = getStory(context) as TemplateResult;
-  console.log('withPseudo', 'story', story);
+  const addonDisabled = settings?.parameters?.disabled || false;
 
-  let addonDisabled = settings?.parameters?.disabled || false;
-
-  channel.on('saps/toolbutton-click', (value) => {
-    console.log('button clicked emitted to addon', value);
-    // TODO update correctly and remove correctly
-    addonDisabled = value;
-  });
-  channel.emit(PseudoStateEventsEnum.INIT_PSEUDO_STATES, addonDisabled);
+  // notify toolbar button
+  channel.emit(SAPS_INIT_PSEUDO_STATES, addonDisabled);
 
   if (addonDisabled) {
     return story;
@@ -178,6 +173,3 @@ export const withPseudo = makeDecorator({
 if (module && module.hot && module.hot.decline) {
   module.hot.decline();
 }
-
-
-console.log('load lit addon');

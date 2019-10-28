@@ -1,10 +1,8 @@
-import { addons, makeDecorator, StoryContext, StoryGetter, WrapperSettings } from '@storybook/addons';
+import { addons, makeDecorator, StoryContext, StoryGetter } from '@storybook/addons';
 import { AttributeState, PseudoState, StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
 import { style_ps_container } from '../share/styles';
 import parameters from '../share/parameters';
-import { PseudoStateEventsEnum } from '../share/events';
-import { API, useChannel } from '@storybook/api';
-import { forceReRender } from '@storybook/html';
+import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
 
 
 function enablePseudoState(story: any, pseudoState: PseudoState, selector: string | Array<string> | null, prefix: string | null) {
@@ -69,7 +67,7 @@ function pseudoStateFn(getStory: StoryGetter,
     console.log('button clicked emitted to addon', value);
     addonDisabled = value;
   });
-  channel.emit(PseudoStateEventsEnum.INIT_PSEUDO_STATES, addonDisabled);
+  channel.emit(SAPS_INIT_PSEUDO_STATES, addonDisabled);
   // when disabled return default story
   if (addonDisabled) {
     return story;

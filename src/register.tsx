@@ -1,14 +1,14 @@
 import React from 'react';
 import addons, { types } from '@storybook/addons';
 import { PseudoStateTool, TOOL_ID } from './share/PseudoStateTool';
-import { PANEL_ID, PseudoStatePanel } from './share/PseudoStatePanel';
-import { API } from '@storybook/api';
+// TODO wtf!?
+// import { API } from '@storybook/addons/node_modules/@storybook/api';
 
 export const ADDON_ID = 'pseudo-states';
 const PREVIEW_ID = `${ADDON_ID}/preview`;
 
 
-addons.register(ADDON_ID, (api) => {
+addons.register(ADDON_ID, (api: any): void => {
 
 
   const title = 'Pseudo States';
@@ -19,7 +19,7 @@ addons.register(ADDON_ID, (api) => {
   //                                                api={api}
   //                                                active={active}/>
   // });
-  
+
   addons.add(TOOL_ID, {
     title: title,
     type: types.TOOL,

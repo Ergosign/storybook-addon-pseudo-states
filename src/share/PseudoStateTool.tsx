@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ADDON_ID } from '../register';
-import { useChannel, useStorybookState } from '@storybook/api';
+import { useChannel } from '@storybook/api';
 import { IconButton } from '@storybook/components';
+import { SAPS_BUTTON_CLICK } from './events';
 
 export const TOOL_ID = `${ADDON_ID}/tool`;
 
@@ -10,36 +11,40 @@ interface Props {
   api: any;
 }
 
-export const PseudoStateTool = (props: any) => {
+export const PseudoStateTool = (props: Props) => {
 
-  let isDisabled = false;
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const buttonStyle = {
+    background: '#1EA7FD',
+    color: 'white'
+  };
 
   const emit = useChannel({
-    STORY_RENDERED: id => { /* do something */
-      console.log('story_Rendered', 'emitted');
+    'storyChanged': () => {
+      setIsVisible(false);
     },
-    'saps/init-pseudo-states': (value) => { /* so something */
+    'saps/init-pseudo-states': (value: boolean) => { /* so something */
 
       console.log('saps/init-pseudo-states', 'emiited', value);
 
-      // PseudoStateTool.isDisabled = value;
+      setIsVisible(true);
+      setIsDisabled(value);
     }
   });
 
   const onButtonClick = () => {
 
     console.log('onButtonClick', props);
-
-    isDisabled = !isDisabled;
-    emit('saps/toolbutton-click', isDisabled);
+    emit(SAPS_BUTTON_CLICK, !isDisabled);
+    setIsDisabled(!isDisabled);
 
     console.log('test button click', emit);
   };
 
-  // render() {
 
-  // return <IconButton onClick={() => emit('saps/toolbutton-click')}></IconButton>;
-  return <IconButton onClick={onButtonClick}>pseudo-states</IconButton>;
-  // }
+  return isVisible ? <IconButton style={!isDisabled ? buttonStyle : undefined} onClick={onButtonClick}>pseudo</IconButton> : null;
+
 };
 

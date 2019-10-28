@@ -16,7 +16,9 @@ This is how it look like:
 | HTML      |        +       |                          |
 | React     |                |                          |
 | Vue       |                |                          |
-| Lit       |                |                          |
+| Lit       |        +       |             +*           |
+
+&ast; Could lead to sync problems with other addons, like knobs
 
 ## Getting started
 
