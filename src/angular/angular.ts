@@ -31,7 +31,6 @@ export const withPseudo = makeDecorator({
   skipIfNoParametersOrOptions: false,
   allowDeprecatedUsage: false,
   wrapper: (getStory: StoryGetter, context: StoryContext, settings: WrapperPseudoStateSettings) => {
-    const metadata = getStory(context);
     const story = getStory(context);
 
     const compInternal = story.component.__annotations__[0];
@@ -83,7 +82,7 @@ export const withPseudo = makeDecorator({
 
 
     return {
-      ...metadata,
+      ...story,
       template: `<pseudo-state-wrapper 
                         [parameters]="'${storyParameters}'"
                         [storyComponent]="'${storyComponent}'"
@@ -91,9 +90,9 @@ export const withPseudo = makeDecorator({
                         ${newTemplate}
                         </ng-template>
                     </pseudo-state-wrapper>`,
-      moduleMetadata: getModuleMetadata(metadata),
+      moduleMetadata: getModuleMetadata(story),
       props: {
-        ...metadata.props
+        ...story.props
       }
     };
   }

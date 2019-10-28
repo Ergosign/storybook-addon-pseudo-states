@@ -140,8 +140,8 @@ const pseudoStateFn = (getStory: StoryGetter,
                        context: StoryContext,
                        settings: WrapperPseudoStateSettings): any => {
 
-  const channel = addons.getChannel();
   const story = getStory(context) as TemplateResult;
+  const channel = addons.getChannel();
   const addonDisabled = settings?.parameters?.disabled || false;
 
   // notify toolbar button

@@ -13,10 +13,10 @@ This is how it look like:
 | Framework | Display States | Tool-Button to show/hide |
 |-----------|:--------------:|:------------------------:|
 | Angular   |        +       |             +            |
-| HTML      |        +       |                          |
-| React     |                |                          |
-| Vue       |                |                          |
+| React     |        +       |             +*           |
 | Lit       |        +       |             +*           |
+| HTML      |        +       |                          |
+| Vue       |                |                          |
 
 &ast; Could lead to sync problems with other addons, like knobs
 
@@ -25,7 +25,7 @@ This is how it look like:
 First of all, you need to install Pseudo States into your project as a dev dependency.
 
 ```sh
-npm install @stroybook/addon-pseudo-states --dev
+npm install @stroybook/addon-pseudo-states --save-dev
 ```
 
 Then, configure it as an addon by adding it to your addons.js file (located in the Storybook config directory).
