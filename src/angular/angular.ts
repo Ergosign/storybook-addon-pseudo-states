@@ -1,6 +1,7 @@
-import { makeDecorator, OptionsParameter, StoryContext, StoryGetter, WrapperSettings } from '@storybook/addons';
+import { addons, makeDecorator, OptionsParameter, StoryContext, StoryGetter, WrapperSettings } from '@storybook/addons';
 import { PseudoStatesParameters, StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
 import { PseudoStateWrapperComponent, PseudoStateWrapperContainer } from './PseudoStateWrapperComponents';
+import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
 
 
 function getModuleMetadata(metadata: any) {
@@ -40,6 +41,10 @@ export const withPseudo = makeDecorator({
 
     // are parameters set by user
     const parameters: PseudoStatesParameters = settings?.parameters || {};
+
+    const channel = addons.getChannel();
+    // notify toolbar button
+    channel.emit(SAPS_INIT_PSEUDO_STATES, parameters.disabled ? parameters.disabled : false);
 
     if (parameters?.disabled) {
       return story;
