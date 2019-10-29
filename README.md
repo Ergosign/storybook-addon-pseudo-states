@@ -185,6 +185,42 @@ export const StoryWithTemplate = () => {
 
 ```
 
+### With React
+
+Presumption:
+- Using CSS Modules
+    -  which providing the pseudo state/attribute styling
+- Component provides prop that controls styling
+    - `export interface ExplComponentProps extends PseudoStateDefaults`
+    - `PseudoStateDefaults extends PseudoStateActive, PseudoStateFocus, PseudoStateHover, PseudoStateDisabled`
+
+```js
+storiesOf('Button', module)
+  .addDecorator(withPseudo)
+  .addParameters({
+    withPseudo: {
+      stateComposition: StatesCompositionDefault
+    }
+  })
+  .add('Button', () => (
+        <Button label="I'm a normal button"/>
+  ))
+
+  .addParameters({
+    withPseudo: {
+        stateComposition: {
+            pseudo: PseudoStateOrderDefault,
+            attributes: [...AttributesStateOrderDefault, 'selected', 'error', 'isLoading', 'isReady']
+        }
+    }
+    })
+  .add('Button', () => (
+      <Button label="I'm a normal button"/>
+  ));
+```
+
+
+
 #### With HTML
 
 ```js
