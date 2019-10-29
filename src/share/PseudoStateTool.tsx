@@ -27,7 +27,7 @@ export const PseudoStateTool = (props: Props) => {
     },
     'saps/init-pseudo-states': (value: boolean) => { /* so something */
 
-      console.log('saps/init-pseudo-states', 'emiited', value);
+      console.log('saps/init-pseudo-states', 'received init', value);
 
       setIsVisible(true);
       setIsDisabled(value);
@@ -36,11 +36,10 @@ export const PseudoStateTool = (props: Props) => {
 
   const onButtonClick = () => {
 
-    console.log('onButtonClick', props);
     emit(SAPS_BUTTON_CLICK, !isDisabled);
     setIsDisabled(!isDisabled);
 
-    console.log('test button click', emit);
+    console.log('SAPS_BUTTON_CLICK', !isDisabled);
   };
 
 

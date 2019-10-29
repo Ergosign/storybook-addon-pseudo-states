@@ -8,10 +8,23 @@ export enum PseudoStateEnum {
   VISITED = 'visited'
 }
 
+export const {
+  HOVER,
+  ACTIVE,
+  FOCUS,
+  FOCUS_WITHIN,
+  VISITED
+} = PseudoStateEnum;
+
 export enum AttributeStatesEnum {
   DISABLED = 'disabled',
   READONLY = 'readonly'
 }
+
+export const {
+  DISABLED,
+  READONLY
+} = AttributeStatesEnum;
 
 export type PseudoState = PseudoStateEnum | string;
 export type AttributeState = AttributeStatesEnum | string;
@@ -22,13 +35,13 @@ export interface StatesComposition {
 }
 
 export const PseudoStateOrderDefault: Array<PseudoState> = [
-  PseudoStateEnum.FOCUS, PseudoStateEnum.HOVER, PseudoStateEnum.ACTIVE
+  FOCUS, HOVER, ACTIVE
 ];
 export const AttributesStateOrderDefault: Array<AttributeState> = [
-  AttributeStatesEnum.DISABLED
+  DISABLED
 ];
 export const AttributesStateOrderInputDefault: Array<AttributeState> = [
-  AttributeStatesEnum.DISABLED, AttributeStatesEnum.READONLY
+  DISABLED, READONLY
 ];
 
 export const StatesCompositionDefault: StatesComposition = {
@@ -53,4 +66,28 @@ export interface PseudoStatesParameters {
   prefix?: string;
   stateComposition?: StatesComposition;
   // [key: string]: any;
+}
+
+export interface PseudoStateActive {
+  active?: boolean;
+}
+
+export interface PseudoStateHover {
+  hover?: boolean;
+}
+
+export interface PseudoStateFocus {
+  focus?: boolean;
+}
+
+export interface PseudoStateDisabled {
+  disabled?: boolean;
+}
+
+export interface PseudoStateReadonly {
+  readonly?: boolean;
+}
+
+export interface PseudoStateDefaults extends PseudoStateActive, PseudoStateFocus, PseudoStateHover, PseudoStateDisabled {
+
 }

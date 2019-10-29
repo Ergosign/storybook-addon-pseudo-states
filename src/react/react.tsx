@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { addons, makeDecorator, StoryContext, StoryGetter } from '@storybook/addons';
 import parameters from '../share/parameters';
-import { StatesComposition, WrapperPseudoStateSettings } from '../share/types';
+import { StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
+import { STORY_CHANGED, STORY_INIT } from '@storybook/core-events';
 
 
 function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: WrapperPseudoStateSettings) {
@@ -10,7 +11,7 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
   const story = getStory(context);
   const channel = addons.getChannel();
   const addonDisabled = settings?.parameters?.disabled || false;
-// notify toolbar button
+  // notify toolbar button
   channel.emit(SAPS_INIT_PSEUDO_STATES, addonDisabled);
 
   if (addonDisabled) {
@@ -20,31 +21,30 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
   // use selector form parameters or if not set use settings selector or null
   const selector: string | Array<string> | null =
     settings?.parameters?.selector || null;
-  debugger;
-  const composition: StatesComposition =
-    settings?.parameters?.stateComposition || {}/*|| StatesCompositionDefault*/;
+
+  const composition: StatesComposition = settings?.parameters?.stateComposition || StatesCompositionDefault;
 
   const prefix: string | null = settings?.parameters?.prefix || null;
-
-  console.log('story', story);
-
-
   const states = [];
 
-  const [isDisabled, setIsDisabled] = useState(addonDisabled);
+  const [isStoryDisabled, setIsStoryDisabled] = useState(false);
 
-  channel.addListener(SAPS_BUTTON_CLICK,(value: boolean) => {
-    console.log('saps/init-pseudo-states', 'emiited', value);
+  channel.once(SAPS_BUTTON_CLICK, (value: boolean) => {
+    console.log('SAPS_BUTTON_CLICK', 'received', value);
 
-    setIsDisabled(value);
+    setIsStoryDisabled(value);
   });
-  channel.once(SAPS_INIT_PSEUDO_STATES, () => {
+  channel.once(STORY_CHANGED, () => {
     channel.removeAllListeners(SAPS_BUTTON_CLICK);
   });
+  channel.once(STORY_INIT, () => {
+    // notify toolbar button
+    channel.emit(SAPS_INIT_PSEUDO_STATES, addonDisabled);
+  });
+
 
   if (composition.pseudo) {
     for (const state of composition.pseudo) {
-
       const storyState = {...story, props: {...story.props, [state]: true}};
 
       states.push(
@@ -57,7 +57,21 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
     }
   }
 
-  const container = isDisabled ? story : <div className="pseudo-states-addon__container">
+  if (composition.attributes) {
+    for (const atrr of composition.attributes) {
+      const storyState = {...story, props: {...story.props, [atrr]: true}};
+
+      states.push(
+        <div className="pseudo-states-addon__story pseudo-states-addon__story--"
+             key={atrr}>
+          <div className="pseudo-states-addon__story__header">{atrr}:</div>
+          <div className="pseudo-states-addon__story__container">{storyState}</div>
+        </div>
+      );
+    }
+  }
+
+  return isStoryDisabled ? story : <div className="pseudo-states-addon__container">
     <div className="pseudo-states-addon__story pseudo-states-addon__story--Normal">
       <div className="pseudo-states-addon__story__header">Normal:</div>
       <div className="pseudo-states-addon__story__container">{story}</div>
@@ -65,15 +79,12 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
     {states}
   </div>;
 
-  return container;
-
 }
 
 export const withPseudo = makeDecorator({
   ...parameters,
   wrapper: (getStory: StoryGetter, context: StoryContext, settings: WrapperPseudoStateSettings) => {
 
-    debugger;
     return pseudoStateFn(getStory, context, settings);
   }
 });
