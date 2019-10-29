@@ -1,0 +1,28 @@
+{
+  "src": {
+    "commit": true,
+    "commitMessage": "Release %s",
+    "commitArgs": "",
+    "tag": true,
+    "tagName": "%s",
+    "tagAnnotation": "Release %s",
+    "push": true,
+    "pushArgs": "",
+    "pushRepo": null,
+    "beforeStartCommand": false,
+    "afterReleaseCommand": false,
+    "addUntrackedFiles": false
+  },
+  "requireUpstream": true,
+  "dist": {
+    "status": false,
+    "commit": true,
+    "tag": false,
+    "push": true,
+    "release": false,
+    "publish": true
+  },
+  "github": {
+    "release": false
+  }
+}

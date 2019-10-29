@@ -1,0 +1,56 @@
+# This folder is cached between builds
+# http://docs.gitlab.com/ce/ci/yaml/README.html#cache
+
+variables:
+  SSH_REPO_URL: git@gitlab.ergosign-projects.com:ergosign/web/ergosign-storybook-pseudo-state.git
+
+stages:
+  - publish
+
+.publish: &publish_base
+  stage: publish
+  image: extdockerregistry.ergosign-projects.com:5000/ergosign-node-image:0.0.20
+  script:
+    - echo "building project with ID $CI_BUILD_REF"
+    - echo > ~/.npmrc
+    - echo @ergosign-internal:registry=https://nexus.ergosign-projects.com/repository/es-npm-internal/ >> ~/.npmrc
+    - echo //nexus.ergosign-projects.com/repository/es-npm-internal/:_authToken=$NPM_AUTH_TOKEN >> ~/.npmrc
+    - echo email = $NPM_EMAIL >> ~/.npmrc
+    - eval $(ssh-agent -s)
+    - echo "$JENKINS_PRIVATE_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - git config --global user.email "jenkins@ergosign.de"
+    - git config --global user.name "Jenkins - Gitlab CI"
+    - git remote set-url origin $SSH_REPO_URL || true
+    - git checkout master
+    - npm ci
+    - npm run $RELEASE_IT_TASK
+  tags:
+    - docker
+  except:
+    variables:
+      - $GITLAB_USER_EMAIL== "jenkins@ergosign.de"
+
+publish_master:
+  <<: *publish_base
+  only:
+    - master
+  variables:
+    RELEASE_IT_TASK: release-it-beta
+
+publish_patch_version:
+  <<: *publish_base
+  when: manual
+  variables:
+    RELEASE_IT_TASK: release-it-patch
+
+publish_minor_version:
+  <<: *publish_base
+  when: manual
+  variables:
+    RELEASE_IT_TASK: release-it-minor
+
+publish_major_version:
+  <<: *publish_base
+  when: manual
+  variables:
+    RELEASE_IT_TASK: release-it-major
