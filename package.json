@@ -11,7 +11,13 @@
     "build": "tsc",
     "watch": "tsc --watch --outDir dist",
     "prepack": "cp package.json ./dist",
-    "pack": "cd dist && npm pack"
+    "pack": "cd dist && npm pack",
+    "release-it-beta": "release-it -n --preRelease=beta --npm.tag=next --verbose",
+    "release-it-patch": "release-it patch -n --verbose",
+    "release-it-minor": "release-it minor -n --verbose",
+    "release-it-major": "release-it major -n --verbose",
+    "release": "release-it"
+
   },
   "author": "philippone",
   "license": "ISC",

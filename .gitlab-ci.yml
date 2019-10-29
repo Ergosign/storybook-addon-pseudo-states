@@ -13,8 +13,8 @@ stages:
   script:
     - echo "building project with ID $CI_BUILD_REF"
     - echo > ~/.npmrc
-    - echo @ergosign-internal:registry=https://nexus.ergosign-projects.com/repository/es-npm-internal/ >> ~/.npmrc
-    - echo //nexus.ergosign-projects.com/repository/es-npm-internal/:_authToken=$NPM_AUTH_TOKEN >> ~/.npmrc
+    - echo @ergosign-external:registry=https://nexus.ergosign-projects.com/repository/es-npm-external/ >> ~/.npmrc
+    - echo //nexus.ergosign-projects.com/repository/es-npm-external/:_authToken=$NPM_AUTH_TOKEN >> ~/.npmrc
     - echo email = $NPM_EMAIL >> ~/.npmrc
     - eval $(ssh-agent -s)
     - echo "$JENKINS_PRIVATE_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
@@ -24,6 +24,8 @@ stages:
     - git checkout master
     - npm ci
     - npm run $RELEASE_IT_TASK
+    - npm run build
+    - npm publish dist --tag next
   tags:
     - docker
   except:
