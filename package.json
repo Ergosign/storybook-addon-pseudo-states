@@ -7,7 +7,6 @@
     "dist": "dist"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "watch": "tsc --watch --outDir dist",
     "prepack": "cp package.json ./dist",
@@ -50,6 +49,6 @@
     "@storybook/core-events": "^5.2.5"
   },
   "publishConfig": {
-    "registry": "https://nexus.ergosign-projects.com/repository/es-npm-internal/"
+    "registry": "https://nexus.ergosign-projects.com/repository/es-npm-external/"
   }
 }

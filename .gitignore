@@ -16,7 +16,6 @@ packages/examples/automated-*
 /**/LICENSE
 docs/public
 packs/*.tgz
-package-lock.json
 .nvmrc
 storybook-static
 integration/__image_snapshots__/__diff_output__

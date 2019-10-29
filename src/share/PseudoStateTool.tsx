@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ADDON_ID } from '../register';
 import { useChannel } from '@storybook/api';
-import { IconButton } from '@storybook/components';
+import { IconButton, Icons } from '@storybook/components';
 import { SAPS_BUTTON_CLICK } from './events';
 
 export const TOOL_ID = `${ADDON_ID}/tool`;
@@ -43,7 +43,9 @@ export const PseudoStateTool = (props: Props) => {
   };
 
 
-  return isVisible ? <IconButton style={!isDisabled ? buttonStyle : undefined} onClick={onButtonClick}>pseudo</IconButton> : null;
+  return isVisible ? <IconButton active={!isDisabled} title="Show/hide Pseudo States" onClick={onButtonClick}>
+    <Icons icon="button" />
+  </IconButton> : null;
 
 };
 
