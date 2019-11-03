@@ -1,7 +1,7 @@
 import { addons, makeDecorator, StoryContext, StoryGetter } from '@storybook/addons';
 import { AttributeState, PseudoState, StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
 import { style_ps_container } from '../share/styles';
-import parameters from '../share/parameters';
+import { parameters } from '../share/constants';
 import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
 
 

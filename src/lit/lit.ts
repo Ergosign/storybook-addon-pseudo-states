@@ -1,9 +1,10 @@
 import { addons, makeDecorator, StoryContext, StoryGetter, WrapperSettings } from '@storybook/addons';
-import parameters from '../share/parameters';
+import { parameters } from '../share/constants';
 import { PseudoState, StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
 import { html, render, TemplateResult } from 'lit-html';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
-import { STORY_CHANGED } from '@storybook/core-events';
+import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
+import { removeAllListeners } from 'cluster';
 
 
 const displayStates = (story: TemplateResult,
@@ -46,8 +47,11 @@ const modifyState = (story: TemplateResult,
   debugger;
   const newStory = new TemplateResult(story.strings, story.values, story.type, story.processor);*/
 
-  // TODO find better solution
-  setTimeout(() => {
+  const channel = addons.getChannel();
+
+  channel.addListener(STORY_RENDERED, () => {
+
+    // setTimeout(() => {
     const storyContainerElement = document.querySelector(`.pseudo-states-addon__story--${state} .pseudo-states-addon__story__container`);
     if (storyContainerElement) {
       const host = storyContainerElement.firstElementChild;
@@ -55,7 +59,12 @@ const modifyState = (story: TemplateResult,
         addStateClass(host, state, selector, prefix);
       }
     }
-  }, 100);
+    // }, 100);
+  });
+
+  channel.once(STORY_CHANGED, () => {
+    channel.removeAllListeners(STORY_RENDERED);
+  });
 
   return html`
     <div class="pseudo-states-addon__story pseudo-states-addon__story--${state}">  
