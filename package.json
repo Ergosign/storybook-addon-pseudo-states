@@ -1,5 +1,5 @@
 {
-  "name": "@storybook/addon-pseudo-states",
+  "name": "@ergosign-external/addon-pseudo-states",
   "version": "0.0.1",
   "description": "Storybook Addon to show pseudo states",
   "directories": {
