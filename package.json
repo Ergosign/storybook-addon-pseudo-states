@@ -9,8 +9,6 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch --outDir dist",
-    "prepack": "cp package.json ./dist",
-    "pack": "cd dist && npm pack",
     "release-it-beta": "release-it -n --preRelease=beta --npm.tag=next --verbose",
     "release-it-patch": "release-it patch -n --verbose",
     "release-it-minor": "release-it minor -n --verbose",
@@ -20,9 +18,7 @@
   "author": "philippone",
   "license": "ISC",
   "files": [
-    "dist/**/*",
-    "**/*.js",
-    "**/*.d.ts"
+    "dist/**/*"
   ],
   "devDependencies": {
     "@angular/core": "8.2.12",

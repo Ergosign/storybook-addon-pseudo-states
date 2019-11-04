@@ -23,9 +23,8 @@ stages:
     - git remote set-url origin $SSH_REPO_URL || true
     - git checkout master
     - npm ci
-    - npm run $RELEASE_IT_TASK
     - npm run build
-    - npm publish dist --tag next
+    - npm run $RELEASE_IT_TASK
   tags:
     - docker
   except:
