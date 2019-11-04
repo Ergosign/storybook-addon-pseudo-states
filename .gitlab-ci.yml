@@ -12,10 +12,10 @@ stages:
   image: extdockerregistry.ergosign-projects.com:5000/ergosign-node-image:0.0.20
   script:
     - echo "building project with ID $CI_BUILD_REF"
-    - echo > ~/.npmrc
-    - echo @ergosign-external:registry=https://nexus.ergosign-projects.com/repository/es-npm-external/ >> ~/.npmrc
-    - echo //nexus.ergosign-projects.com/repository/es-npm-external/:_authToken=$NPM_AUTH_TOKEN >> ~/.npmrc
-    - echo email = $NPM_EMAIL >> ~/.npmrc
+    # - echo > ~/.npmrc
+    # - echo @ergosign-external:registry=https://nexus.ergosign-projects.com/repository/es-npm-external/ >> ~/.npmrc
+    # - echo //nexus.ergosign-projects.com/repository/es-npm-external/:_authToken=$NPM_AUTH_TOKEN >> ~/.npmrc
+    # - echo email = $NPM_EMAIL >> ~/.npmrc
     - eval $(ssh-agent -s)
     - echo "$JENKINS_PRIVATE_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - git config --global user.email "jenkins@ergosign.de"
