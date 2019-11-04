@@ -17,6 +17,7 @@ stages:
     # - echo //nexus.ergosign-projects.com/repository/es-npm-external/:_authToken=$NPM_AUTH_TOKEN >> ~/.npmrc
     # - echo email = $NPM_EMAIL >> ~/.npmrc
     - eval $(ssh-agent -s)
+    - echo "$JENKINS_PRIVATE_SSH_KEY"
     - echo "$JENKINS_PRIVATE_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - git config --global user.email "jenkins@ergosign.de"
     - git config --global user.name "Jenkins - Gitlab CI"
