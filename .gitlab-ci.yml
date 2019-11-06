@@ -25,6 +25,7 @@ stages:
     - npm ci
     - npm run build
     - npm run $RELEASE_IT_TASK
+    - npm publish dist --tag next
   tags:
     - docker
   except:

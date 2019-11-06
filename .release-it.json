@@ -20,7 +20,7 @@
     "tag": false,
     "push": true,
     "release": false,
-    "publish": true
+    "publish": false
   },
   "github": {
     "release": false

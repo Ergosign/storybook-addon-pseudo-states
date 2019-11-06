@@ -9,6 +9,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch --outDir dist",
+    "prepack": "cp package.json ./dist",
     "release-it-beta": "release-it -n --preRelease=beta --npm.tag=next --verbose",
     "release-it-patch": "release-it patch -n --verbose",
     "release-it-minor": "release-it minor -n --verbose",
