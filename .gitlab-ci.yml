@@ -24,7 +24,6 @@ stages:
     - git checkout master
     - npm ci
     - npm run build
-    - npm run $RELEASE_IT_TASK
     - npm run prepack-package
     - npm publish dist --tag next
   tags:

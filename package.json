@@ -1,6 +1,6 @@
 {
-  "name": "@ergosign-external/addon-pseudo-states",
-  "version": "0.0.2-beta.7",
+  "name": "@ergosign/addon-pseudo-states",
+  "version": "0.0.1-beta.1",
   "description": "Storybook Addon to show pseudo states",
   "directories": {
     "test": "test",
