@@ -4,7 +4,6 @@ import { PseudoState, StatesComposition, StatesCompositionDefault, WrapperPseudo
 import { html, render, TemplateResult } from 'lit-html';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
 import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
-import { removeAllListeners } from 'cluster';
 
 
 const displayStates = (story: TemplateResult,

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { addons, makeDecorator, StoryContext, StoryGetter } from '@storybook/addons';
-import { ADDON_GLOBAL_DISABLE_STATE, parameters } from '../share/constants';
+import { parameters } from '../share/constants';
 import { StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
-import { STORY_CHANGED, STORY_INIT, STORY_RENDERED } from '@storybook/core-events';
-import { useAddonState } from '@storybook/api';
+import { STORY_CHANGED, STORY_INIT } from '@storybook/core-events';
 
 
 function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: WrapperPseudoStateSettings) {
@@ -17,14 +16,15 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
 
   // setTimeout(() => {
 
-  channel.once(STORY_RENDERED, () => {
+  // channel.once(STORY_RENDERED, () => {
 
-    console.log('Story rendered');
-    // const [s, _] = useAddonState(ADDON_GLOBAL_DISABLE_STATE, false);
-    //
-    // console.log(s);
-  });
+  // console.log('Story rendered');
+  // const [s, _] = useAddonState(ADDON_GLOBAL_DISABLE_STATE, false);
+  //
+  // console.log(s);
   // });
+  // });
+
 
   if (addonDisabled) {
     return story;

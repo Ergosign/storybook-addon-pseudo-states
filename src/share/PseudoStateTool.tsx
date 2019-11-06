@@ -42,9 +42,8 @@ export const PseudoStateTool = (props: Props) => {
 
     emit(SAPS_BUTTON_CLICK, !isDisabled);
     setIsDisabled(!isDisabled);
+    // update
     setgloballyDisabled(!globallyDisabled);
-
-    console.log('SAPS_BUTTON_CLICK', !isDisabled);
   };
 
   return isVisible ? <IconButton active={!globallyDisabled}
