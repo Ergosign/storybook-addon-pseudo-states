@@ -1,6 +1,6 @@
 {
   "name": "@ergosign-external/addon-pseudo-states",
-  "version": "0.0.2-beta.6",
+  "version": "0.0.2-beta.7",
   "description": "Storybook Addon to show pseudo states",
   "directories": {
     "test": "test",
@@ -19,7 +19,8 @@
   "author": "philippone",
   "license": "ISC",
   "files": [
-    "dist/**/*"
+    "**/*.js",
+    "**/*.d.ts"
   ],
   "devDependencies": {
     "@angular/core": "8.2.12",
