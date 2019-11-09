@@ -25,18 +25,18 @@ This is how it look like:
 First of all, you need to install Pseudo States into your project as a dev dependency.
 
 ```sh
-npm install @stroybook/addon-pseudo-states --save-dev
+npm install @ergosign/addon-pseudo-states --save-dev
 ```
 
 Then, configure it as an addon by adding it to your addons.js file (located in the Storybook config directory).
 
-To display the pseudo states, you have to add specifc css classes to your stlying, see [Styling](###Styling)
+To display the pseudo states, you have to add specific css classes to your styling, see [Styling](###Styling)
 
 Then, you can set the decorator locally, see [Usage](###Usage).
 
 ### Styling 
 
-#### Automatically generated with PostCss Webpack config
+#### Automatically generated with PostCss Webpack config (recommended)
 
 Add [postcss-loader](https://github.com/postcss/postcss-loader) to a Storybook custom webpack config
 
@@ -50,16 +50,18 @@ module.exports = {
                             loader: 'style-loader'
                         },
                         {
-                            loader: 'css-loader'
-                        },
-                        {
-                            loader: 'postcss-loader',
-                            options: {
-                                sourceMap: true,
-                                config: {
-                                    path: 'postcss.config.js'
-                                }
+                            loader: 'css-loader',
+                                options: {
+                                    // ATTENTION when using css modules
+                                    modules: {
+                                        // !!! must not use [hash]'
+                                        localIdentName: '[path][name]__[local]',
+                                    }
                             }
+                        },
+                        // Add loader here
+                        {
+                            loader: 'postcss-loader'
                         },
                         {
                             loader: 'sass-loader'
@@ -81,35 +83,63 @@ module.exports = {
 };
 ```
 
+<details>
+<summary>When using a custom `prefix`, configure the same for postcss-pseudo-classes</summary>
+
+```js
+module.exports = {
+    plugins: {   
+        'postcss-pseudo-classes': {
+            prefix: 'pseudoclass-example-prefix'
+        }
+    }
+};
+```
+</details>
+
+
 #### Manually 
 
-Add pseudo state classes (`.hover`, `.focus`, `.active`, `.yourOwnState`) when styling your component 
+In addition to the standard pseudo state styling, you have to add fake classes consisting of `prefix` + `pseudostate` (`\:hover`, `\:focus`, `\:active`, `\:yourOwnState`) by yourself.
+Be aware that default prefix is `\:`. When using your own prefix, update your styling accordingly.
 
 ```scss
 .element {
     //element styling
 
-    &:hover, .hover {
+    &:hover, &\:hover {
       // hover styling    
     } 
 }
 ```
 
-You can prefix your classes and configure your `prefix` in addon's `parameter object`, for instance use `.pseudoclass--hover` and configure
+<details>
+<summary>With a custom prefix</summary>
 
-```
- parameters: {
+custom prefix: `.pseudoclass--`
+
+```js
+// in your story
+parameters: {
     withPseudo: {
-      selector: "element",
-      prefix: "pseudoclass--"
-    },
-    knobs: {
-      disableDebounce: true
+        selector: "element",
+        prefix: "pseudoclass--"
     }
-  }
+}
 ```
 
-### Show/Hide Button
+```scss
+.element {
+    //element styling
+
+    &:hover, &.pseudoclass--hover {
+      // hover styling    
+    } 
+}
+```
+</details>
+
+### Show/Hide Button (alpha only)
 
 You can enable a toolbar button that toggles the Pseudo States in the Preview area. 
 
@@ -117,21 +147,68 @@ See [Framework Support](##Framework Support) which Frameworks support this featu
 
 Enable the button by adding it to your `addons.js` file (located in the Storybook config directory):
 ```js
-import "@storybook/addon-pseudo-states/register";
+import "@ergosign/addon-pseudo-states/register";
 ```
 
 ### Usage
 
-
 > **WARNING**: `withPseudo` should always the first element in your `decorators` array because it alters the template of the story.
 
+#### General
+
+##### Component Stroy Format (CSF, recommended)
+
+**TODO test following config**
+
+```js
+import { withPseudo } from "@ergosign/addon-pseudo-states/<framework>";
+
+const section = {
+  title: "Button",
+  decorators: [
+    withPseudo
+  ],
+  parameters: {
+    withPseudo: {selector: 'button'} 
+  },
+};
+export default section;
+
+export const Story = () => {
+    return {
+        component: ButtonComponent,
+    };
+};
+```
+
+##### storyOf Format
+
+```js
+import { withPseudo } from '@ergosign/addon-pseudo-states/<framework>';
+
+storiesOf('Button', module)
+ .addDecorator(withPseudo)
+ .addParameters({
+    withPseudo: {
+      selector: 'button', // css selector of pseudo state's host element
+      stateComposition: {
+        pseudo: ['focus', 'hover', 'hover & focus', 'active'],
+        attributes: ['disabled', 'readonly', 'error']
+      }
+    }
+  })
+ .add('Icon Button', () => (
+    <Button/>
+  ))
+```
+There is a default configuration for `StateComposition`.
 
 #### With Angular
 
-At the moment, only [Component Story Format](https://storybook.js.org/docs/formats/component-story-format/) is supported.
+At the moment, only [Component Story Format](https://storybook.js.org/docs/formats/component-story-format/) is supported (tested).
 
 ```js
-import { withPseudo } from "@storybook/addon-pseudo-states/angular";
+import { withPseudo } from "@ergosign/addon-pseudo-states/angular";
 
 const section = {
   component: ButtonComponent,
@@ -187,12 +264,10 @@ export const StoryWithTemplate = () => {
 
 ### With React
 
-Presumption:
-- Using CSS Modules
-    -  which providing the pseudo state/attribute styling
-- Component provides prop that controls styling
-    - `export interface ExplComponentProps extends PseudoStateDefaults`
-    - `PseudoStateDefaults extends PseudoStateActive, PseudoStateFocus, PseudoStateHover, PseudoStateDisabled`
+When using [CSS Modules](https://github.com/css-modules/css-modules), you must use automatically styling generation via `postcss-loader` (see [Styling section](###Styling)).
+
+`StateComposition.attributes` enable component's props.
+
 
 ```js
 storiesOf('Button', module)
@@ -209,7 +284,7 @@ storiesOf('Button', module)
   .addParameters({
     withPseudo: {
         stateComposition: {
-            pseudo: PseudoStateOrderDefault,
+            pseudo: [...PseudoStateOrderDefault, 'hover & focus'],
             attributes: [...AttributesStateOrderDefault, 'selected', 'error', 'isLoading', 'isReady']
         }
     }

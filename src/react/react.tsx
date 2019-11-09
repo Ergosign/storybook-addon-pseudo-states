@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { DOMElement, useState } from 'react';
 import { addons, makeDecorator, StoryContext, StoryGetter } from '@storybook/addons';
 import { parameters } from '../share/constants';
-import { StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
+import { PseudoStatesDefaultPrefix, StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
-import { STORY_CHANGED, STORY_INIT } from '@storybook/core-events';
+import { STORY_CHANGED, STORY_INIT, STORY_RENDERED } from '@storybook/core-events';
 
 
 function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: WrapperPseudoStateSettings) {
@@ -24,9 +24,10 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
   // console.log(s);
   // });
   // });
-
-
-  if (addonDisabled) {
+  // @ts-ignore
+  // console.log('globalState', addons.disabled);
+  // @ts-ignore
+  if (addonDisabled /*|| addons.disabled*/) {
     return story;
   }
 
@@ -36,8 +37,8 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
 
   const composition: StatesComposition = settings?.parameters?.stateComposition || StatesCompositionDefault;
 
-  const prefix: string | null = settings?.parameters?.prefix || null;
-  const states = [];
+  const prefix: string | null = settings?.parameters?.prefix || PseudoStatesDefaultPrefix;
+  const states: Array<JSX.Element> = [];
 
   const [isStoryDisabled, setIsStoryDisabled] = useState(false);
 
@@ -57,26 +58,76 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
 
   if (composition.pseudo) {
     for (const state of composition.pseudo) {
-      const storyState = {...story, props: {...story.props, [state]: true}};
+      const pstate = state.replace(/\s/g, '')
+        .replace('&', '-');
+      // const storyState = {...story, props: {...story.props, [state]: true}};
+
+      const pseudoStoryPart = <div className={`pseudo-states-addon__story pseudo-states-addon__story--${pstate}`}
+                                   key={`pseudo-${pstate}`}>
+        <div className="pseudo-states-addon__story__header">{state}:</div>
+        <div className="pseudo-states-addon__story__container">{story}</div>
+      </div>;
+
+      // console.log('pseudoStoryPart', pseudoStoryPart);
 
       states.push(
-        <div className="pseudo-states-addon__story pseudo-states-addon__story--"
-             key={state}>
-          <div className="pseudo-states-addon__story__header">{state}:</div>
-          <div className="pseudo-states-addon__story__container">{storyState}</div>
-        </div>
+        pseudoStoryPart
       );
     }
+    channel.once(STORY_RENDERED, () => {
+
+        if (composition.pseudo) {
+          let i = 0;
+          for (const pstateRaw of composition.pseudo) {
+            // TODO use above
+            const pstate = pstateRaw.replace(/\s/g, '')
+              .replace('&', '-');
+
+            const element = states[i++];
+            // console.log('state', element.props.children[1].props);
+
+            const container = document.querySelector(`.pseudo-states-addon__story--${pstate} .pseudo-states-addon__story__container`);
+
+            console.log(pstate, `.pseudo-states-addon__story--${pstate}`, container);
+            if (container) {
+              let host;
+              if (!selector) {
+                host = container.children[0];
+              } else if (typeof selector === 'string') {
+                host = container.querySelector(selector);
+              } else if (Array.isArray(selector)) {
+                // TODO
+              }
+              // get css module [path][name]__[local] and remove [local]
+              const moduleClass = host?.classList[0].match(/(.+?)?__/);
+              if (moduleClass && moduleClass?.length >= 1) {
+                console.log('test');
+                const subPseudoStates = pstateRaw.split('&');
+                console.log(pstateRaw, subPseudoStates);
+                if (subPseudoStates.length >= 1) {
+                  for (const s of subPseudoStates) {
+                    host?.classList.add(moduleClass[1] + '__' + prefix + s.trim());
+                  }
+                } else {
+                  // and append pseudo class
+                  host?.classList.add(moduleClass[1] + '__' + prefix + pstate);
+                }
+              }
+            }
+          }
+        }
+      }
+    );
   }
 
   if (composition.attributes) {
-    for (const atrr of composition.attributes) {
-      const storyState = {...story, props: {...story.props, [atrr]: true}};
+    for (const attr of composition.attributes) {
+      const storyState = {...story, props: {...story.props, [attr]: true}};
 
       states.push(
-        <div className="pseudo-states-addon__story pseudo-states-addon__story--"
-             key={atrr}>
-          <div className="pseudo-states-addon__story__header">{atrr}:</div>
+        <div className={`pseudo-states-addon__story pseudo-states-addon__story--attr-${attr}`}
+             key={`attr-${attr}`}>
+          <div className="pseudo-states-addon__story__header">{attr}:</div>
           <div className="pseudo-states-addon__story__container">{storyState}</div>
         </div>
       );

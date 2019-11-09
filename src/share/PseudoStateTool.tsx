@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useAddonState, useChannel } from '@storybook/api';
+import { useChannel } from '@storybook/api';
 import { IconButton, Icons } from '@storybook/components';
 import { SAPS_BUTTON_CLICK } from './events';
-import { ADDON_GLOBAL_DISABLE_STATE } from './constants';
+import { addons } from '@storybook/addons';
 
 
 interface Props {
@@ -17,7 +17,9 @@ export const PseudoStateTool = (props: Props) => {
   // toobar button visibility
   const [isVisible, setIsVisible] = useState(false);
 
-  const [globallyDisabled, setgloballyDisabled] = useAddonState(ADDON_GLOBAL_DISABLE_STATE, false);
+  const [globallyDisabled, setgloballyDisabled] = useState(false);
+
+  // globalState.isDisabled = globallyDisabled;
 
   /**
    * register hooks
@@ -30,7 +32,7 @@ export const PseudoStateTool = (props: Props) => {
     },
     'saps/init-pseudo-states': (value: boolean) => { /* so something */
 
-      console.log('saps/init-pseudo-states', 'received init', 'is disabled = ', value);
+      // console.log('saps/init-pseudo-states', 'received init', 'is disabled = ', value);
 
       // show button only when story uses withPseudo addon and is not disabled
       setIsVisible(!value);
@@ -43,7 +45,13 @@ export const PseudoStateTool = (props: Props) => {
     emit(SAPS_BUTTON_CLICK, !isDisabled);
     setIsDisabled(!isDisabled);
     // update
-    setgloballyDisabled(!globallyDisabled);
+    // @ts-ignore
+    addons.disabled = !addons.disabled;
+    // @ts-ignore
+    setgloballyDisabled(addons.disabled);
+    // @ts-ignore
+    console.log('button click', addons.disabled);
+
   };
 
   return isVisible ? <IconButton active={!globallyDisabled}

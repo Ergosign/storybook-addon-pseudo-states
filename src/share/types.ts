@@ -58,6 +58,8 @@ export interface WrapperPseudoStateSettings extends WrapperSettings {
   parameters: PseudoStatesParameters
 }
 
+export const PseudoStatesDefaultPrefix = ':';
+
 export interface PseudoStatesParameters {
   disabled?: boolean;
   // query for selector to host element[s] that have to be modified

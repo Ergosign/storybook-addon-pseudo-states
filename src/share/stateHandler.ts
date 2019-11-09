@@ -1,4 +1,4 @@
-/*class StateHandler {
+class StateHandler {
 
   static instance: StateHandler;
   static isDisabled: boolean;
@@ -18,10 +18,15 @@
     StateHandler.isDisabled = value;
   }
 
-}*/
+}
 
+/*
 const stateHandling = {
   disabled: false
 };
+*/
 
-export default stateHandling;
+// export default stateHandling;
+
+
+export default new StateHandler();
