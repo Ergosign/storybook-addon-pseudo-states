@@ -1,5 +1,12 @@
 import { addons, makeDecorator, StoryContext, StoryGetter } from '@storybook/addons';
-import { AttributeState, PseudoState, StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
+import {
+  AttributeState,
+  PseudoState, PseudoStatesDefaultPrefix,
+  Selector,
+  StatesComposition,
+  StatesCompositionDefault,
+  WrapperPseudoStateSettings
+} from '../share/types';
 import { style_ps_container } from '../share/styles';
 import { parameters } from '../share/constants';
 import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
@@ -76,14 +83,14 @@ function pseudoStateFn(getStory: StoryGetter,
   const container = getStoryContainer();
 
   // use selector form parameters or if not set use settings selector or null
-  const selector: string | Array<string> | null =
+  const selector: Selector | null =
     settings?.parameters?.selector || null/*|| settings?.options?.selector*/;
   // TODO support Array<string>
 
   const composition: StatesComposition =
     settings?.parameters?.stateComposition || StatesCompositionDefault;
 
-  const prefix: string | null = settings?.parameters?.prefix || null;
+  const prefix: string = settings?.parameters?.prefix || PseudoStatesDefaultPrefix;
 
   // show default story at first
   if (composition?.pseudo && composition?.pseudo.length > 0) {

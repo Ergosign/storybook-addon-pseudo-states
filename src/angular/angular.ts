@@ -1,5 +1,5 @@
 import { addons, makeDecorator, OptionsParameter, StoryContext, StoryGetter } from '@storybook/addons';
-import { PseudoStatesParameters, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
+import { PseudoStatesDefaultPrefix, PseudoStatesParameters, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
 import { PseudoStateWrapperComponent, PseudoStateWrapperContainer } from './PseudoStateWrapperComponents';
 import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
 
@@ -54,7 +54,7 @@ export const withPseudo = makeDecorator({
     // use user values or default
     parameters.stateComposition = parameters.stateComposition || StatesCompositionDefault;
     if (parameters.prefix || options?.prefix) {
-      parameters.prefix = parameters.prefix || options.prefix;
+      parameters.prefix = parameters.prefix || options.prefix || PseudoStatesDefaultPrefix;
     }
     storyParameters = escape(JSON.stringify(parameters));
 

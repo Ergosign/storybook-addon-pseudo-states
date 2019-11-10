@@ -32,7 +32,7 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
 
   const composition: StatesComposition = settings?.parameters?.stateComposition || StatesCompositionDefault;
 
-  const prefix: string | null = settings?.parameters?.prefix || PseudoStatesDefaultPrefix;
+  const prefix: string = settings?.parameters?.prefix || PseudoStatesDefaultPrefix;
   const states: Array<JSX.Element> = [];
 
   const [isStoryDisabled, setIsStoryDisabled] = useState(false);

@@ -11,7 +11,7 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import { PseudoState, PseudoStatesParameters } from '../share/types';
+import { PseudoState, PseudoStatesParameters, Selector } from '../share/types';
 import { addons } from '@storybook/addons';
 
 
@@ -252,7 +252,7 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
   /**
    * selector to element that have to be modified
    */
-  selector: string | Array<string> | null;
+  selector: Selector | null;
 
   /**
    * selector of original story component

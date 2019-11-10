@@ -10,6 +10,7 @@
     "build": "tsc",
     "watch": "tsc --watch --outDir dist",
     "prepack-package": "cp package.json ./dist",
+    "pack": "npm run build && npm run prepack-package && cd dist && npm pack",
     "release-it-beta": "release-it -n --preRelease=beta --no-npm.publish --verbose",
     "release-it-patch": "release-it patch -n --no-npm.publish --verbose ",
     "release-it-minor": "release-it minor -n --no-npm.publish --verbose",

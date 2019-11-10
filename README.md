@@ -73,18 +73,32 @@ module.exports = {
 };
 ```
 
-Add [postcss-pseudo-classes](https://github.com/grouchal/postcss-pseudo-classes) to `postcss.config.js`
+Add [postcss-pseudo-classes](https://github.com/giuseppeg/postcss-pseudo-classes).
+
+> Use [forked version](https://github.com/philippone/postcss-pseudo-classes) to get all features, like optional `prefix` 
+ and blacklisted pseudo-class functions like `:host(...)` and `:host-context(...)`
+
+Add following line to your `devDependencies` in your `package.json`:
+
+ ```json
+ "postcss-pseudo-classes": "git@github.com:philippone/postcss-pseudo-classes.git" 
+ ```
+
+And enable it in `postcss.config.js`
 
 ```js
 module.exports = {
     plugins: {   
-        'postcss-pseudo-classes': {}
+        'postcss-pseudo-classes': {
+            // prefix: 'pseudoclass--',
+            // blacklist: ':not'
+        }
     }
 };
 ```
 
 <details>
-<summary>When using a custom `prefix`, configure the same for postcss-pseudo-classes</summary>
+<summary>When using a custom `prefix` parameter, use the same for postcss-pseudo-classes</summary>
 
 ```js
 module.exports = {

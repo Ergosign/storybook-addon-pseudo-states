@@ -1,6 +1,13 @@
 import { addons, makeDecorator, StoryContext, StoryGetter, WrapperSettings } from '@storybook/addons';
 import { parameters } from '../share/constants';
-import { PseudoState, StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
+import {
+  PseudoState,
+  PseudoStatesDefaultPrefix,
+  Selector,
+  StatesComposition,
+  StatesCompositionDefault,
+  WrapperPseudoStateSettings
+} from '../share/types';
 import { html, render, TemplateResult } from 'lit-html';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
 import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
@@ -157,13 +164,13 @@ const pseudoStateFn = (getStory: StoryGetter,
   }
 
   // use selector form parameters or if not set use settings selector or null
-  const selector: string | Array<string> | null =
+  const selector: Selector | null =
     settings?.parameters?.selector || null;
 
   const composition: StatesComposition =
     settings?.parameters?.stateComposition || StatesCompositionDefault;
 
-  const prefix: string | null = settings?.parameters?.prefix || null;
+  const prefix: string = settings?.parameters?.prefix || PseudoStatesDefaultPrefix;
 
   return generatePseudoStates(story, composition, selector, prefix);
 };
