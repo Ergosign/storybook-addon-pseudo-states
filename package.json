@@ -11,9 +11,9 @@
     "watch": "tsc --watch --outDir dist",
     "prepack-package": "cp package.json ./dist",
     "release-it-beta": "release-it -n --preRelease=beta --npm.tag=next --verbose",
-    "release-it-patch": "release-it patch -n --verbose",
-    "release-it-minor": "release-it minor -n --verbose",
-    "release-it-major": "release-it major -n --verbose",
+    "release-it-patch": "release-it patch -n --no-npm.publish --verbose",
+    "release-it-minor": "release-it minor -n --no-npm.publish --verbose",
+    "release-it-major": "release-it major -n --no-npm.publish --verbose",
     "release": "release-it"
   },
   "author": "philippone",
