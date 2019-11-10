@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
 import { addons, makeDecorator, StoryContext, StoryGetter } from '@storybook/addons';
 import { parameters } from '../share/constants';
-import { PseudoStatesDefaultPrefix, StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
+import {
+  PseudoState,
+  PseudoStatesDefaultPrefix, Selector,
+  StatesComposition,
+  StatesCompositionDefault,
+  WrapperPseudoStateSettings
+} from '../share/types';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
 import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
+import { getMixedPseudoStates, sanitizePseudoName } from '../share/utils';
 
 
 function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: WrapperPseudoStateSettings) {
@@ -20,7 +27,7 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
   }
 
   // use selector form parameters or if not set use settings selector or null
-  const selector: string | Array<string> | null =
+  const selector: Selector | null =
     settings?.parameters?.selector || null;
 
   const composition: StatesComposition = settings?.parameters?.stateComposition || StatesCompositionDefault;
@@ -30,10 +37,10 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
 
   const [isStoryDisabled, setIsStoryDisabled] = useState(false);
 
+  // create story's new template
   if (composition.pseudo) {
     for (const state of composition.pseudo) {
-      const pstate = state.replace(/\s/g, '')
-        .replace('&', '-');
+      const pstate = sanitizePseudoName(state);
       // const storyState = {...story, props: {...story.props, [state]: true}};
 
       const pseudoStoryPart = <div className={`pseudo-states-addon__story pseudo-states-addon__story--${pstate}`}
@@ -47,7 +54,6 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
       );
     }
   }
-
   if (composition.attributes) {
     for (const attr of composition.attributes) {
       const storyState = {...story, props: {...story.props, [attr]: true}};
@@ -65,29 +71,30 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
   // update pseudo states after story is rendered
   const updatePseudoStates = () => {
     if (composition.pseudo) {
-      let i = 0;
-      for (const pstateRaw of composition.pseudo) {
-        // TODO use above
-        const pstate = pstateRaw.replace(/\s/g, '')
-          .replace('&', '-');
 
-        const element = states[i++];
+      for (const pstateRaw of composition.pseudo) {
+
+        const pstate = sanitizePseudoName(pstateRaw);
 
         const container = document.querySelector(`.pseudo-states-addon__story--${pstate} .pseudo-states-addon__story__container`);
 
-        if (container) {
+        const applyPseudoStateToHost = (container: Element, selector: Selector | null) => {
           let host;
           if (!selector) {
             host = container.children[0];
           } else if (typeof selector === 'string') {
             host = container.querySelector(selector);
           } else if (Array.isArray(selector)) {
-            // TODO
+            for (const s of (selector as Array<PseudoState>)) {
+              applyPseudoStateToHost(container, s);
+            }
           }
           // get css module [path][name]__[local] and remove [local]
+          // TODO test if first class represents always css module
           const moduleClass = host?.classList[0].match(/(.+?)?__/);
+
           if (moduleClass && moduleClass?.length >= 1) {
-            const subPseudoStates = pstateRaw.split('&');
+            const subPseudoStates = getMixedPseudoStates(pstateRaw);
 
             if (subPseudoStates.length >= 1) {
               for (const s of subPseudoStates) {
@@ -98,6 +105,10 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
               host?.classList.add(moduleClass[1] + '__' + prefix + pstate);
             }
           }
+        };
+
+        if (container) {
+          applyPseudoStateToHost(container, selector);
         }
       }
     }
@@ -105,7 +116,7 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
 
   // update when story is rendered
   channel.once(STORY_RENDERED, () => {
-     updatePseudoStates();
+      updatePseudoStates();
     }
   );
 

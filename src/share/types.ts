@@ -60,36 +60,16 @@ export interface WrapperPseudoStateSettings extends WrapperSettings {
 
 export const PseudoStatesDefaultPrefix = ':';
 
+export type Selector = string | Array<string>;
+
 export interface PseudoStatesParameters {
   disabled?: boolean;
   // query for selector to host element[s] that have to be modified
-  selector?: string | Array<string>;
+  selector?: Selector;
   // prefix for state classes that will be added to host element
   prefix?: string;
   stateComposition?: StatesComposition;
   // [key: string]: any;
 }
 
-export interface PseudoStateActive {
-  active?: boolean;
-}
 
-export interface PseudoStateHover {
-  hover?: boolean;
-}
-
-export interface PseudoStateFocus {
-  focus?: boolean;
-}
-
-export interface PseudoStateDisabled {
-  disabled?: boolean;
-}
-
-export interface PseudoStateReadonly {
-  readonly?: boolean;
-}
-
-export interface PseudoStateDefaults extends PseudoStateActive, PseudoStateFocus, PseudoStateHover, PseudoStateDisabled {
-
-}

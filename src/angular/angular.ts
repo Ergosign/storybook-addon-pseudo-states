@@ -1,5 +1,5 @@
-import { addons, makeDecorator, OptionsParameter, StoryContext, StoryGetter, WrapperSettings } from '@storybook/addons';
-import { PseudoStatesParameters, StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
+import { addons, makeDecorator, OptionsParameter, StoryContext, StoryGetter } from '@storybook/addons';
+import { PseudoStatesParameters, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
 import { PseudoStateWrapperComponent, PseudoStateWrapperContainer } from './PseudoStateWrapperComponents';
 import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
 

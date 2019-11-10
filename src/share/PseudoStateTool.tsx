@@ -4,11 +4,11 @@ import { IconButton, Icons } from '@storybook/components';
 import { SAPS_BUTTON_CLICK } from './events';
 
 
-interface Props {
-  api: any;
-}
+/*interface Props {
+  api: API;
+}*/
 
-export const PseudoStateTool = (props: Props) => {
+export const PseudoStateTool = (/*props: Props*/) => {
 
   // active story params
   // const storyParams = useParameter<PseudoStatesParameters>(parameters.parameterName, {stateComposition: StatesCompositionDefault});

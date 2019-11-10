@@ -105,7 +105,6 @@ const generatePseudoStates = (story: TemplateResult,
                               selector: string | Array<string> | null,
                               prefix: string | null): TemplateResult => {
 
-  let addonDisabled = false;
   const channel = addons.getChannel();
 
   const tmpl = html`
@@ -118,8 +117,6 @@ const generatePseudoStates = (story: TemplateResult,
   const handleDisableState = (value: boolean) => {
 
     const containerRef = document.querySelector('.pseudo-states-addon__container');
-
-    addonDisabled = value;
 
     if (containerRef) {
       if (value) {
@@ -134,7 +131,7 @@ const generatePseudoStates = (story: TemplateResult,
   channel.on(SAPS_BUTTON_CLICK, handleDisableState);
 
   // remove listener when story changed
-  const storyChangedListener = channel.once(STORY_CHANGED, () => {
+  channel.once(STORY_CHANGED, () => {
     channel.removeListener(SAPS_BUTTON_CLICK, handleDisableState);
     channel.removeAllListeners(SAPS_BUTTON_CLICK);
   });

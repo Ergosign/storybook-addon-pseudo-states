@@ -9,8 +9,7 @@ import {
   OnInit,
   Renderer2,
   TemplateRef,
-  ViewChild,
-  ViewEncapsulation
+  ViewChild
 } from '@angular/core';
 import { PseudoState, PseudoStatesParameters } from '../share/types';
 import { addons } from '@storybook/addons';

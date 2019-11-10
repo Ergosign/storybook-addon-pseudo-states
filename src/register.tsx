@@ -2,17 +2,15 @@ import React from 'react';
 import addons, { types } from '@storybook/addons';
 import { PseudoStateTool } from './share/PseudoStateTool';
 import { ADDON_ID, TOOL_ID, TOOL_TITLE } from './share/constants';
-import { API } from '@storybook/api';
 
 
-
-addons.register(ADDON_ID, (api: any): void => {
+addons.register(ADDON_ID, (/*api: API*/): void => {
 
   addons.add(TOOL_ID, {
     title: TOOL_TITLE,
     type: types.TOOL,
     match: ({viewMode}) => viewMode === 'story',
-    render: () => <PseudoStateTool api={api}/>
+    render: () => <PseudoStateTool /*api={api}*//>
   });
 
   // addons.addPanel(PANEL_ID, {
