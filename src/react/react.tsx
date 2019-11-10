@@ -1,9 +1,9 @@
-import React, { DOMElement, useState } from 'react';
+import React, { useState } from 'react';
 import { addons, makeDecorator, StoryContext, StoryGetter } from '@storybook/addons';
 import { parameters } from '../share/constants';
 import { PseudoStatesDefaultPrefix, StatesComposition, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
-import { STORY_CHANGED, STORY_INIT, STORY_RENDERED } from '@storybook/core-events';
+import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
 
 
 function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: WrapperPseudoStateSettings) {
@@ -11,23 +11,11 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
   const story = getStory(context);
   const channel = addons.getChannel();
   const addonDisabled = settings?.parameters?.disabled || false;
+
   // notify toolbar button
   channel.emit(SAPS_INIT_PSEUDO_STATES, addonDisabled);
 
-  // setTimeout(() => {
-
-  // channel.once(STORY_RENDERED, () => {
-
-  // console.log('Story rendered');
-  // const [s, _] = useAddonState(ADDON_GLOBAL_DISABLE_STATE, false);
-  //
-  // console.log(s);
-  // });
-  // });
-  // @ts-ignore
-  // console.log('globalState', addons.disabled);
-  // @ts-ignore
-  if (addonDisabled /*|| addons.disabled*/) {
+  if (addonDisabled) {
     return story;
   }
 
@@ -42,20 +30,6 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
 
   const [isStoryDisabled, setIsStoryDisabled] = useState(false);
 
-  channel.once(SAPS_BUTTON_CLICK, (value: boolean) => {
-    console.log('SAPS_BUTTON_CLICK', 'received', value);
-
-    setIsStoryDisabled(value);
-  });
-  channel.once(STORY_CHANGED, () => {
-    channel.removeAllListeners(SAPS_BUTTON_CLICK);
-  });
-  channel.once(STORY_INIT, () => {
-    // notify toolbar button
-    channel.emit(SAPS_INIT_PSEUDO_STATES, addonDisabled);
-  });
-
-
   if (composition.pseudo) {
     for (const state of composition.pseudo) {
       const pstate = state.replace(/\s/g, '')
@@ -68,56 +42,10 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
         <div className="pseudo-states-addon__story__container">{story}</div>
       </div>;
 
-      // console.log('pseudoStoryPart', pseudoStoryPart);
-
       states.push(
         pseudoStoryPart
       );
     }
-    channel.once(STORY_RENDERED, () => {
-
-        if (composition.pseudo) {
-          let i = 0;
-          for (const pstateRaw of composition.pseudo) {
-            // TODO use above
-            const pstate = pstateRaw.replace(/\s/g, '')
-              .replace('&', '-');
-
-            const element = states[i++];
-            // console.log('state', element.props.children[1].props);
-
-            const container = document.querySelector(`.pseudo-states-addon__story--${pstate} .pseudo-states-addon__story__container`);
-
-            console.log(pstate, `.pseudo-states-addon__story--${pstate}`, container);
-            if (container) {
-              let host;
-              if (!selector) {
-                host = container.children[0];
-              } else if (typeof selector === 'string') {
-                host = container.querySelector(selector);
-              } else if (Array.isArray(selector)) {
-                // TODO
-              }
-              // get css module [path][name]__[local] and remove [local]
-              const moduleClass = host?.classList[0].match(/(.+?)?__/);
-              if (moduleClass && moduleClass?.length >= 1) {
-                console.log('test');
-                const subPseudoStates = pstateRaw.split('&');
-                console.log(pstateRaw, subPseudoStates);
-                if (subPseudoStates.length >= 1) {
-                  for (const s of subPseudoStates) {
-                    host?.classList.add(moduleClass[1] + '__' + prefix + s.trim());
-                  }
-                } else {
-                  // and append pseudo class
-                  host?.classList.add(moduleClass[1] + '__' + prefix + pstate);
-                }
-              }
-            }
-          }
-        }
-      }
-    );
   }
 
   if (composition.attributes) {
@@ -134,6 +62,65 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
     }
   }
 
+  // update pseudo states after story is rendered
+  const updatePseudoStates = () => {
+    if (composition.pseudo) {
+      let i = 0;
+      for (const pstateRaw of composition.pseudo) {
+        // TODO use above
+        const pstate = pstateRaw.replace(/\s/g, '')
+          .replace('&', '-');
+
+        const element = states[i++];
+
+        const container = document.querySelector(`.pseudo-states-addon__story--${pstate} .pseudo-states-addon__story__container`);
+
+        if (container) {
+          let host;
+          if (!selector) {
+            host = container.children[0];
+          } else if (typeof selector === 'string') {
+            host = container.querySelector(selector);
+          } else if (Array.isArray(selector)) {
+            // TODO
+          }
+          // get css module [path][name]__[local] and remove [local]
+          const moduleClass = host?.classList[0].match(/(.+?)?__/);
+          if (moduleClass && moduleClass?.length >= 1) {
+            const subPseudoStates = pstateRaw.split('&');
+
+            if (subPseudoStates.length >= 1) {
+              for (const s of subPseudoStates) {
+                host?.classList.add(moduleClass[1] + '__' + prefix + s.trim());
+              }
+            } else {
+              // and append pseudo class
+              host?.classList.add(moduleClass[1] + '__' + prefix + pstate);
+            }
+          }
+        }
+      }
+    }
+  };
+
+  // update when story is rendered
+  channel.once(STORY_RENDERED, () => {
+     updatePseudoStates();
+    }
+  );
+
+  channel.once(SAPS_BUTTON_CLICK, (value: boolean) => {
+    setIsStoryDisabled(value);
+    // update when disable state changed
+    if (!value) {
+      updatePseudoStates();
+    }
+  });
+  channel.once(STORY_CHANGED, () => {
+    channel.removeAllListeners(SAPS_BUTTON_CLICK);
+  });
+
+
   return isStoryDisabled ? story : <div className="pseudo-states-addon__container">
     <div className="pseudo-states-addon__story pseudo-states-addon__story--Normal">
       <div className="pseudo-states-addon__story__header">Normal:</div>
@@ -147,7 +134,6 @@ function pseudoStateFn(getStory: StoryGetter, context: StoryContext, settings: W
 export const withPseudo = makeDecorator({
   ...parameters,
   wrapper: (getStory: StoryGetter, context: StoryContext, settings: WrapperPseudoStateSettings) => {
-
     return pseudoStateFn(getStory, context, settings);
   }
 });
