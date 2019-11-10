@@ -24,9 +24,9 @@ stages:
     - git checkout master
     - npm ci
     - npm run build
-    - npm run release-it-beta
+    - npm run $RELEASE_IT_TASK
     - npm run prepack-package
-    - npm publish dist --tag next
+    - npm publish dist
   tags:
     - docker
   except:
