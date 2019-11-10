@@ -10,11 +10,11 @@
     "build": "tsc",
     "watch": "tsc --watch --outDir dist",
     "prepack-package": "cp package.json ./dist",
-    "release-it-beta": "release-it -n --preRelease=beta --npm.tag=next --verbose",
-    "release-it-patch": "release-it patch -n --no-npm.publish --verbose",
+    "release-it-beta": "release-it -n --preRelease=beta --no-npm.publish --verbose",
+    "release-it-patch": "release-it patch -n --no-npm.publish --verbose ",
     "release-it-minor": "release-it minor -n --no-npm.publish --verbose",
     "release-it-major": "release-it major -n --no-npm.publish --verbose",
-    "release": "release-it"
+    "release": "release-it --no-npm.publish"
   },
   "author": "philippone",
   "license": "ISC",
