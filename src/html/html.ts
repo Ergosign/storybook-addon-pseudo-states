@@ -12,7 +12,7 @@ import { parameters } from '../share/constants';
 import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
 
 
-function enablePseudoState(story: any, pseudoState: PseudoState, selector: string | Array<string> | null, prefix: string | null) {
+function enablePseudoState(story: any, pseudoState: PseudoState, selector: string | Array<string> | null, prefix: string) {
 
   let element = story.cloneNode(true);
 
@@ -20,8 +20,9 @@ function enablePseudoState(story: any, pseudoState: PseudoState, selector: strin
   if (selector) {
     stateHostElement = element.querySelector(selector);
   }
-  const stateClass = prefix ? prefix : '' + pseudoState;
+  const stateClass = prefix + pseudoState;
   stateHostElement?.classList?.add(stateClass);
+
 
   return element;
 }
@@ -34,11 +35,12 @@ function enableAttributeState(story: any, attribute: AttributeState, selector: s
   if (selector) {
     stateHostElement = element.querySelector(selector);
   }
-  stateHostElement.setAttribute(attribute, 'true');
+  if (stateHostElement) {
+    stateHostElement.setAttribute(attribute, 'true');
+  }
 
   // set on host too
   element.setAttribute(attribute, 'true');
-
   return element;
 }
 
@@ -62,35 +64,7 @@ function wrapStoryinStateContainer(story: HTMLElement, state: PseudoState | Attr
   return stateContainer;
 }
 
-function pseudoStateFn(getStory: StoryGetter,
-                       context: StoryContext,
-                       settings: WrapperPseudoStateSettings) {
-
-  const channel = addons.getChannel();
-  const story = getStory(context);
-
-  let addonDisabled = settings?.parameters?.disabled || false;
-  channel.on('saps/toolbutton-click', (value) => {
-    console.log('button clicked emitted to addon', value);
-    addonDisabled = value;
-  });
-  channel.emit(SAPS_INIT_PSEUDO_STATES, addonDisabled);
-  // when disabled return default story
-  if (addonDisabled) {
-    return story;
-  }
-
-  const container = getStoryContainer();
-
-  // use selector form parameters or if not set use settings selector or null
-  const selector: Selector | null =
-    settings?.parameters?.selector || null/*|| settings?.options?.selector*/;
-  // TODO support Array<string>
-
-  const composition: StatesComposition =
-    settings?.parameters?.stateComposition || StatesCompositionDefault;
-
-  const prefix: string = settings?.parameters?.prefix || PseudoStatesDefaultPrefix;
+function renderStates(story: HTMLElement, composition: StatesComposition, container: Element, selector: Selector | null, prefix: string) {
 
   // show default story at first
   if (composition?.pseudo && composition?.pseudo.length > 0) {
@@ -112,8 +86,48 @@ function pseudoStateFn(getStory: StoryGetter,
       container.appendChild(wrapStoryinStateContainer(elementWithPseudo, state));
     }
   }
-
   return container;
+}
+
+function pseudoStateFn(getStory: StoryGetter,
+                       context: StoryContext,
+                       settings: WrapperPseudoStateSettings) {
+
+  const channel = addons.getChannel();
+  const story = getStory(context);
+  let container = getStoryContainer();
+
+  let addonDisabled = settings?.parameters?.disabled || false;
+  channel.on('saps/toolbutton-click', (value) => {
+    addonDisabled = value;
+    if (value) {
+      container.innerHTML = '';
+      container.append(story);
+    } else {
+      container.innerHTML = '';
+      renderStates(story, composition, container, selector, prefix);
+    }
+  });
+  channel.emit(SAPS_INIT_PSEUDO_STATES, addonDisabled);
+  // when disabled return default story
+  if (addonDisabled) {
+    return story;
+  }
+
+
+
+  // use selector form parameters or if not set use settings selector or null
+  const selector: Selector | null =
+    settings?.parameters?.selector || null/*|| settings?.options?.selector*/;
+  // TODO support Array<string>
+
+  const composition: StatesComposition =
+    settings?.parameters?.stateComposition || StatesCompositionDefault;
+
+  const prefix: string = settings?.parameters?.prefix || PseudoStatesDefaultPrefix;
+
+
+  return renderStates(story, composition, container, selector, prefix);
 }
 
 export const withPseudo = makeDecorator({

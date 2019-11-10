@@ -12,10 +12,10 @@ This is how it look like:
 
 | Framework | Display States | Tool-Button to show/hide |
 |-----------|:--------------:|:------------------------:|
-| Angular   |        +       |             +            |
+| Angular   |        +       |             +*           |
 | React     |        +       |             +*           |
 | Lit       |        +       |             +*           |
-| HTML      |        +       |                          |
+| HTML      |        +       |             +*           |
 | Vue       |                |                          |
 
 &ast; Could lead to sync problems with other addons, like knobs
