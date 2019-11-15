@@ -3,7 +3,6 @@ import { PseudoStatesDefaultPrefix, PseudoStatesParameters, StatesCompositionDef
 import { PseudoStateWrapperComponent, PseudoStateWrapperContainer } from './PseudoStateWrapperComponents';
 import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
 
-
 function getModuleMetadata(metadata: any) {
   const {moduleMetadata, component} = metadata;
 

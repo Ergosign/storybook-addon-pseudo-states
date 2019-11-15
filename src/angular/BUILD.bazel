@@ -1,0 +1,39 @@
+
+load("@npm_bazel_typescript//:index.bzl", "ts_library")
+load("@npm_bazel_rollup//:index.bzl", "rollup_bundle")
+load("@build_bazel_rules_nodejs//:index.bzl", "npm_package")
+
+
+
+ts_library(
+    name = "angular",
+    visibility = ["//visibility:public"],
+    srcs = glob(["*.ts"]),
+    tsconfig = "//src:tsconfig-base",
+    deps = [
+        "//src/share",
+        "@npm//@storybook/addons",
+        "@npm//@angular/core"
+    ],
+)
+
+
+rollup_bundle(
+    name = "bundle",
+    srcs = ["dependency.js"],
+    entry_point = "input.js",
+    config_file = "rollup.config.js",
+)
+
+
+npm_package(
+    name = "packr",
+    srcs = [
+        "README.md",
+        "package.json"
+    ],
+    deps = [
+        ":angular",
+        "//src/share"
+    ],
+)

@@ -1,6 +1,6 @@
 {
-  "name": "@ergosign/addon-pseudo-states",
-  "version": "0.0.1-beta.7",
+  "name": "@ergosign/storybook-addon-pseudo-states",
+  "version": "0.0.1",
   "description": "Storybook Addon to show pseudo states",
   "directories": {
     "test": "test",
@@ -15,17 +15,28 @@
     "release-it-patch": "release-it patch -n --no-npm.publish --verbose ",
     "release-it-minor": "release-it minor -n --no-npm.publish --verbose",
     "release-it-major": "release-it major -n --no-npm.publish --verbose",
-    "release": "release-it --no-npm.publish"
+    "release": "release-it --no-npm.publish",
+    "bazel-build": "bazel build",
+    "bazel-test": "bazel test",
+    "bazel-build-all": "bazel build //src:all_frameworks",
+    "build-share": "bazel build //src/share",
+    "build-angular": "bazel build //src/angular",
+    "build-angular-packr": "bazel build //src/angular:packr.pack"
   },
   "author": "philippone",
-  "license": "ISC",
+  "license": "MIT",
   "files": [
     "**/*.js",
     "**/*.d.ts"
   ],
   "devDependencies": {
-    "@angular/core": "8.2.13",
+    "@angular/core": "8.2.14",
     "@babel/core": "7.7.2",
+    "@bazel/bazel": "^1.1.0",
+    "@bazel/buildifier": "0.29.0",
+    "@bazel/ibazel": "^0.10.3",
+    "@bazel/typescript": "^0.40.0",
+    "@bazel/rollup": "^0.40.0",
     "@storybook/addons": "5.2.6",
     "@storybook/cli": "5.2.6",
     "@storybook/html": "5.2.6",
@@ -37,7 +48,8 @@
     "emotion": "10.0.23",
     "lit-html": "1.1.2",
     "release-it": "12.4.3",
-    "typescript": "3.8.0-dev.20191105"
+    "typescript": "3.7.2",
+    "ts-api-guardian": "^0.4.6"
   },
   "dependencies": {},
   "peerDependencies": {
@@ -46,7 +58,8 @@
     "@storybook/addons": "^5.2.6",
     "@storybook/angular": "^5.2.6",
     "@storybook/api": "^5.2.6",
-    "@storybook/core-events": "^5.2.6"
+    "@storybook/core-events": "^5.2.6",
+    "@storybook/components": "^5.2.6"
   },
   "publishConfig": {
     "registry": "https://nexus.ergosign-projects.com/repository/es-npm-external/"

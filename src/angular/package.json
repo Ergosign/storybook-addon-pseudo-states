@@ -1,0 +1,31 @@
+{
+  "name": "@ergosign/storybook-addon-pseudo-states-angular",
+  "version": "0.0.1",
+  "description": "Storybook addon to show pseudo states for Angular Framework",
+  "directories": {
+    "test": "test",
+    "dist": "dist"
+  },
+  "author": "philippone",
+  "license": "MIT",
+  "files": [
+    "**/*.js",
+    "**/*.d.ts"
+  ],
+  "main": "lib/public-api.js",
+  "typings": "lib/public-api.d.ts",
+  "dependencies": {},
+  "peerDependencies": {
+    "react": "^16.11.0",
+    "@angular/core": "^8.0.0",
+    "@storybook/angular": "^5.2.6",
+    "@storybook/addons": "^5.2.6",
+    "@storybook/api": "^5.2.6",
+    "@storybook/core-events": "^5.2.6",
+    "@storybook/components": "^5.2.6"
+  },
+  "publishConfig": {
+    "registry": "https://nexus.ergosign-projects.com/repository/es-npm-external/"
+  }
+  "private": true
+}

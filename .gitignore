@@ -29,3 +29,4 @@ htpasswd
 /false
 *.tgz
 package/
+bazel-out
