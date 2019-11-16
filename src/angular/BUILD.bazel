@@ -11,19 +11,42 @@ ts_library(
         "//src/share",
         "@npm//@angular/core",
         "@npm//@storybook/addons",
-    ]
+    ],
 )
 
+[
+    rollup_bundle(
+        name = "bundle.%s" % format,
+        config_file = "//:rollup.config.js",
+        entry_points = {
+                ":angular.public-api": "withPseudo.%s" % format,
+            },
+        format = format,
+        sourcemap = "inline",
+        deps = [
+            ":angular",
+        ],
+    )
+    for format in [
+        "cjs",
+        "umd",
+        "amd",
+        "esm",
+        "iife",
+        "system",
+    ]
+]
+
 rollup_bundle(
-    name = "angular_bundle",
+    name = "bundle_all",
+    config_file = "rollup-angular.config.js",
     entry_points = {
-            "public-api.d.ts": "index",
-        },
-    output_dir = True,
+        "public-api": "withPseudo_ts",
+    },
+    sourcemap = "inline",
     deps = [
-        ":angular",
+        "//src/angular",
     ],
-    config_file = "rollup.config.js",
 )
 
 npm_package(
@@ -33,6 +56,10 @@ npm_package(
         "package.json",
     ],
     deps = [
-        ":angular_bundle",
+        ":bundle.cjs",
+        ":bundle.esm",
+        ":bundle.amd",
+        ":bundle.iife",
+        ":bundle.system",
     ],
 )
