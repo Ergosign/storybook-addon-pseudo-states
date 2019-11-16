@@ -2,7 +2,7 @@ load("@npm_bazel_typescript//:index.bzl", "ts_config")
 
 ts_config(
     name = "tsconfig-base",
-    visibility = ["//visibility:public"],
     src = "tsconfig.json",
+    visibility = ["//visibility:public"],
     deps = ["tsconfig.json"],
 )

@@ -21,6 +21,7 @@
     "bazel-build-all": "bazel build //src:all_frameworks",
     "build-share": "bazel build //src/share",
     "build-angular": "bazel build //src/angular",
+    "build-angular-bundle": "bazel build //src/angular:angular_bundle",
     "build-angular-packr": "bazel build //src/angular:packr.pack"
   },
   "author": "philippone",
@@ -37,6 +38,7 @@
     "@bazel/ibazel": "^0.10.3",
     "@bazel/typescript": "^0.40.0",
     "@bazel/rollup": "^0.40.0",
+    "rollup": "^1.27.0",
     "@storybook/addons": "5.2.6",
     "@storybook/cli": "5.2.6",
     "@storybook/html": "5.2.6",
@@ -56,7 +58,6 @@
     "react": "^16.11.0",
     "lit-html": "^1.1.2",
     "@storybook/addons": "^5.2.6",
-    "@storybook/angular": "^5.2.6",
     "@storybook/api": "^5.2.6",
     "@storybook/core-events": "^5.2.6",
     "@storybook/components": "^5.2.6"

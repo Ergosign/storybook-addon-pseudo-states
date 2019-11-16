@@ -1,26 +1,31 @@
 load("@npm_bazel_typescript//:index.bzl", "ts_library")
 
-
 ts_library(
-    name="share",
+    name = "share",
+    srcs = glob([
+        "*.ts",
+        "*.tsx",
+    ]),
     visibility = ["//visibility:public"],
-    srcs = glob(["*.ts", "*.tsx"]),
-     deps = [
-        "@npm//@types/react",
+    deps = [
         "@npm//@storybook/addons",
-        "@npm//@storybook/core-events",
-        "@npm//@storybook/components",
         "@npm//@storybook/api",
-     ]
+        "@npm//@storybook/components",
+        "@npm//@storybook/core-events",
+        "@npm//@types/react",
+    ],
 )
 
 ts_library(
     name = "html",
-    srcs = glob(["html.ts", "html/**/*.ts"]),
+    srcs = glob([
+        "html.ts",
+        "html/**/*.ts",
+    ]),
     deps = [
         ":share",
+        "@npm//@storybook/addons",
         "@npm//@types",
         "@npm//@types/node",
-        "@npm//@storybook/addons"
-    ]
+    ],
 )
