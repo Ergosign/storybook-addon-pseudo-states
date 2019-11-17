@@ -4,27 +4,85 @@ load("@build_bazel_rules_nodejs//:index.bzl", "npm_package")
 
 ts_library(
     name = "angular",
-    srcs = glob(["*.ts"]),
-    tsconfig = "//src:tsconfig-base",
+    srcs = glob([
+        #        "public-api.ts",
+        "angular.ts",
+        "PseudoStateWrapperComponents.ts",
+    ]),
+    #    tsconfig = "//src:tsconfig-base",
     visibility = ["//visibility:public"],
     deps = [
         "//src/share",
+        #        "//src/register",
         "@npm//@angular/core",
         "@npm//@storybook/addons",
     ],
 )
 
+filegroup(
+    name = "js_out",
+    srcs = ["angular"],
+    # Change to es6_sources to get the 'prodmode' JS
+    output_group = "es6_sources",
+)
+
+#genrule(
+#    name = "public_api_file",
+#)
+
+ts_library(
+    name = "public_api",
+    srcs = glob(["public-api.ts"]),
+    #    tsconfig = "//src:tsconfig-base",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":angular",
+        "//src/register",
+    ],
+)
+
+#filegroup(
+#    name = "public-api.js",
+#    srcs = ["public_api"],
+#    # Change to es6_sources to get the 'prodmode' JS
+#    output_group = "es5_sources",
+#)
+
+#ts_library(
+#    name = "lib",
+#    srcs = glob(["public-api.ts"]),
+#    tsconfig = "//src:tsconfig-base",
+#    visibility = ["//visibility:public"],
+#    deps = [
+#        ":angular",
+#        "//src/register",
+#    ],
+#)
+
+#filegroup(
+#    name = "lib.js",
+#    srcs = ["lib"],
+#    # Change to es6_sources to get the 'prodmode' JS
+#    output_group = "es5_sources",
+#)
+
 [
     rollup_bundle(
         name = "bundle.%s" % format,
+        srcs = [
+            ":angular",
+            "//src/register",
+        ],
         config_file = "//:rollup.config.js",
         entry_points = {
-                ":angular.public-api": "withPseudo.%s" % format,
-            },
+            "public-api.ts": "withPseudo.%s" % format,
+        },
         format = format,
+        output_dir = False,
         sourcemap = "inline",
         deps = [
             ":angular",
+            ":public_api",
         ],
     )
     for format in [
@@ -37,18 +95,6 @@ ts_library(
     ]
 ]
 
-rollup_bundle(
-    name = "bundle_all",
-    config_file = "rollup-angular.config.js",
-    entry_points = {
-        "public-api": "withPseudo_ts",
-    },
-    sourcemap = "inline",
-    deps = [
-        "//src/angular",
-    ],
-)
-
 npm_package(
     name = "packr",
     srcs = [
@@ -57,9 +103,10 @@ npm_package(
     ],
     deps = [
         ":bundle.cjs",
-        ":bundle.esm",
-        ":bundle.amd",
-        ":bundle.iife",
-        ":bundle.system",
     ],
 )
+
+#":bundle.esm",
+#        ":bundle.amd",
+#        ":bundle.iife",
+#        ":bundle.system"

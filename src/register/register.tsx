@@ -1,10 +1,10 @@
 import React from 'react';
 import addons, { types } from '@storybook/addons';
-import { PseudoStateTool } from './PseudoStateTool';
-import { ADDON_ID, TOOL_ID, TOOL_TITLE } from './constants';
+import { PseudoStateTool } from '../share/PseudoStateTool';
+import { ADDON_ID, TOOL_ID, TOOL_TITLE } from '../share/constants';
 
 
-addons.register(ADDON_ID, (/*api: API*/): void => {
+export default addons.register(ADDON_ID, (/*api: API*/): void => {
 
   addons.add(TOOL_ID, {
     title: TOOL_TITLE,

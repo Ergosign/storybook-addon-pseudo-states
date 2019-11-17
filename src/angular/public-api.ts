@@ -1,2 +1,4 @@
 export {withPseudo} from './angular';
-export * from '../share/register';
+import r from '../register/register';
+
+export const register = r;

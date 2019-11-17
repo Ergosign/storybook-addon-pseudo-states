@@ -17,6 +17,22 @@ ts_library(
 )
 
 ts_library(
+    name = "register",
+    srcs = glob([
+        "register.tsx",
+    ]),
+    visibility = ["//visibility:public"],
+    deps = [
+        ":share",
+        "@npm//@storybook/addons",
+        "@npm//@storybook/api",
+        "@npm//@storybook/components",
+        "@npm//@storybook/core-events",
+        "@npm//@types/react",
+    ],
+)
+
+ts_library(
     name = "html",
     srcs = glob([
         "html.ts",
