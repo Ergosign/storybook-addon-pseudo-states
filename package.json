@@ -20,11 +20,8 @@
     "bazel-test": "bazel test",
     "bazel-build-all": "bazel build //src:all_frameworks",
     "build-share": "bazel build //src/share",
-    "build-angular": "bazel build //src/angular",
-    "build-angular-bundle": "bazel build //src/angular:bundle",
-    "build-angular-bundle_all": "bazel build //src/angular:bundle_all",
-    "build-angular-app": "bazel run //src/angular:diffload",
-    "build-angular-packr": "bazel build //src/angular:packr.pack"
+    "build-angular-packr": "bazel build //src/angular:packr.pack --sandbox_debug",
+    "build-angular-packr-watch": "ibazel build //src/angular:packr.pack"
   },
   "author": "philippone",
   "license": "MIT",
@@ -52,12 +49,15 @@
     "lit-html": "1.1.2",
     "release-it": "12.4.3",
     "rollup": "^1.27.0",
+    "rollup-plugin-dts": "^1.1.12",
     "rollup-plugin-typescript": "^1.0.1",
     "ts-api-guardian": "^0.4.6",
     "tslib": "^1.10.0",
     "typescript": "^3.7.2"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@wessberg/rollup-plugin-ts": "^1.1.80"
+  },
   "peerDependencies": {
     "react": "^16.11.0",
     "lit-html": "^1.1.2",

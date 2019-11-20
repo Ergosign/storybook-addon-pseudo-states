@@ -41,12 +41,18 @@ ts_library(
     ],
 )
 
-#filegroup(
-#    name = "public-api.js",
-#    srcs = ["public_api"],
-#    # Change to es6_sources to get the 'prodmode' JS
-#    output_group = "es5_sources",
-#)
+filegroup(
+    name = "public-api.js",
+    srcs = ["public_api"],
+    # Change to es6_sources to get the 'prodmode' JS
+    output_group = "es5_sources",
+)
+filegroup(
+    name = "public-api.d.ts",
+    srcs = ["public_api"],
+    # Change to es6_sources to get the 'prodmode' JS
+    output_group = "es5_sources",
+)
 
 #ts_library(
 #    name = "lib",
@@ -83,6 +89,15 @@ ts_library(
         deps = [
             ":angular",
             ":public_api",
+#            "public-api.d.ts",
+#            "public-api.js",
+            "@npm//@wessberg/rollup-plugin-ts",
+            "@npm//rollup-plugin-dts",
+            "@npm//@angular/core",
+            "@npm//@storybook/addons",
+            "@npm//@storybook/api",
+            "@npm//@storybook/components",
+            "@npm//react"
         ],
     )
     for format in [
@@ -102,11 +117,12 @@ npm_package(
         "package.json",
     ],
     deps = [
-        ":bundle.cjs",
-    ],
-)
-
-#":bundle.esm",
+#        ":bundle.cjs",
+         ":bundle.esm",
 #        ":bundle.amd",
 #        ":bundle.iife",
 #        ":bundle.system"
+
+    ],
+)
+
