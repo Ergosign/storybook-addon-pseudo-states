@@ -1,5 +1,5 @@
 {
-  "name": "@ergosign/storybook-addon-pseudo-states",
+  "name": "@ergosign/storybook-pseudo-states",
   "version": "0.0.1",
   "description": "Storybook decorator to display all pseudo states at once.",
   "directories": {
@@ -19,7 +19,11 @@
     "angular:build": "tsc --p src/angular",
     "angular:pack": "cd src/angular && npm pack",
     "react:build": "tsc --p src/react",
-    "react:pack": "cd src/react && npm pack"
+    "react:pack": "cd src/react && npm pack",
+    "html:build": "tsc --p src/html",
+    "html:pack": "cd src/html && npm pack",
+    "lit:build": "tsc --p src/lit",
+    "lit:pack": "cd src/lit && npm pack"
   },
   "author": "philippone",
   "license": "MIT",
@@ -38,18 +42,7 @@
     "release-it": "12.4.3",
     "typescript": "^3.8.0-dev.20191120"
   },
-  "peerDependencies": {
-    "react": "^16.11.0",
-    "lit-html": "^1.1.2",
-    "@storybook/addons": "^5.2.6",
-    "@storybook/api": "^5.2.6",
-    "@storybook/core-events": "^5.2.6",
-    "@storybook/components": "^5.2.6"
-  },
   "private": true,
-  "publishConfig": {
-    "registry": "https://nexus.ergosign-projects.com/repository/es-npm-external/"
-  },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"

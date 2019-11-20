@@ -1,5 +1,5 @@
 {
-  "name": "@ergosign/storybook-addon-pseudo-states-react",
+  "name": "@ergosign/storybook-pseudo-states-react",
   "version": "0.0.1",
   "description": "Storybook decorator to display all pseudo states at once for React.",
   "directories": {
@@ -20,8 +20,6 @@
   "dependencies": {},
   "peerDependencies": {
     "react": "^16.11.0",
-    "@angular/core": "^8.0.0",
-    "@storybook/angular": "^5.2.6",
     "@storybook/addons": "^5.2.6",
     "@storybook/api": "^5.2.6",
     "@storybook/core-events": "^5.2.6",

@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "include": [
+    "./public-api.ts",
+    "./register.ts"
+  ]
+}
