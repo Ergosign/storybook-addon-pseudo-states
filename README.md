@@ -1,6 +1,6 @@
-# Stroybook Addon Pseudo States 
+# Storybook Addon Pseudo States 
 
-Stroybook Addon Pseudo States allows you to automatically display pseudo states (and attribute states) of a component in Storybook's preview area.
+Storybook Addon Pseudo States allows you to automatically display pseudo states (and attribute states) of a component in Storybook's preview area.
 
 This is how it look like:
 

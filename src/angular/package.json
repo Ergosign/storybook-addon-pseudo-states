@@ -12,8 +12,7 @@
     "**/*.js",
     "**/*.d.ts"
   ],
-  "main": "withPseudo.cjs.js",
-  "module": "withPseudo.esm.js",
+  "main": "public-api.js",
   "dependencies": {},
   "peerDependencies": {
     "react": "^16.11.0",

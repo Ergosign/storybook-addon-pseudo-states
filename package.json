@@ -16,12 +16,7 @@
     "release-it-minor": "release-it minor -n --no-npm.publish --verbose",
     "release-it-major": "release-it major -n --no-npm.publish --verbose",
     "release": "release-it --no-npm.publish",
-    "bazel-build": "bazel build",
-    "bazel-test": "bazel test",
-    "bazel-build-all": "bazel build //src:all_frameworks",
-    "build-share": "bazel build //src/share",
-    "build-angular-packr": "bazel build //src/angular:packr.pack --sandbox_debug",
-    "build-angular-packr-watch": "ibazel build //src/angular:packr.pack"
+    "build-angular": "tsc --p src/angular"
   },
   "author": "philippone",
   "license": "MIT",
@@ -32,11 +27,6 @@
   "devDependencies": {
     "@angular/core": "8.2.14",
     "@babel/core": "7.7.2",
-    "@bazel/bazel": "^1.1.0",
-    "@bazel/buildifier": "0.29.0",
-    "@bazel/ibazel": "^0.10.3",
-    "@bazel/rollup": "^0.40.0",
-    "@bazel/typescript": "^0.40.0",
     "@storybook/addons": "5.2.6",
     "@storybook/cli": "5.2.6",
     "@storybook/html": "5.2.6",
@@ -53,7 +43,7 @@
     "rollup-plugin-typescript": "^1.0.1",
     "ts-api-guardian": "^0.4.6",
     "tslib": "^1.10.0",
-    "typescript": "^3.7.2"
+    "typescript": "^3.8.0-dev.20191120"
   },
   "dependencies": {
     "@wessberg/rollup-plugin-ts": "^1.1.80"
