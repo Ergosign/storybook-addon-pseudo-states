@@ -1,0 +1,10 @@
+{
+  "packages": [
+    "src/angular",
+    "src/react",
+    "src/html",
+    "src/lit"
+  ],
+  "npmClient": "npm",
+  "version": "0.0.1"
+}

@@ -38,6 +38,7 @@
     "@types/react-dom": "16.9.4",
     "cz-conventional-changelog": "3.0.2",
     "emotion": "10.0.23",
+    "lerna": "^3.18.5",
     "lit-html": "1.1.2",
     "release-it": "12.4.3",
     "typescript": "^3.8.0-dev.20191120"
