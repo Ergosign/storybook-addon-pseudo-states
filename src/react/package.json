@@ -1,7 +1,7 @@
 {
-  "name": "@ergosign/storybook-addon-pseudo-states-angular",
+  "name": "@ergosign/storybook-addon-pseudo-states-react",
   "version": "0.0.1",
-  "description": "Storybook decorator to display all pseudo states at once for Angular Components.",
+  "description": "Storybook decorator to display all pseudo states at once for React.",
   "directories": {
     "test": "test",
     "dist": "dist"
