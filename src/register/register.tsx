@@ -4,7 +4,7 @@ import { PseudoStateTool } from '../share/PseudoStateTool';
 import { ADDON_ID, TOOL_ID, TOOL_TITLE } from '../share/constants';
 
 
-export default () => {
+// export default () => {
 
   addons.register(ADDON_ID, (/*api: API*/): void => {
 
@@ -30,4 +30,4 @@ export default () => {
     // });
   });
 
-}
+// }

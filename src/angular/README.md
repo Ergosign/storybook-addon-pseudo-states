@@ -25,7 +25,7 @@ This is how it look like:
 First of all, you need to install Pseudo States into your project as a dev dependency.
 
 ```sh
-npm install @ergosign/addon-pseudo-states --save-dev
+npm install @ergosign/storybook-pseudo-states-angular --save-dev
 ```
 
 Then, configure it as an addon by adding it to your addons.js file (located in the Storybook config directory).
@@ -161,7 +161,7 @@ See [Framework Support](##Framework Support) which Frameworks support this featu
 
 Enable the button by adding it to your `addons.js` file (located in the Storybook config directory):
 ```js
-import "@ergosign/addon-pseudo-states/register";
+import "@ergosign/storybook-pseudo-states-angular/register";
 ```
 
 ### Usage
@@ -175,7 +175,7 @@ import "@ergosign/addon-pseudo-states/register";
 **TODO test following config**
 
 ```js
-import { withPseudo } from "@ergosign/addon-pseudo-states/<framework>";
+import { withPseudo } from "@ergosign/storybook-pseudo-states-<frameork>";
 
 const section = {
   title: "Button",
@@ -198,7 +198,7 @@ export const Story = () => {
 ##### storyOf Format
 
 ```js
-import { withPseudo } from '@ergosign/addon-pseudo-states/<framework>';
+import { withPseudo } from '@ergosign/@ergosign/storybook-pseudo-states-<framework>';
 
 storiesOf('Button', module)
  .addDecorator(withPseudo)
@@ -222,7 +222,7 @@ There is a default configuration for `StateComposition`.
 At the moment, only [Component Story Format](https://storybook.js.org/docs/formats/component-story-format/) is supported (tested).
 
 ```js
-import { withPseudo } from "@ergosign/addon-pseudo-states/angular";
+import { withPseudo } from "@ergosign/storybook-pseudo-states-angular";
 
 const section = {
   component: ButtonComponent,
