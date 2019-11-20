@@ -17,13 +17,12 @@
   ],
   "main": "dist/angular/public-api.js",
   "types": "dist/angular/public-api.d.ts",
-  "dependencies": {},
   "peerDependencies": {
-    "react": "^16.11.0",
     "@storybook/addons": "^5.2.6",
     "@storybook/api": "^5.2.6",
+    "@storybook/components": "^5.2.6",
     "@storybook/core-events": "^5.2.6",
-    "@storybook/components": "^5.2.6"
+    "react": "^16.11.0"
   },
   "publishConfig": {
     "registry": "https://nexus.ergosign-projects.com/repository/es-npm-external/"
