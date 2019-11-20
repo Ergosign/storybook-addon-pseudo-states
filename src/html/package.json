@@ -6,6 +6,11 @@
     "test": "test",
     "dist": "dist"
   },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch --outDir dist",
+    "pack": "npm pack"
+  },
   "author": "philippone",
   "license": "MIT",
   "files": [

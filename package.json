@@ -7,15 +7,7 @@
     "dist": "dist"
   },
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch --outDir dist",
-    "prepack-package": "cp package.json ./dist",
-    "pack": "npm run build && npm run prepack-package && cd dist && npm pack",
-    "release-it-beta": "release-it -n --preRelease=beta --no-npm.publish --verbose",
-    "release-it-patch": "release-it patch -n --no-npm.publish --verbose ",
-    "release-it-minor": "release-it minor -n --no-npm.publish --verbose",
-    "release-it-major": "release-it major -n --no-npm.publish --verbose",
-    "release": "release-it --no-npm.publish",
+    "lint": "eslint src --fix",
     "angular:build": "tsc --p src/angular",
     "angular:pack": "cd src/angular && npm pack",
     "react:build": "tsc --p src/react",
@@ -25,7 +17,8 @@
     "lit:build": "tsc --p src/lit",
     "lit:pack": "cd src/lit && npm pack",
     "lerna:bootstrap": "lerna bootstrap",
-    "lerna:version": "lerna version"
+    "lerna:version": "lerna version",
+    "lerna:build-all": "lerna run build"
   },
   "author": "philippone",
   "license": "MIT",
@@ -38,14 +31,21 @@
     "@types/node": "12.12.7",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.4",
-    "cz-conventional-changelog": "3.0.2",
+    "@typescript-eslint/eslint-plugin": "^2.8.0",
+    "@typescript-eslint/parser": "^2.8.0",
     "babel-loader": "8.0.6",
-    "zone.js": "0.10.2",
+    "cz-conventional-changelog": "3.0.2",
     "emotion": "10.0.23",
+    "eslint": "^6.6.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
     "lerna": "3.18.5",
     "lit-html": "1.1.2",
     "typescript": "^3.8.0-dev.20191120",
-    "eslint": "6.6.0"
+    "zone.js": "0.10.2"
   },
   "private": true,
   "config": {
