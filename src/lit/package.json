@@ -38,6 +38,7 @@
     "**/*.d.ts"
   ],
   "main": "dist/lit/public-api.js",
+  "browser": "dist/lit/public-api.js",
   "types": "dist/lit/public-api.d.ts",
   "peerDependencies": {
     "@storybook/addons": "^5.2.6",

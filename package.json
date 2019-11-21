@@ -35,7 +35,8 @@
     "lit:pack": "cd src/lit && npm pack",
     "lerna:bootstrap": "lerna bootstrap",
     "lerna:version": "lerna version",
-    "lerna:build-all": "lerna run build"
+    "lerna:build-all": "lerna run build",
+    "lerna:publish": "lerna publish"
   },
   "husky": {
     "hooks": {
@@ -50,25 +51,28 @@
     "@storybook/addons": "5.2.6",
     "@storybook/cli": "5.2.6",
     "@storybook/html": "5.2.6",
-    "@types/node": "12.12.7",
+    "@types/node": "12.12.11",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.4",
-    "@typescript-eslint/eslint-plugin": "^2.8.0",
-    "@typescript-eslint/parser": "^2.8.0",
+    "@typescript-eslint/eslint-plugin": "2.8.0",
+    "@typescript-eslint/parser": "2.8.0",
     "babel-loader": "8.0.6",
     "cz-conventional-changelog": "3.0.2",
     "emotion": "10.0.23",
-    "eslint": "^6.6.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-node": "^10.0.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "husky": "^3.1.0",
+    "eslint": "6.6.0",
+    "eslint-config-standard": "14.1.0",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-node": "10.0.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-standard": "4.0.1",
+    "husky": "3.1.0",
     "lerna": "3.18.5",
     "lit-html": "1.1.2",
-    "typescript": "^3.8.0-dev.20191120",
+    "typescript": "3.7.2",
     "zone.js": "0.10.2"
+  },
+  "engines": {
+    "node": ">=10.0.0"
   },
   "private": true,
   "config": {
