@@ -1,7 +1,24 @@
 {
-  "name": "@ergosign/storybook-pseudo-states",
+  "name": "storybook-pseudo-states",
   "version": "0.0.1",
-  "description": "Storybook decorator to display all pseudo states at once.",
+  "description": "Storybook decorator to enable automatic generation and displaying of CSS pseudo states for components.",
+  "keywords": [
+    "storybook",
+    "storybookjs",
+    "addon",
+    "decorator",
+    "pseudo states",
+    "css",
+    "angular",
+    "components",
+    "tool",
+    "ui",
+    "user interface"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ergosign/storybook-addon-pseudo-states"
+  },
   "directories": {
     "test": "test",
     "dist": "dist"
@@ -19,6 +36,11 @@
     "lerna:bootstrap": "lerna bootstrap",
     "lerna:version": "lerna version",
     "lerna:build-all": "lerna run build"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
   },
   "author": "philippone",
   "license": "MIT",
@@ -42,6 +64,7 @@
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "husky": "^3.1.0",
     "lerna": "3.18.5",
     "lit-html": "1.1.2",
     "typescript": "^3.8.0-dev.20191120",

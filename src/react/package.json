@@ -1,7 +1,24 @@
 {
-  "name": "@ergosign/storybook-pseudo-states-react",
+  "name": "storybook-addon-pseudo-states-react",
   "version": "0.0.1",
-  "description": "Storybook decorator to display all pseudo states at once for React.",
+  "description": "Storybook decorator to enable automatic generation and displaying of CSS pseudo states for components.",
+  "keywords": [
+    "storybook",
+    "storybookjs",
+    "addon",
+    "decorator",
+    "pseudo states",
+    "css",
+    "angular",
+    "components",
+    "tool",
+    "ui",
+    "user interface"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ergosign/storybook-addon-pseudo-states"
+  },
   "directories": {
     "test": "test",
     "dist": "dist"
@@ -28,9 +45,5 @@
     "@storybook/components": "^5.2.6",
     "@storybook/core-events": "^5.2.6",
     "react": "^16.11.0"
-  },
-  "publishConfig": {
-    "registry": "https://nexus.ergosign-projects.com/repository/es-npm-external/"
-  },
-  "private": true
+  }
 }
