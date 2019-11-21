@@ -13,7 +13,6 @@ coverage/
 *.lerna_backup
 build
 packages/examples/automated-*
-/**/LICENSE
 docs/public
 packs/*.tgz
 .nvmrc
