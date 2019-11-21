@@ -9,6 +9,8 @@
   "npmClient": "npm",
   "command": {
     "publish": {
+      "conventionalCommits": true,
+      "yes": true,
       "ignoreChanges": [
         "ignored-file"
       ],
