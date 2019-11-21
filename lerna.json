@@ -1,5 +1,5 @@
 {
-  "version": "0.0.1-alpha.2",
+  "version": "0.0.1-alpha.3",
   "packages": [
     "src/angular",
     "src/html",
@@ -12,8 +12,7 @@
       "ignoreChanges": [
         "ignored-file"
       ],
-      "message": "chore(release): publish",
-      "registry": "https://npm.pkg.github.com"
+      "message": "chore(release): publish"
     }
   }
 }
