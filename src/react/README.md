@@ -2,12 +2,6 @@
 
 Storybook Addon Pseudo States allows you to automatically display pseudo states (and attribute states) of a component in Storybook's preview area.
 
-This is how it look like:
-
-![example](./addon-example.png)
-
-**TODO** add live example
-
 ## Framework Support
 
 | Framework | Display States | Tool-Button to show/hide |
@@ -22,10 +16,10 @@ This is how it look like:
 
 ## Getting started
 
-First of all, you need to install Pseudo States into your project as a dev dependency.
+First of all, you need to install Pseudo States into your project as a dev dependency. 
 
 ```sh
-npm install addon-pseudo-states --save-dev
+npm install storybook-pseudo-states-react --save-dev
 ```
 
 Then, configure it as an addon by adding it to your addons.js file (located in the Storybook config directory).
@@ -161,7 +155,7 @@ See [Framework Support](##Framework Support) which Frameworks support this featu
 
 Enable the button by adding it to your `addons.js` file (located in the Storybook config directory):
 ```js
-import "addon-pseudo-states/register";
+import "storybook-pseudo-states-react/register";
 ```
 
 ### Usage
@@ -170,12 +164,12 @@ import "addon-pseudo-states/register";
 
 #### General
 
-##### Component Stroy Format (CSF, recommended)
+##### Component Story Format (CSF, recommended)
 
 **TODO test following config**
 
 ```js
-import { withPseudo } from "addon-pseudo-states/<framework>";
+import { withPseudo } from "storybook-pseudo-states-react";
 
 const section = {
   title: "Button",
@@ -198,7 +192,7 @@ export const Story = () => {
 ##### storyOf Format
 
 ```js
-import { withPseudo } from 'addon-pseudo-states/<framework>';
+import { withPseudo } from 'storybook-pseudo-states-<framework>';
 
 storiesOf('Button', module)
  .addDecorator(withPseudo)
@@ -217,12 +211,46 @@ storiesOf('Button', module)
 ```
 There is a default configuration for `StateComposition`.
 
+### With React
+
+When using [CSS Modules](https://github.com/css-modules/css-modules), you must use automatically styling generation via `postcss-loader` (see [Styling section](###Styling)).
+
+`StateComposition.attributes` enable component's props.
+
+
+```js
+import { withPseudo } from "storybook-pseudo-states-react";
+
+storiesOf('Button', module)
+  .addDecorator(withPseudo)
+  .addParameters({
+    withPseudo: {
+      stateComposition: StatesCompositionDefault
+    }
+  })
+  .add('Button', () => (
+        <Button label="I'm a normal button"/>
+  ))
+
+  .addParameters({
+    withPseudo: {
+        stateComposition: {
+            pseudo: [...PseudoStateOrderDefault, 'hover & focus'],
+            attributes: [...AttributesStateOrderDefault, 'selected', 'error', 'isLoading', 'isReady']
+        }
+    }
+    })
+  .add('Button', () => (
+      <Button label="I'm a normal button"/>
+  ));
+```
+
 #### With Angular
 
 At the moment, only [Component Story Format](https://storybook.js.org/docs/formats/component-story-format/) is supported (tested).
 
 ```js
-import { withPseudo } from "addon-pseudo-states/angular";
+import { withPseudo } from "storybook-pseudo-states-angular";
 
 const section = {
   component: ButtonComponent,
@@ -275,39 +303,6 @@ export const StoryWithTemplate = () => {
 };
 
 ```
-
-### With React
-
-When using [CSS Modules](https://github.com/css-modules/css-modules), you must use automatically styling generation via `postcss-loader` (see [Styling section](###Styling)).
-
-`StateComposition.attributes` enable component's props.
-
-
-```js
-storiesOf('Button', module)
-  .addDecorator(withPseudo)
-  .addParameters({
-    withPseudo: {
-      stateComposition: StatesCompositionDefault
-    }
-  })
-  .add('Button', () => (
-        <Button label="I'm a normal button"/>
-  ))
-
-  .addParameters({
-    withPseudo: {
-        stateComposition: {
-            pseudo: [...PseudoStateOrderDefault, 'hover & focus'],
-            attributes: [...AttributesStateOrderDefault, 'selected', 'error', 'isLoading', 'isReady']
-        }
-    }
-    })
-  .add('Button', () => (
-      <Button label="I'm a normal button"/>
-  ));
-```
-
 
 
 #### With HTML

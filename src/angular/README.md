@@ -2,10 +2,6 @@
 
 Storybook Addon Pseudo States allows you to automatically display pseudo states (and attribute states) of a component in Storybook's preview area.
 
-This is how it looks like:
-
-![example](./addon-example.png)
-
 ## Framework Support
 
 | Framework | Display States | Tool-Button to show/hide |
@@ -21,10 +17,9 @@ This is how it looks like:
 ## Getting started
 
 First of all, you need to install Pseudo States into your project as a dev dependency. 
-Replace `<framework>` with `angular`, `react`, `html` or `lit`:
 
 ```sh
-npm install storybook-pseudo-states-<framework> --save-dev
+npm install storybook-pseudo-states-angular --save-dev
 ```
 
 Then, configure it as an addon by adding it to your addons.js file (located in the Storybook config directory).
@@ -160,7 +155,7 @@ See [Framework Support](##Framework Support) which Frameworks support this featu
 
 Enable the button by adding it to your `addons.js` file (located in the Storybook config directory):
 ```js
-import "storybook-pseudo-states-<framework>/register";
+import "storybook-pseudo-states-angular/register";
 ```
 
 ### Usage
@@ -174,7 +169,7 @@ import "storybook-pseudo-states-<framework>/register";
 **TODO test following config**
 
 ```js
-import { withPseudo } from "storybook-pseudo-states-<frameork>";
+import { withPseudo } from "storybook-pseudo-states-angular";
 
 const section = {
   title: "Button",
@@ -283,8 +278,6 @@ When using [CSS Modules](https://github.com/css-modules/css-modules), you must u
 
 
 ```js
-import { withPseudo } from "storybook-pseudo-states-react";
-
 storiesOf('Button', module)
   .addDecorator(withPseudo)
   .addParameters({
@@ -314,8 +307,6 @@ storiesOf('Button', module)
 #### With HTML
 
 ```js
-import { withPseudo } from "storybook-pseudo-states-html";
-
 storiesOf('Demo', module)
     .addDecorator(withPseudo)
     .addParameters({withPseudo: {selector: null}})
