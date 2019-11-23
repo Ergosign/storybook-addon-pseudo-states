@@ -166,8 +166,6 @@ import "storybook-pseudo-states-<framework>/register";
 
 ##### Component Story Format (CSF, recommended)
 
-**TODO test following config**
-
 ```js
 import { withPseudo } from "storybook-pseudo-states-<frameork>";
 

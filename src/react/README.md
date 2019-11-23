@@ -161,8 +161,6 @@ import "storybook-pseudo-states-react/register";
 
 ##### Component Story Format (CSF, recommended)
 
-**TODO test following config**
-
 ```js
 import { withPseudo } from "storybook-pseudo-states-react";
 
