@@ -70,9 +70,9 @@
     "lerna": "3.19.0",
     "lit-html": "1.1.2",
     "typescript": "3.7.2",
-    "zone.js": "0.10.2",
     "vue": "2.6.10",
-    "vue-class-component": "7.1.0"
+    "vue-class-component": "7.1.0",
+    "zone.js": "0.10.2"
   },
   "engines": {
     "node": ">=10.0.0"
