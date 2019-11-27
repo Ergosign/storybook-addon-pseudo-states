@@ -19,7 +19,7 @@ Storybook Addon Pseudo States allows you to automatically display pseudo states 
 First of all, you need to install Pseudo States into your project as a dev dependency. 
 
 ```sh
-npm install storybook-pseudo-states-angular --save-dev
+npm install storybook-pseudo-states-vue --save-dev
 ```
 
 Then, configure it as an addon by adding it to your addons.js file (located in the Storybook config directory).
@@ -150,7 +150,7 @@ See [Framework Support](##Framework Support) which Frameworks support this featu
 
 Enable the button by adding it to your `addons.js` file (located in the Storybook config directory):
 ```js
-import "storybook-pseudo-states-angular/register";
+import "storybook-pseudo-states-vue/register";
 ```
 
 ### Usage
@@ -162,7 +162,7 @@ import "storybook-pseudo-states-angular/register";
 ##### Component Story Format (CSF, recommended)
 
 ```js
-import { withPseudo } from "storybook-pseudo-states-angular";
+import { withPseudo } from "storybook-pseudo-states-vue";
 
 const section = {
   title: "Button",
@@ -203,6 +203,34 @@ storiesOf('Button', module)
   ))
 ```
 There is a default configuration for `StateComposition`.
+
+### With Vue
+
+```js
+import {withPseudo} from "storybook-addon-pseudo-states-vue";
+import {AttributesStateOrderDefault, PseudoStateOrderDefault} from "storybook-addon-pseudo-states-vue/dist/share/types";
+import MyButton from './MyButton';
+
+export default {
+  title: 'Button',
+  decorators: [withPseudo],
+  parameters: {
+    withPseudo: {
+      stateComposition: {
+        pseudo: PseudoStateOrderDefault,
+        attributes: [...AttributesStateOrderDefault, 'selected', 'isDisabled' ]
+      }
+    }
+  },
+};
+
+export const text = () => ({
+  components: { MyButton },
+  template: '<my-button @click="action">Hello Button</my-button>',
+  methods: { action: action('clicked') },
+});
+```
+
 
 #### With Angular
 

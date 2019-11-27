@@ -49,6 +49,7 @@ export const StatesCompositionDefault: StatesComposition = {
   attributes: AttributesStateOrderDefault
 };
 
+
 export const StatesCompositionDefaultInputC = {
   pseudo: PseudoStateOrderDefault,
   attributes: AttributesStateOrderInputDefault

@@ -4,7 +4,8 @@
     "src/angular",
     "src/html",
     "src/lit",
-    "src/react"
+    "src/react",
+    "src/vue"
   ],
   "npmClient": "npm",
   "command": {

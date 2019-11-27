@@ -14,7 +14,7 @@ This is how it looks like:
 | React     |        +       |             +*           |
 | Lit       |        +       |             +*           |
 | HTML      |        +       |             +*           |
-| Vue       |                |                          |
+| Vue       |        +       |             +*           |
 
 &ast; Could lead to sync problems with other addons, like knobs
 
@@ -302,7 +302,32 @@ storiesOf('Button', module)
   ));
 ```
 
+### With Vue
 
+```js
+import {withPseudo} from "storybook-addon-pseudo-states-vue";
+import {AttributesStateOrderDefault, PseudoStateOrderDefault} from "storybook-addon-pseudo-states-vue/dist/share/types";
+import MyButton from './MyButton';
+
+export default {
+  title: 'Button',
+  decorators: [withPseudo],
+  parameters: {
+    withPseudo: {
+      stateComposition: {
+        pseudo: PseudoStateOrderDefault,
+        attributes: [...AttributesStateOrderDefault, 'selected', 'isDisabled' ]
+      }
+    }
+  },
+};
+
+export const text = () => ({
+  components: { MyButton },
+  template: '<my-button @click="action">Hello Button</my-button>',
+  methods: { action: action('clicked') },
+});
+```
 
 #### With HTML
 
@@ -355,4 +380,19 @@ export interface StatesComposition {
 
 export type PseudoState = PseudoStateEnum | string;
 export type AttributeState = AttributeStatesEnum | string;
+
+export const StatesCompositionDefault: StatesComposition = {
+  pseudo: PseudoStateOrderDefault,
+  attributes: AttributesStateOrderDefault
+};
+
+export const PseudoStateOrderDefault: Array<PseudoState> = [
+  FOCUS, HOVER, ACTIVE
+];
+export const AttributesStateOrderDefault: Array<AttributeState> = [
+  DISABLED
+];
+export const AttributesStateOrderInputDefault: Array<AttributeState> = [
+  DISABLED, READONLY
+];
 ```

@@ -7,7 +7,7 @@ import {
   StatesCompositionDefault,
   WrapperPseudoStateSettings
 } from '../share/types';
-import { style_ps_container } from '../share/styles';
+import { styles } from '../share/styles';
 import { parameters } from '../share/constants';
 import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
 
@@ -47,7 +47,7 @@ function enableAttributeState(story: any, attribute: AttributeState, selector: s
 function getStoryContainer() {
   const container = document.createElement('div');
   // container.classList.add('pseudo-states__container');
-  Object.assign(container.style, style_ps_container.style);
+  Object.assign(container.style, styles.style);
   return container;
 }
 

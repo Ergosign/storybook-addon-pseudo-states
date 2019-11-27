@@ -1,0 +1,52 @@
+{
+  "name": "storybook-addon-pseudo-states-vue",
+  "version": "0.0.1-alpha.4",
+  "description": "Storybook decorator to enable automatic generation and displaying of CSS pseudo states for components.",
+  "keywords": [
+    "storybook",
+    "storybookjs",
+    "addon",
+    "decorator",
+    "pseudo states",
+    "css",
+    "angular",
+    "components",
+    "tool",
+    "ui",
+    "user interface"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ergosign/storybook-addon-pseudo-states"
+  },
+  "directories": {
+    "test": "test",
+    "dist": "dist"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch --outDir dist",
+    "pack": "npm pack"
+  },
+  "author": "philippone",
+  "license": "MIT",
+  "files": [
+    "dist/**/*",
+    "docs/**/*",
+    "README.md",
+    "**/*.js",
+    "**/*.d.ts"
+  ],
+  "main": "dist/vue/public-api.js",
+  "browser": "dist/vue/public-api.js",
+  "types": "dist/vue/public-api.d.ts",
+  "peerDependencies": {
+    "@storybook/addons": "^5.2.6",
+    "@storybook/api": "^5.2.6",
+    "@storybook/components": "^5.2.6",
+    "@storybook/core-events": "^5.2.6",
+    "vue": "^2.6.10",
+    "vue-class-component": "^7.1.0"
+  },
+  "gitHead": "d4da46cfaa23af0376366e6e7c2fe6b20e196845"
+}
