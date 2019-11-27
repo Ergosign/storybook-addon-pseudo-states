@@ -9,11 +9,3 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 * **vue:** added vue decorator ([fdff7d7](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/fdff7d712a16ba09b644f98bc8a6e144d56bd6ce))
-
-
-
-
-
-## [0.0.1-alpha.4](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.3...v0.0.1-alpha.4) (2019-11-23)
-
-**Note:** Version bump only for package storybook-addon-pseudo-states-angular
