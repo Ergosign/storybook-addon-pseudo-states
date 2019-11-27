@@ -10,7 +10,7 @@ Storybook Addon Pseudo States allows you to automatically display pseudo states 
 | React     |        +       |             +*           |
 | Lit       |        +       |             +*           |
 | HTML      |        +       |             +*           |
-| Vue       |                |                          |
+| Vue       |        +       |             +*           |
 
 &ast; Could lead to sync problems with other addons, like knobs
 
@@ -346,5 +346,18 @@ export interface StatesComposition {
 }
 
 export type PseudoState = PseudoStateEnum | string;
-export type AttributeState = AttributeStatesEnum | string;
+export const StatesCompositionDefault: StatesComposition = {
+  pseudo: PseudoStateOrderDefault,
+  attributes: AttributesStateOrderDefault
+};
+
+export const PseudoStateOrderDefault: Array<PseudoState> = [
+  FOCUS, HOVER, ACTIVE
+];
+export const AttributesStateOrderDefault: Array<AttributeState> = [
+  DISABLED
+];
+export const AttributesStateOrderInputDefault: Array<AttributeState> = [
+  DISABLED, READONLY
+];
 ```
