@@ -1,6 +1,6 @@
 {
   "name": "storybook-addon-pseudo-states-angular",
-  "version": "0.0.1-alpha.4",
+  "version": "0.0.1-alpha.5",
   "description": "Storybook decorator to enable automatic generation and displaying of CSS pseudo states for components.",
   "keywords": [
     "storybook",
