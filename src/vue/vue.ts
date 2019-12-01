@@ -8,8 +8,8 @@ import {
   StatesCompositionDefault,
   WrapperPseudoStateSettings
 } from '../share/types';
-import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
-import { STORY_RENDERED } from '@storybook/core-events';
+import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
+import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
 import { getMixedPseudoStates } from '../share/utils';
 import { styles } from '../share/styles';
 
@@ -35,7 +35,8 @@ const pseudoStateFn = (getStory: StoryGetter, context: StoryContext, settings: W
 
   return {
     template: `
-      <div class="pseudo-states-addon__container">
+        <div> 
+      <div class="pseudo-states-addon__container" v-if="!isDisabled">
         <!-- nomal -->
         <div class="pseudo-states-addon__story pseudo-states-addon__story--Normal" :style="styles.storyContainer">
             <div class="pseudo-states-addon__story__header" :style="styles.storyHeader">Normal:</div>
@@ -61,13 +62,17 @@ const pseudoStateFn = (getStory: StoryGetter, context: StoryContext, settings: W
         </div>
        
       </div>
+      <!-- display original story when addon is disabled by toolbar -->
+      <div v-if="isDisabled"><story/></div>
+      </div>
     `,
     data() {
       return {
         styles,
         selector,
         composition,
-        prefix
+        prefix,
+        isDisabled: false
       };
     },
     mounted: function() {
@@ -75,10 +80,20 @@ const pseudoStateFn = (getStory: StoryGetter, context: StoryContext, settings: W
         this.updatePseudoStates();
         this.updateAttributes();
       });
+
+      channel.addListener(SAPS_BUTTON_CLICK, (isDisabled: boolean) => {
+        this.isDisabled = isDisabled;
+      });
+
+      channel.once(STORY_CHANGED, () => {
+        channel.removeAllListeners(SAPS_BUTTON_CLICK);
+      });
     },
     updated: function() {
-      this.updatePseudoStates();
-      this.updateAttributes();
+      if (!this.isDisabled) {
+        this.updatePseudoStates();
+        this.updateAttributes();
+      }
     },
     methods: {
       updatePseudoStates: function() {
@@ -120,7 +135,6 @@ const pseudoStateFn = (getStory: StoryGetter, context: StoryContext, settings: W
       },
       updateAttributes: function() {
         if (composition.attributes) {
-          console.log(composition.attributes);
           for (const attr of composition.attributes) {
             const container = document.querySelector(`.pseudo-states-addon__story--attr-${attr} .pseudo-states-addon__story__container`);
 

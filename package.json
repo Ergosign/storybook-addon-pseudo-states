@@ -36,7 +36,7 @@
     "lerna:bootstrap": "lerna bootstrap",
     "lerna:version": "lerna version",
     "lerna:build-all": "lerna run build",
-    "lerna:publish": "lerna publish --canary --force-publish",
+    "lerna:publish": "lerna publish from-package",
     "lerna:publish:github": "lerna publish --registry https://npm.pkg.github.com/"
   },
   "husky": {
