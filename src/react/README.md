@@ -19,7 +19,7 @@ Storybook Addon Pseudo States allows you to automatically display pseudo states 
 First of all, you need to install Pseudo States into your project as a dev dependency. 
 
 ```sh
-npm install storybook-pseudo-states-react --save-dev
+npm install storybook-addon-pseudo-states-react --save-dev
 ```
 
 Then, configure it as an addon by adding it to your addons.js file (located in the Storybook config directory).
@@ -150,7 +150,7 @@ See [Framework Support](##Framework Support) which Frameworks support this featu
 
 Enable the button by adding it to your `addons.js` file (located in the Storybook config directory):
 ```js
-import "storybook-pseudo-states-react/register";
+import "storybook-addon-pseudo-states-react/register";
 ```
 
 ### Usage
@@ -162,7 +162,7 @@ import "storybook-pseudo-states-react/register";
 ##### Component Story Format (CSF, recommended)
 
 ```js
-import { withPseudo } from "storybook-pseudo-states-react";
+import { withPseudo } from "storybook-addon-pseudo-states-react";
 
 const section = {
   title: "Button",
@@ -185,7 +185,7 @@ export const Story = () => {
 ##### storyOf Format
 
 ```js
-import { withPseudo } from 'storybook-pseudo-states-<framework>';
+import { withPseudo } from 'storybook-addon-pseudo-states-<framework>';
 
 storiesOf('Button', module)
  .addDecorator(withPseudo)
@@ -212,7 +212,7 @@ When using [CSS Modules](https://github.com/css-modules/css-modules), you must u
 
 
 ```js
-import { withPseudo } from "storybook-pseudo-states-react";
+import { withPseudo } from "storybook-addon-pseudo-states-react";
 
 storiesOf('Button', module)
   .addDecorator(withPseudo)
@@ -243,7 +243,7 @@ storiesOf('Button', module)
 At the moment, only [Component Story Format](https://storybook.js.org/docs/formats/component-story-format/) is supported (tested).
 
 ```js
-import { withPseudo } from "storybook-pseudo-states-angular";
+import { withPseudo } from "storybook-addon-pseudo-states-angular";
 
 const section = {
   component: ButtonComponent,

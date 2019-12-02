@@ -24,7 +24,7 @@ First of all, you need to install Pseudo States into your project as a dev depen
 Replace `<framework>` with `angular`, `react`, `html` or `lit`:
 
 ```sh
-npm install storybook-pseudo-states-<framework> --save-dev
+npm install storybook-addon-pseudo-states-<framework> --save-dev
 ```
 
 Then, configure it as an addon by adding it to your addons.js file (located in the Storybook config directory).
@@ -155,7 +155,7 @@ See [Framework Support](##Framework Support) which Frameworks support this featu
 
 Enable the button by adding it to your `addons.js` file (located in the Storybook config directory):
 ```js
-import "storybook-pseudo-states-<framework>/register";
+import "storybook-addon-pseudo-states-<framework>/register";
 ```
 
 ### Usage
@@ -167,7 +167,7 @@ import "storybook-pseudo-states-<framework>/register";
 ##### Component Story Format (CSF, recommended)
 
 ```js
-import { withPseudo } from "storybook-pseudo-states-<frameork>";
+import { withPseudo } from "storybook-addon-pseudo-states-<frameork>";
 
 const section = {
   title: "Button",
@@ -190,7 +190,7 @@ export const Story = () => {
 ##### storyOf Format
 
 ```js
-import { withPseudo } from 'storybook-pseudo-states-<framework>';
+import { withPseudo } from 'storybook-addon-pseudo-states-<framework>';
 
 storiesOf('Button', module)
  .addDecorator(withPseudo)
@@ -214,7 +214,7 @@ There is a default configuration for `StateComposition`.
 At the moment, only [Component Story Format](https://storybook.js.org/docs/formats/component-story-format/) is supported (tested).
 
 ```js
-import { withPseudo } from "storybook-pseudo-states-angular";
+import { withPseudo } from "storybook-addon-pseudo-states-angular";
 
 const section = {
   component: ButtonComponent,
@@ -276,7 +276,7 @@ When using [CSS Modules](https://github.com/css-modules/css-modules), you must u
 
 
 ```js
-import { withPseudo } from "storybook-pseudo-states-react";
+import { withPseudo } from "storybook-addon-pseudo-states-react";
 
 storiesOf('Button', module)
   .addDecorator(withPseudo)
@@ -332,7 +332,7 @@ export const text = () => ({
 #### With HTML
 
 ```js
-import { withPseudo } from "storybook-pseudo-states-html";
+import { withPseudo } from "storybook-addon-pseudo-states-html";
 
 storiesOf('Demo', module)
     .addDecorator(withPseudo)
