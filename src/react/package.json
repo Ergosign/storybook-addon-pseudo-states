@@ -1,6 +1,6 @@
 {
   "name": "storybook-addon-pseudo-states-react",
-  "version": "0.0.1-alpha.8",
+  "version": "0.0.1-alpha.9",
   "description": "Storybook decorator to enable automatic generation and displaying of CSS pseudo states for components.",
   "keywords": [
     "storybook",
