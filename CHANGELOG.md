@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.11](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.10...v0.0.1-alpha.11) (2019-12-02)
+
+
+### Features
+
+* **vue:** added more checks ([eceb457](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/eceb45789550637a97ff5c93fc43c72551a26345))
+
+
+
+
+
 ## [0.0.1-alpha.10](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.9...v0.0.1-alpha.10) (2019-12-02)
 
 **Note:** Version bump only for package storybook-pseudo-states
