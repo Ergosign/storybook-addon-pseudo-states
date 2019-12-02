@@ -35,36 +35,52 @@ const pseudoStateFn = (getStory: StoryGetter, context: StoryContext, settings: W
 
   return {
     template: `
-        <div> 
-      <div class="pseudo-states-addon__container" v-if="!isDisabled">
-        <!-- nomal -->
-        <div class="pseudo-states-addon__story pseudo-states-addon__story--Normal" :style="styles.storyContainer">
-            <div class="pseudo-states-addon__story__header" :style="styles.storyHeader">Normal:</div>
-            <div class="pseudo-states-addon__story__container"><story/></div>
+        <div>
+            <div class="pseudo-states-addon__container"
+                 v-if="!isDisabled">
+                <!-- nomal -->
+                <div class="pseudo-states-addon__story pseudo-states-addon__story--Normal"
+                     :style="styles.storyContainer">
+                    <div class="pseudo-states-addon__story__header"
+                         :style="styles.storyHeader">Normal:
+                    </div>
+                    <div class="pseudo-states-addon__story__container">
+                        <story/>
+                    </div>
+                </div>
+
+                <!-- pseudo states -->
+                <div v-for="state in composition.pseudo"
+                     class="pseudo-states-addon__story"
+                     :style="styles.storyContainer"
+                     :class="'pseudo-states-addon__story--' + state">
+                    <div class="pseudo-states-addon__story__header"
+                         :style="styles.storyHeader">{{state}}:
+                    </div>
+                    <div class="pseudo-states-addon__story__container">
+                        <story/>
+                    </div>
+                </div>
+
+                <!-- attributes -->
+                <div v-for="attr in composition.attributes"
+                     class="pseudo-states-addon__story"
+                     :style="styles.storyContainer"
+                     :class="'pseudo-states-addon__story--attr-' + attr">
+                    <div class="pseudo-states-addon__story__header"
+                         :style="styles.storyHeader">{{attr}}:
+                    </div>
+                    <div class="pseudo-states-addon__story__container">
+                        <story ref="attr"/>
+                    </div>
+                </div>
+
+            </div>
+            <!-- display original story when addon is disabled by toolbar -->
+            <div v-if="isDisabled">
+                <story/>
+            </div>
         </div>
-      
-        <!-- pseudo states -->
-        <div v-for="state in composition.pseudo" 
-            class="pseudo-states-addon__story" 
-            :style="styles.storyContainer"
-            :class="'pseudo-states-addon__story--' + state">
-                <div class="pseudo-states-addon__story__header" :style="styles.storyHeader">{{state}}:</div>
-                <div class="pseudo-states-addon__story__container" ><story/></div>
-        </div>
-        
-        <!-- attributes -->
-        <div v-for="attr in composition.attributes" 
-            class="pseudo-states-addon__story" 
-            :style="styles.storyContainer"
-            :class="'pseudo-states-addon__story--attr-' + attr">
-                <div class="pseudo-states-addon__story__header" :style="styles.storyHeader">{{attr}}:</div>
-                <div class="pseudo-states-addon__story__container" ><story ref="attr"/></div>
-        </div>
-       
-      </div>
-      <!-- display original story when addon is disabled by toolbar -->
-      <div v-if="isDisabled"><story/></div>
-      </div>
     `,
     data() {
       return {
@@ -144,14 +160,21 @@ const pseudoStateFn = (getStory: StoryGetter, context: StoryContext, settings: W
             // @ts-ignore
             const vm = elem?.__vue__.$children[0];
 
-            // set attribute to true
-            vm[attr] = true;
+            if (vm) {
 
-            // set attribute to element to support :disabled, :readonly, etc.
-            vm.$el[attr] = true;
+              // set attribute to true
+              if (vm.hasOwnProperty(attr)) {
+                vm[attr] = true;
+              }
 
-            // force update
-            vm.$forceUpdate();
+              // set attribute to element to support :disabled, :readonly, etc.
+              if (vm?.$el.hasOwnProperty(attr)) {
+                vm.$el[attr] = true;
+              }
+
+              // force update
+              vm.$forceUpdate();
+            }
 
           }
         }
