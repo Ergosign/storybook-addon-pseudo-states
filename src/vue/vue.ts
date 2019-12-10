@@ -1,4 +1,9 @@
-import { addons, makeDecorator, StoryContext, StoryGetter } from '@storybook/addons';
+import {
+  addons,
+  makeDecorator,
+  StoryContext,
+  StoryGetter,
+} from '@storybook/addons';
 import { parameters } from '../share/constants';
 import {
   PseudoState,
@@ -6,15 +11,18 @@ import {
   Selector,
   StatesComposition,
   StatesCompositionDefault,
-  WrapperPseudoStateSettings
+  WrapperPseudoStateSettings,
 } from '../share/types';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
 import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
 import { getMixedPseudoStates } from '../share/utils';
 import { styles } from '../share/styles';
 
-const pseudoStateFn = (getStory: StoryGetter, context: StoryContext, settings: WrapperPseudoStateSettings): any => {
-
+const pseudoStateFn = (
+  getStory: StoryGetter,
+  context: StoryContext,
+  settings: WrapperPseudoStateSettings
+): any => {
   const channel = addons.getChannel();
   const addonDisabled = settings?.parameters?.disabled || false;
 
@@ -26,12 +34,13 @@ const pseudoStateFn = (getStory: StoryGetter, context: StoryContext, settings: W
   }
 
   // use selector form parameters or if not set use settings selector or null
-  const selector: Selector | null =
-    settings?.parameters?.selector || null;
+  const selector: Selector | null = settings?.parameters?.selector || null;
 
-  const composition: StatesComposition = settings?.parameters?.stateComposition || StatesCompositionDefault;
+  const composition: StatesComposition =
+    settings?.parameters?.stateComposition || StatesCompositionDefault;
 
-  const prefix: string = settings?.parameters?.prefix || PseudoStatesDefaultPrefix;
+  const prefix: string =
+    settings?.parameters?.prefix || PseudoStatesDefaultPrefix;
 
   return {
     template: `
@@ -88,7 +97,7 @@ const pseudoStateFn = (getStory: StoryGetter, context: StoryContext, settings: W
         selector,
         composition,
         prefix,
-        isDisabled: false
+        isDisabled: false,
       };
     },
     mounted: function() {
@@ -113,20 +122,23 @@ const pseudoStateFn = (getStory: StoryGetter, context: StoryContext, settings: W
     },
     methods: {
       updatePseudoStates: function() {
-
         if (composition.pseudo) {
           for (const pState of composition.pseudo) {
+            const container = document.querySelector(
+              `.pseudo-states-addon__story--${pState} .pseudo-states-addon__story__container`
+            );
 
-            const container = document.querySelector(`.pseudo-states-addon__story--${pState} .pseudo-states-addon__story__container`);
-
-            const applyPseudoStateToHost = (container: Element, selector: Selector | null) => {
+            const applyPseudoStateToHost = (
+              container: Element,
+              selector: Selector | null
+            ) => {
               let host;
               if (!selector) {
                 host = container.children[0];
               } else if (typeof selector === 'string') {
                 host = container.querySelector(selector);
               } else if (Array.isArray(selector)) {
-                for (const s of (selector as Array<PseudoState>)) {
+                for (const s of selector as Array<PseudoState>) {
                   applyPseudoStateToHost(container, s);
                 }
               }
@@ -152,7 +164,9 @@ const pseudoStateFn = (getStory: StoryGetter, context: StoryContext, settings: W
       updateAttributes: function() {
         if (composition.attributes) {
           for (const attr of composition.attributes) {
-            const container = document.querySelector(`.pseudo-states-addon__story--attr-${attr} .pseudo-states-addon__story__container`);
+            const container = document.querySelector(
+              `.pseudo-states-addon__story--attr-${attr} .pseudo-states-addon__story__container`
+            );
 
             const elem = container?.children[0];
 
@@ -161,7 +175,6 @@ const pseudoStateFn = (getStory: StoryGetter, context: StoryContext, settings: W
             const vm = elem?.__vue__.$children[0];
 
             if (vm) {
-
               // set attribute to true
               if (vm.hasOwnProperty(attr)) {
                 vm[attr] = true;
@@ -175,19 +188,22 @@ const pseudoStateFn = (getStory: StoryGetter, context: StoryContext, settings: W
               // force update
               vm.$forceUpdate();
             }
-
           }
         }
-      }
-    }
+      },
+    },
   };
 };
 
 export const withPseudo = makeDecorator({
   ...parameters,
-  wrapper: (getStory: StoryGetter, context: StoryContext, settings: WrapperPseudoStateSettings) => {
+  wrapper: (
+    getStory: StoryGetter,
+    context: StoryContext,
+    settings: WrapperPseudoStateSettings
+  ) => {
     return pseudoStateFn(getStory, context, settings);
-  }
+  },
 });
 
 if (module && module.hot && module.hot.decline) {

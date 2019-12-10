@@ -1,3 +1,3 @@
-export {withPseudo} from './html';
+export { withPseudo } from './html';
 // import r from '../register/register';
 // export const register = r;

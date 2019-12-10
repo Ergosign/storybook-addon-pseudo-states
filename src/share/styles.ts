@@ -1,15 +1,14 @@
 export const styles = {
   style: {
     display: 'inline-flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
 
   addonContainer: {},
   storyContainer: {
-    'margin-bottom': '10px'
+    'margin-bottom': '10px',
   },
   storyHeader: {
-    'margin-bottom': '3px'
-  }
-
+    'margin-bottom': '3px',
+  },
 };

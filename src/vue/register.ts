@@ -1,1 +1,1 @@
-import '../register/register';
+import '../register/register'; /* eslint-disable-line */

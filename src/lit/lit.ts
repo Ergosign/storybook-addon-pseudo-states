@@ -1,4 +1,10 @@
-import { addons, makeDecorator, StoryContext, StoryGetter, WrapperSettings } from '@storybook/addons';
+import {
+  addons,
+  makeDecorator,
+  StoryContext,
+  StoryGetter,
+  WrapperSettings,
+} from '@storybook/addons';
 import { parameters } from '../share/constants';
 import {
   PseudoState,
@@ -6,37 +12,36 @@ import {
   Selector,
   StatesComposition,
   StatesCompositionDefault,
-  WrapperPseudoStateSettings
+  WrapperPseudoStateSettings,
 } from '../share/types';
 import { html, render, TemplateResult } from 'lit-html';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
 import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
 
-
-const displayStates = (story: TemplateResult,
-                       composition: StatesComposition,
-                       selector: string | Array<string> | null,
-                       prefix: string | null): TemplateResult => {
-
+const displayStates = (
+  story: TemplateResult,
+  composition: StatesComposition,
+  selector: string | Array<string> | null,
+  prefix: string | null
+): TemplateResult => {
   if (composition?.pseudo) {
     const sates = composition.pseudo;
     return html`
-       ${sates.map((state) => {
-      return modifyState(story, state, selector, prefix);
-    })
-    }
+      ${sates.map(state => {
+        return modifyState(story, state, selector, prefix);
+      })}
     `;
   } else {
     return html``;
   }
-
-
 };
 
-const modifyState = (story: TemplateResult,
-                     state: PseudoState | string,
-                     selector: string | Array<string> | null,
-                     prefix: string | null) => {
+const modifyState = (
+  story: TemplateResult,
+  state: PseudoState | string,
+  selector: string | Array<string> | null,
+  prefix: string | null
+) => {
   /*console.log('templatResult of story', story, story.getTemplateElement());
 
   const storyTemplateElement: HTMLTemplateElement = story.getTemplateElement();
@@ -56,9 +61,10 @@ const modifyState = (story: TemplateResult,
   const channel = addons.getChannel();
 
   channel.addListener(STORY_RENDERED, () => {
-
     // setTimeout(() => {
-    const storyContainerElement = document.querySelector(`.pseudo-states-addon__story--${state} .pseudo-states-addon__story__container`);
+    const storyContainerElement = document.querySelector(
+      `.pseudo-states-addon__story--${state} .pseudo-states-addon__story__container`
+    );
     if (storyContainerElement) {
       const host = storyContainerElement.firstElementChild;
       if (host) {
@@ -73,57 +79,57 @@ const modifyState = (story: TemplateResult,
   });
 
   return html`
-    <div class="pseudo-states-addon__story pseudo-states-addon__story--${state}">  
-        <div class="pseudo-states-addon__story__header">${state}:</div>
-        <div class="pseudo-states-addon__story__container">${story}</div>
+    <div
+      class="pseudo-states-addon__story pseudo-states-addon__story--${state}"
+    >
+      <div class="pseudo-states-addon__story__header">${state}:</div>
+      <div class="pseudo-states-addon__story__container">${story}</div>
     </div>
   `;
 };
 
-const addStateClass = (host: Element,
-                       state: PseudoState | string,
-                       selector: string | Array<string> | null,
-                       prefix: string | null) => {
-
+const addStateClass = (
+  host: Element,
+  state: PseudoState | string,
+  selector: string | Array<string> | null,
+  prefix: string | null
+) => {
   const newClass = `${prefix ? prefix : ''}${state}`;
   if (!selector) {
     host.classList.add(newClass);
   } else if (typeof selector === 'string') {
     if (host.shadowRoot) {
-      host.shadowRoot.querySelector(selector)
-        ?.classList
-        .add(newClass);
+      host.shadowRoot.querySelector(selector)?.classList.add(newClass);
     } else {
-      host.querySelector(selector)
-        ?.classList
-        .add(newClass);
+      host.querySelector(selector)?.classList.add(newClass);
     }
   } else if (Array.isArray(selector)) {
     for (const s of selector) {
       addStateClass(host, state, s, prefix);
     }
   }
-
 };
 
-
-const generatePseudoStates = (story: TemplateResult,
-                              composition: StatesComposition,
-                              selector: string | Array<string> | null,
-                              prefix: string | null): TemplateResult => {
-
+const generatePseudoStates = (
+  story: TemplateResult,
+  composition: StatesComposition,
+  selector: string | Array<string> | null,
+  prefix: string | null
+): TemplateResult => {
   const channel = addons.getChannel();
 
   const tmpl = html`
-        ${modifyState(story, 'Normal', null, null)}
-        ${displayStates(story, composition, selector, prefix)}
-    `;
-  const container = html`<div class="pseudo-states-addon__container">${tmpl}</div>`;
-
+    ${modifyState(story, 'Normal', null, null)}
+    ${displayStates(story, composition, selector, prefix)}
+  `;
+  const container = html`
+    <div class="pseudo-states-addon__container">${tmpl}</div>
+  `;
 
   const handleDisableState = (value: boolean) => {
-
-    const containerRef = document.querySelector('.pseudo-states-addon__container');
+    const containerRef = document.querySelector(
+      '.pseudo-states-addon__container'
+    );
 
     if (containerRef) {
       if (value) {
@@ -143,15 +149,14 @@ const generatePseudoStates = (story: TemplateResult,
     channel.removeAllListeners(SAPS_BUTTON_CLICK);
   });
 
-
   return container;
 };
 
-
-const pseudoStateFn = (getStory: StoryGetter,
-                       context: StoryContext,
-                       settings: WrapperPseudoStateSettings): any => {
-
+const pseudoStateFn = (
+  getStory: StoryGetter,
+  context: StoryContext,
+  settings: WrapperPseudoStateSettings
+): any => {
   const story = getStory(context) as TemplateResult;
   const channel = addons.getChannel();
   const addonDisabled = settings?.parameters?.disabled || false;
@@ -164,22 +169,26 @@ const pseudoStateFn = (getStory: StoryGetter,
   }
 
   // use selector form parameters or if not set use settings selector or null
-  const selector: Selector | null =
-    settings?.parameters?.selector || null;
+  const selector: Selector | null = settings?.parameters?.selector || null;
 
   const composition: StatesComposition =
     settings?.parameters?.stateComposition || StatesCompositionDefault;
 
-  const prefix: string = settings?.parameters?.prefix || PseudoStatesDefaultPrefix;
+  const prefix: string =
+    settings?.parameters?.prefix || PseudoStatesDefaultPrefix;
 
   return generatePseudoStates(story, composition, selector, prefix);
 };
 
 export const withPseudo = makeDecorator({
   ...parameters,
-  wrapper: (getStory: StoryGetter, context: StoryContext, settings: WrapperSettings) => {
+  wrapper: (
+    getStory: StoryGetter,
+    context: StoryContext,
+    settings: WrapperSettings
+  ) => {
     return pseudoStateFn(getStory, context, settings);
-  }
+  },
 });
 
 if (module && module.hot && module.hot.decline) {

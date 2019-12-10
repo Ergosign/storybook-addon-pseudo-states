@@ -1,14 +1,28 @@
-import { addons, makeDecorator, OptionsParameter, StoryContext, StoryGetter } from '@storybook/addons';
-import { PseudoStatesDefaultPrefix, PseudoStatesParameters, StatesCompositionDefault, WrapperPseudoStateSettings } from '../share/types';
-import { PseudoStateWrapperComponent, PseudoStateWrapperContainer } from './PseudoStateWrapperComponents';
+import {
+  addons,
+  makeDecorator,
+  OptionsParameter,
+  StoryContext,
+  StoryGetter,
+} from '@storybook/addons';
+import {
+  PseudoStatesDefaultPrefix,
+  PseudoStatesParameters,
+  StatesCompositionDefault,
+  WrapperPseudoStateSettings,
+} from '../share/types';
+import {
+  PseudoStateWrapperComponent,
+  PseudoStateWrapperContainer,
+} from './PseudoStateWrapperComponents';
 import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
 
 function getModuleMetadata(metadata: any) {
-  const {moduleMetadata, component} = metadata;
+  const { moduleMetadata, component } = metadata;
 
   if (component && !moduleMetadata) {
     return {
-      declarations: [metadata.component]
+      declarations: [metadata.component],
     };
   }
 
@@ -16,7 +30,12 @@ function getModuleMetadata(metadata: any) {
     return {
       ...moduleMetadata,
       // add own wrapper components
-      declarations: [...moduleMetadata.declarations, metadata.component, PseudoStateWrapperComponent, PseudoStateWrapperContainer]
+      declarations: [
+        ...moduleMetadata.declarations,
+        metadata.component,
+        PseudoStateWrapperComponent,
+        PseudoStateWrapperContainer,
+      ],
     };
   }
 
@@ -29,7 +48,11 @@ export const withPseudo = makeDecorator({
   // This means don't run this decorator if the withPseudo decorator is not set
   skipIfNoParametersOrOptions: false,
   allowDeprecatedUsage: false,
-  wrapper: (getStory: StoryGetter, context: StoryContext, settings: WrapperPseudoStateSettings) => {
+  wrapper: (
+    getStory: StoryGetter,
+    context: StoryContext,
+    settings: WrapperPseudoStateSettings
+  ) => {
     const story = getStory(context);
 
     const compInternal = story.component.__annotations__[0];
@@ -42,7 +65,10 @@ export const withPseudo = makeDecorator({
 
     const channel = addons.getChannel();
     // notify toolbar button
-    channel.emit(SAPS_INIT_PSEUDO_STATES, parameters.disabled ? parameters.disabled : false);
+    channel.emit(
+      SAPS_INIT_PSEUDO_STATES,
+      parameters.disabled ? parameters.disabled : false
+    );
 
     if (parameters?.disabled) {
       return story;
@@ -51,34 +77,38 @@ export const withPseudo = makeDecorator({
     let storyParameters = null;
 
     // use user values or default
-    parameters.stateComposition = parameters.stateComposition || StatesCompositionDefault;
+    parameters.stateComposition =
+      parameters.stateComposition || StatesCompositionDefault;
     if (parameters.prefix || options?.prefix) {
-      parameters.prefix = parameters.prefix || options.prefix || PseudoStatesDefaultPrefix;
+      parameters.prefix =
+        parameters.prefix || options.prefix || PseudoStatesDefaultPrefix;
     }
     storyParameters = escape(JSON.stringify(parameters));
 
     let storyComponent = null;
     if (story.component && story.component.__annotations__[0]) {
-      storyComponent = escape(JSON.stringify(story.component.__annotations__[0]));
+      storyComponent = escape(
+        JSON.stringify(story.component.__annotations__[0])
+      );
     }
 
     let newTemplate = story.template;
     // if story has no template, set up component with provided proerties
-    if (!newTemplate ) {
+    if (!newTemplate) {
       let propertyString = ``;
 
       for (const property in story?.props) {
         // check if component has property with the same key
-        const componentProperty = story?.component?.__prop__metadata__[property];
+        const componentProperty =
+          story?.component?.__prop__metadata__[property];
 
         if (componentProperty) {
           propertyString += `[${property}]="${property}" `;
         }
       }
 
-      newTemplate = `<${compInternal.selector} ${propertyString}>${compInternal.template}</${compInternal.selector}>`
+      newTemplate = `<${compInternal.selector} ${propertyString}>${compInternal.template}</${compInternal.selector}>`;
     }
-
 
     return {
       ...story,
@@ -91,8 +121,8 @@ export const withPseudo = makeDecorator({
                     </pseudo-state-wrapper>`,
       moduleMetadata: getModuleMetadata(story),
       props: {
-        ...story.props
-      }
+        ...story.props,
+      },
     };
-  }
+  },
 });

@@ -5,26 +5,17 @@ export enum PseudoStateEnum {
   ACTIVE = 'active',
   FOCUS = 'focus',
   FOCUS_WITHIN = 'focus-within',
-  VISITED = 'visited'
+  VISITED = 'visited',
 }
 
-export const {
-  HOVER,
-  ACTIVE,
-  FOCUS,
-  FOCUS_WITHIN,
-  VISITED
-} = PseudoStateEnum;
+export const { HOVER, ACTIVE, FOCUS, FOCUS_WITHIN, VISITED } = PseudoStateEnum;
 
 export enum AttributeStatesEnum {
   DISABLED = 'disabled',
-  READONLY = 'readonly'
+  READONLY = 'readonly',
 }
 
-export const {
-  DISABLED,
-  READONLY
-} = AttributeStatesEnum;
+export const { DISABLED, READONLY } = AttributeStatesEnum;
 
 export type PseudoState = PseudoStateEnum | string;
 export type AttributeState = AttributeStatesEnum | string;
@@ -35,28 +26,28 @@ export interface StatesComposition {
 }
 
 export const PseudoStateOrderDefault: Array<PseudoState> = [
-  FOCUS, HOVER, ACTIVE
+  FOCUS,
+  HOVER,
+  ACTIVE,
 ];
-export const AttributesStateOrderDefault: Array<AttributeState> = [
-  DISABLED
-];
+export const AttributesStateOrderDefault: Array<AttributeState> = [DISABLED];
 export const AttributesStateOrderInputDefault: Array<AttributeState> = [
-  DISABLED, READONLY
+  DISABLED,
+  READONLY,
 ];
 
 export const StatesCompositionDefault: StatesComposition = {
   pseudo: PseudoStateOrderDefault,
-  attributes: AttributesStateOrderDefault
+  attributes: AttributesStateOrderDefault,
 };
-
 
 export const StatesCompositionDefaultInputC = {
   pseudo: PseudoStateOrderDefault,
-  attributes: AttributesStateOrderInputDefault
+  attributes: AttributesStateOrderInputDefault,
 };
 
 export interface WrapperPseudoStateSettings extends WrapperSettings {
-  parameters: PseudoStatesParameters
+  parameters: PseudoStatesParameters;
 }
 
 export const PseudoStatesDefaultPrefix = ':';
@@ -72,5 +63,3 @@ export interface PseudoStatesParameters {
   stateComposition?: StatesComposition;
   // [key: string]: any;
 }
-
-

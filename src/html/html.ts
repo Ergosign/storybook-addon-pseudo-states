@@ -1,19 +1,28 @@
-import { addons, makeDecorator, StoryContext, StoryGetter } from '@storybook/addons';
+import {
+  addons,
+  makeDecorator,
+  StoryContext,
+  StoryGetter,
+} from '@storybook/addons';
 import {
   AttributeState,
-  PseudoState, PseudoStatesDefaultPrefix,
+  PseudoState,
+  PseudoStatesDefaultPrefix,
   Selector,
   StatesComposition,
   StatesCompositionDefault,
-  WrapperPseudoStateSettings
+  WrapperPseudoStateSettings,
 } from '../share/types';
 import { styles } from '../share/styles';
 import { parameters } from '../share/constants';
 import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
 
-
-function enablePseudoState(story: any, pseudoState: PseudoState, selector: string | Array<string> | null, prefix: string) {
-
+function enablePseudoState(
+  story: any,
+  pseudoState: PseudoState,
+  selector: string | Array<string> | null,
+  prefix: string
+) {
   let element = story.cloneNode(true);
 
   let stateHostElement: HTMLElement = element;
@@ -23,12 +32,14 @@ function enablePseudoState(story: any, pseudoState: PseudoState, selector: strin
   const stateClass = prefix + pseudoState;
   stateHostElement?.classList?.add(stateClass);
 
-
   return element;
 }
 
-function enableAttributeState(story: any, attribute: AttributeState, selector: string | Array<string> | null) {
-
+function enableAttributeState(
+  story: any,
+  attribute: AttributeState,
+  selector: string | Array<string> | null
+) {
   let element = story.cloneNode(true);
 
   let stateHostElement: HTMLElement = element;
@@ -51,7 +62,10 @@ function getStoryContainer() {
   return container;
 }
 
-function wrapStoryinStateContainer(story: HTMLElement, state: PseudoState | AttributeState) {
+function wrapStoryinStateContainer(
+  story: HTMLElement,
+  state: PseudoState | AttributeState
+) {
   const stateContainer = document.createElement('div');
   const header = document.createElement('div');
   header.innerHTML = state;
@@ -64,8 +78,13 @@ function wrapStoryinStateContainer(story: HTMLElement, state: PseudoState | Attr
   return stateContainer;
 }
 
-function renderStates(story: HTMLElement, composition: StatesComposition, container: Element, selector: Selector | null, prefix: string) {
-
+function renderStates(
+  story: HTMLElement,
+  composition: StatesComposition,
+  container: Element,
+  selector: Selector | null,
+  prefix: string
+) {
   // show default story at first
   if (composition?.pseudo && composition?.pseudo.length > 0) {
     container.appendChild(wrapStoryinStateContainer(story, 'Default'));
@@ -74,8 +93,15 @@ function renderStates(story: HTMLElement, composition: StatesComposition, contai
   if (composition?.pseudo) {
     // create pseudo states of story
     for (const state of composition?.pseudo) {
-      const elementWithPseudo = enablePseudoState(story, state, selector, prefix);
-      container.appendChild(wrapStoryinStateContainer(elementWithPseudo, state));
+      const elementWithPseudo = enablePseudoState(
+        story,
+        state,
+        selector,
+        prefix
+      );
+      container.appendChild(
+        wrapStoryinStateContainer(elementWithPseudo, state)
+      );
     }
   }
 
@@ -83,22 +109,25 @@ function renderStates(story: HTMLElement, composition: StatesComposition, contai
     // create attribute states of story
     for (const state of composition?.attributes) {
       const elementWithPseudo = enableAttributeState(story, state, selector);
-      container.appendChild(wrapStoryinStateContainer(elementWithPseudo, state));
+      container.appendChild(
+        wrapStoryinStateContainer(elementWithPseudo, state)
+      );
     }
   }
   return container;
 }
 
-function pseudoStateFn(getStory: StoryGetter,
-                       context: StoryContext,
-                       settings: WrapperPseudoStateSettings) {
-
+function pseudoStateFn(
+  getStory: StoryGetter,
+  context: StoryContext,
+  settings: WrapperPseudoStateSettings
+) {
   const channel = addons.getChannel();
   const story = getStory(context);
   let container = getStoryContainer();
 
   let addonDisabled = settings?.parameters?.disabled || false;
-  channel.on('saps/toolbutton-click', (value) => {
+  channel.on('saps/toolbutton-click', value => {
     addonDisabled = value;
     if (value) {
       container.innerHTML = '';
@@ -114,25 +143,27 @@ function pseudoStateFn(getStory: StoryGetter,
     return story;
   }
 
-
-
   // use selector form parameters or if not set use settings selector or null
   const selector: Selector | null =
-    settings?.parameters?.selector || null/*|| settings?.options?.selector*/;
+      settings?.parameters?.selector || null /*|| settings?.options?.selector*/;
   // TODO support Array<string>
 
   const composition: StatesComposition =
     settings?.parameters?.stateComposition || StatesCompositionDefault;
 
-  const prefix: string = settings?.parameters?.prefix || PseudoStatesDefaultPrefix;
-
+  const prefix: string =
+    settings?.parameters?.prefix || PseudoStatesDefaultPrefix;
 
   return renderStates(story, composition, container, selector, prefix);
 }
 
 export const withPseudo = makeDecorator({
   ...parameters,
-  wrapper: (getStory: StoryGetter, context: StoryContext, settings: WrapperPseudoStateSettings) => pseudoStateFn(getStory, context, settings)
+  wrapper: (
+    getStory: StoryGetter,
+    context: StoryContext,
+    settings: WrapperPseudoStateSettings
+  ) => pseudoStateFn(getStory, context, settings),
 });
 
 if (module && module.hot && module.hot.decline) {
