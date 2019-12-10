@@ -1,32 +1,40 @@
 {
-    "env": {
-        "browser": true,
-        "es6": true
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": ["plugin:react/recommended", "airbnb", "prettier"],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
     },
-    "extends": [
-        "plugin:react/recommended",
-        "prettier",
-        "airbnb"
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "@typescript-eslint", "prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "no-irregular-whitespace": 1,
+    "import/no-unresolved": 0,
+    "import/prefer-default-export": 0,
+    "no-unused-vars": 0,
+    "no-underscore-dangle": 0,
+    "no-useless-constructor": 0,
+    "no-empty-function": 0,
+    "no-restricted-syntax": [
+      "error",
+      "WithStatement",
+      "BinaryExpression[operator='in']"
     ],
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 2018,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react",
-        "@typescript-eslint",
-        "prettier"
-    ],
-    "rules": {
-        "prettier/prettier": "error",
-        "no-irregular-whitespace": 1
-    }
+    "import/no-extraneous-dependencies": 0,
+    "camelcase": 0,
+    "no-unused-expressions": 0,
+    "no-use-before-define": 0,
+    "prefer-destructuring": 1
+  }
 }

@@ -5,6 +5,8 @@ import {
   StoryGetter,
   WrapperSettings,
 } from '@storybook/addons';
+import { html, render, TemplateResult } from 'lit-html';
+import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
 import { parameters } from '../share/constants';
 import {
   PseudoState,
@@ -14,9 +16,7 @@ import {
   StatesCompositionDefault,
   WrapperPseudoStateSettings,
 } from '../share/types';
-import { html, render, TemplateResult } from 'lit-html';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
-import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
 
 const displayStates = (
   story: TemplateResult,
@@ -27,13 +27,10 @@ const displayStates = (
   if (composition?.pseudo) {
     const sates = composition.pseudo;
     return html`
-      ${sates.map(state => {
-        return modifyState(story, state, selector, prefix);
-      })}
+      ${sates.map(state => modifyState(story, state, selector, prefix))}
     `;
-  } else {
-    return html``;
   }
+  return html``;
 };
 
 const modifyState = (
@@ -42,7 +39,7 @@ const modifyState = (
   selector: string | Array<string> | null,
   prefix: string | null
 ) => {
-  /*console.log('templatResult of story', story, story.getTemplateElement());
+  /* console.log('templatResult of story', story, story.getTemplateElement());
 
   const storyTemplateElement: HTMLTemplateElement = story.getTemplateElement();
   const storyFragment: DocumentFragment = storyTemplateElement.content;
@@ -56,7 +53,7 @@ const modifyState = (
   const s = story.strings;
   console.log('story.strings', s);
   debugger;
-  const newStory = new TemplateResult(story.strings, story.values, story.type, story.processor);*/
+  const newStory = new TemplateResult(story.strings, story.values, story.type, story.processor); */
 
   const channel = addons.getChannel();
 
@@ -94,7 +91,7 @@ const addStateClass = (
   selector: string | Array<string> | null,
   prefix: string | null
 ) => {
-  const newClass = `${prefix ? prefix : ''}${state}`;
+  const newClass = `${prefix || ''}${state}`;
   if (!selector) {
     host.classList.add(newClass);
   } else if (typeof selector === 'string') {
@@ -186,9 +183,7 @@ export const withPseudo = makeDecorator({
     getStory: StoryGetter,
     context: StoryContext,
     settings: WrapperSettings
-  ) => {
-    return pseudoStateFn(getStory, context, settings);
-  },
+  ) => pseudoStateFn(getStory, context, settings),
 });
 
 if (module && module.hot && module.hot.decline) {

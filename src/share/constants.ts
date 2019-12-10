@@ -13,4 +13,4 @@ export const TOOL_TITLE = 'Pseudo States';
 
 export const ADDON_GLOBAL_DISABLE_STATE = `${ADDON_ID}/globallyDisabled`;
 
-//const PREVIEW_ID = `${ADDON_ID}/preview`;
+// const PREVIEW_ID = `${ADDON_ID}/preview`;

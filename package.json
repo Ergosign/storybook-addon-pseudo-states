@@ -24,7 +24,7 @@
     "dist": "dist"
   },
   "scripts": {
-    "lint": "eslint src --fix",
+    "lint": "eslint src/**/*.ts --fix",
     "angular:build": "tsc --p src/angular",
     "angular:pack": "cd src/angular && npm pack",
     "prettier": "prettier --config .prettierrc --write ./src/**/*.ts",

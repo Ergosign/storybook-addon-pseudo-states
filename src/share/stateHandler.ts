@@ -1,6 +1,7 @@
 class StateHandler {
   static instance: StateHandler;
-  static isDisabled: boolean;
+
+  isDisabled: boolean;
 
   constructor() {
     if (!StateHandler.instance) {
@@ -10,11 +11,11 @@ class StateHandler {
   }
 
   get disabled(): boolean {
-    return StateHandler.isDisabled;
+    return this.isDisabled;
   }
 
   set disabled(value: boolean) {
-    StateHandler.isDisabled = value;
+    this.isDisabled = value;
   }
 }
 

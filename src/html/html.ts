@@ -23,7 +23,7 @@ function enablePseudoState(
   selector: string | Array<string> | null,
   prefix: string
 ) {
-  let element = story.cloneNode(true);
+  const element = story.cloneNode(true);
 
   let stateHostElement: HTMLElement = element;
   if (selector) {
@@ -40,7 +40,7 @@ function enableAttributeState(
   attribute: AttributeState,
   selector: string | Array<string> | null
 ) {
-  let element = story.cloneNode(true);
+  const element = story.cloneNode(true);
 
   let stateHostElement: HTMLElement = element;
   if (selector) {
@@ -124,7 +124,7 @@ function pseudoStateFn(
 ) {
   const channel = addons.getChannel();
   const story = getStory(context);
-  let container = getStoryContainer();
+  const container = getStoryContainer();
 
   let addonDisabled = settings?.parameters?.disabled || false;
   channel.on('saps/toolbutton-click', value => {
@@ -144,8 +144,7 @@ function pseudoStateFn(
   }
 
   // use selector form parameters or if not set use settings selector or null
-  const selector: Selector | null =
-      settings?.parameters?.selector || null /*|| settings?.options?.selector*/;
+  const selector: Selector | null = settings?.parameters?.selector || null;
   // TODO support Array<string>
 
   const composition: StatesComposition =

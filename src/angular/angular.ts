@@ -11,11 +11,9 @@ import {
   StatesCompositionDefault,
   WrapperPseudoStateSettings,
 } from '../share/types';
-import {
-  PseudoStateWrapperComponent,
-  PseudoStateWrapperContainer,
-} from './PseudoStateWrapperComponents';
 import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
+import { PseudoStateWrapperComponent } from './PseudoStateWrapperComponent.component';
+import { PseudoStateWrapperContainer } from './PseudoStateWrapperContainer.component';
 
 function getModuleMetadata(metadata: any) {
   const { moduleMetadata, component } = metadata;
@@ -95,15 +93,17 @@ export const withPseudo = makeDecorator({
     let newTemplate = story.template;
     // if story has no template, set up component with provided proerties
     if (!newTemplate) {
-      let propertyString = ``;
+      let propertyString = '';
 
       for (const property in story?.props) {
-        // check if component has property with the same key
-        const componentProperty =
-          story?.component?.__prop__metadata__[property];
+        if (story?.props.hasOwnProperty(property)) {
+          // check if component has property with the same key
+          const componentProperty =
+            story?.component?.__prop__metadata__[property];
 
-        if (componentProperty) {
-          propertyString += `[${property}]="${property}" `;
+          if (componentProperty) {
+            propertyString += `[${property}]="${property}" `;
+          }
         }
       }
 

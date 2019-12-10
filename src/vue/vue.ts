@@ -4,6 +4,7 @@ import {
   StoryContext,
   StoryGetter,
 } from '@storybook/addons';
+import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
 import { parameters } from '../share/constants';
 import {
   PseudoState,
@@ -14,7 +15,6 @@ import {
   WrapperPseudoStateSettings,
 } from '../share/types';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
-import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
 import { getMixedPseudoStates } from '../share/utils';
 import { styles } from '../share/styles';
 
@@ -100,7 +100,7 @@ const pseudoStateFn = (
         isDisabled: false,
       };
     },
-    mounted: function() {
+    mounted() {
       channel.once(STORY_RENDERED, () => {
         this.updatePseudoStates();
         this.updateAttributes();
@@ -114,14 +114,14 @@ const pseudoStateFn = (
         channel.removeAllListeners(SAPS_BUTTON_CLICK);
       });
     },
-    updated: function() {
+    updated() {
       if (!this.isDisabled) {
         this.updatePseudoStates();
         this.updateAttributes();
       }
     },
     methods: {
-      updatePseudoStates: function() {
+      updatePseudoStates() {
         if (composition.pseudo) {
           for (const pState of composition.pseudo) {
             const container = document.querySelector(
@@ -129,17 +129,17 @@ const pseudoStateFn = (
             );
 
             const applyPseudoStateToHost = (
-              container: Element,
-              selector: Selector | null
+              containerElem: Element,
+              selectorStr: Selector | null
             ) => {
-              let host;
-              if (!selector) {
-                host = container.children[0];
-              } else if (typeof selector === 'string') {
-                host = container.querySelector(selector);
-              } else if (Array.isArray(selector)) {
-                for (const s of selector as Array<PseudoState>) {
-                  applyPseudoStateToHost(container, s);
+              let host: Element | null = null;
+              if (!selectorStr) {
+                host = containerElem.children[0];
+              } else if (typeof selectorStr === 'string') {
+                host = containerElem.querySelector(selectorStr);
+              } else if (Array.isArray(selectorStr)) {
+                for (const s of selectorStr as Array<PseudoState>) {
+                  applyPseudoStateToHost(containerElem, s);
                 }
               }
 
@@ -161,7 +161,7 @@ const pseudoStateFn = (
           }
         }
       },
-      updateAttributes: function() {
+      updateAttributes() {
         if (composition.attributes) {
           for (const attr of composition.attributes) {
             const container = document.querySelector(
@@ -176,7 +176,7 @@ const pseudoStateFn = (
 
             if (vm) {
               // set attribute to true
-              if (vm.hasOwnProperty(attr)) {
+              if (Object.prototype.hasOwnProperty.call(vm, attr)) {
                 vm[attr] = true;
               }
 
@@ -201,9 +201,7 @@ export const withPseudo = makeDecorator({
     getStory: StoryGetter,
     context: StoryContext,
     settings: WrapperPseudoStateSettings
-  ) => {
-    return pseudoStateFn(getStory, context, settings);
-  },
+  ) => pseudoStateFn(getStory, context, settings),
 });
 
 if (module && module.hot && module.hot.decline) {
