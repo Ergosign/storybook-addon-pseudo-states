@@ -1,20 +1,12 @@
 {
-  "version": "0.0.1-alpha.12",
-  "packages": [
-    "src/angular",
-    "src/html",
-    "src/lit",
-    "src/react",
-    "src/vue"
-  ],
+  "version": "0.0.1-alpha.13",
+  "packages": ["src/angular", "src/html", "src/lit", "src/react", "src/vue"],
   "npmClient": "npm",
   "command": {
     "publish": {
       "conventionalCommits": true,
       "yes": true,
-      "ignoreChanges": [
-        "ignored-file"
-      ],
+      "ignoreChanges": ["ignored-file"],
       "message": "chore(release): publish"
     }
   }
