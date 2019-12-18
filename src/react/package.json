@@ -9,7 +9,7 @@
     "decorator",
     "pseudo states",
     "css",
-    "angular",
+    "react",
     "components",
     "tool",
     "ui",
@@ -37,9 +37,9 @@
     "**/*.js",
     "**/*.d.ts"
   ],
-  "main": "dist/angular/public-api.js",
-  "browser": "dist/angular/public-api.js",
-  "types": "dist/angular/public-api.d.ts",
+  "main": "dist/react/public-api.js",
+  "browser": "dist/react/public-api.js",
+  "types": "dist/react/public-api.d.ts",
   "peerDependencies": {
     "@storybook/addons": "^5.2.6",
     "@storybook/api": "^5.2.6",
