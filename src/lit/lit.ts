@@ -7,8 +7,8 @@ import {
 } from '@storybook/addons';
 import { html, render, TemplateResult } from 'lit-html';
 import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
-import { parameters } from '../share/constants';
 import {
+  AttributeState,
   PseudoState,
   PseudoStatesDefaultPrefix,
   Selector,
@@ -17,6 +17,92 @@ import {
   WrapperPseudoStateSettings,
 } from '../share/types';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
+import { parameters } from '../share/constants';
+
+const displayAtrributes = (
+  story: TemplateResult,
+  composition: StatesComposition,
+  selector: string | Array<string> | null,
+  prefix: string | null
+) => {
+  if (composition?.attributes) {
+    const { attributes } = composition;
+    return html`
+      ${attributes.map(attr => modifyAttr(story, attr, selector, prefix))}
+    `;
+  }
+  return html``;
+};
+
+const addAttr = (
+  host: Element,
+  attr: AttributeState | string,
+  selector: string | Array<string> | null,
+  prefix: string | null
+) => {
+  if (!selector) {
+    const elem = host;
+    elem.setAttribute(attr, 'true');
+    // @ts-ignore
+    elem[attr] = true;
+  } else if (typeof selector === 'string') {
+    if (host.shadowRoot) {
+      const elem = host.shadowRoot.querySelector(selector);
+      if (elem) {
+        elem.setAttribute(attr, 'true');
+        // @ts-ignore
+        elem[attr] = true;
+      }
+    } else {
+      const elem = host.querySelector(selector);
+      if (elem) {
+        elem.setAttribute(attr, 'true');
+        // @ts-ignore
+        elem[attr] = true;
+      }
+    }
+  } else if (Array.isArray(selector)) {
+    for (const s of selector) {
+      addStateClass(host, attr, s, prefix);
+    }
+  }
+};
+
+const modifyAttr = (
+  story: TemplateResult,
+  attr: AttributeState | string,
+  selector: string | Array<string> | null,
+  prefix: string | null
+) => {
+  const channel = addons.getChannel();
+
+  channel.addListener(STORY_RENDERED, () => {
+    // setTimeout(() => {
+    const storyContainerElement = document.querySelector(
+      `.pseudo-states-addon__story--attr-${attr} .pseudo-states-addon__story__container`
+    );
+    if (storyContainerElement) {
+      const host = storyContainerElement.firstElementChild;
+      if (host) {
+        addAttr(host, attr, selector, prefix);
+      }
+    }
+    // }, 100);
+  });
+
+  channel.once(STORY_CHANGED, () => {
+    channel.removeAllListeners(STORY_RENDERED);
+  });
+
+  return html`
+    <div
+      class="pseudo-states-addon__story pseudo-states-addon__story--attr-${attr}"
+    >
+      <div class="pseudo-states-addon__story__header">${attr}:</div>
+      <div class="pseudo-states-addon__story__container">${story}</div>
+    </div>
+  `;
+};
 
 const displayStates = (
   story: TemplateResult,
@@ -118,6 +204,7 @@ const generatePseudoStates = (
   const tmpl = html`
     ${modifyState(story, 'Normal', null, null)}
     ${displayStates(story, composition, selector, prefix)}
+    ${displayAtrributes(story, composition, selector, prefix)}
   `;
   const container = html`
     <div class="pseudo-states-addon__container">${tmpl}</div>

@@ -35,6 +35,7 @@
     "camelcase": 0,
     "no-unused-expressions": 0,
     "no-use-before-define": 0,
-    "prefer-destructuring": 1
+    "prefer-destructuring": 1,
+    "import/extensions": 1
   }
 }
