@@ -5,7 +5,9 @@ import {
   StoryContext,
   StoryGetter,
 } from '@storybook/addons';
-import { parameters } from '../share/constants';
+// import { useAddonState } from '@storybook/client-api';
+import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
+import { ADDON_GLOBAL_DISABLE_STATE, parameters } from '../share/constants';
 import {
   PseudoState,
   PseudoStatesDefaultPrefix,
@@ -15,7 +17,6 @@ import {
   WrapperPseudoStateSettings,
 } from '../share/types';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
-import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
 import { getMixedPseudoStates, sanitizePseudoName } from '../share/utils';
 
 function pseudoStateFn(
@@ -30,6 +31,11 @@ function pseudoStateFn(
   // notify toolbar button
   channel.emit(SAPS_INIT_PSEUDO_STATES, addonDisabled);
 
+  const globallyDisabled =
+    sessionStorage.getItem(ADDON_GLOBAL_DISABLE_STATE) === 'true';
+  // const [isStoryDisabled, setIsStoryDisabled] = useAddonState<boolean>(ADDON_GLOBAL_DISABLE_STATE, false);
+  const [isStoryDisabled, setIsStoryDisabled] = useState(globallyDisabled);
+
   if (addonDisabled) {
     return story;
   }
@@ -43,8 +49,6 @@ function pseudoStateFn(
   const prefix: string =
     settings?.parameters?.prefix || PseudoStatesDefaultPrefix;
   const states: Array<JSX.Element> = [];
-
-  const [isStoryDisabled, setIsStoryDisabled] = useState(false);
 
   // create story's new template
   if (composition.pseudo) {
@@ -140,13 +144,15 @@ function pseudoStateFn(
     updatePseudoStates();
   });
 
-  channel.once(SAPS_BUTTON_CLICK, (value: boolean) => {
+  const clickHandler = (value: boolean) => {
     setIsStoryDisabled(value);
     // update when disable state changed
-    if (!value) {
-      updatePseudoStates();
-    }
-  });
+    updatePseudoStates();
+  };
+
+  channel.removeAllListeners(SAPS_BUTTON_CLICK);
+  channel.addListener(SAPS_BUTTON_CLICK, clickHandler);
+
   channel.once(STORY_CHANGED, () => {
     channel.removeAllListeners(SAPS_BUTTON_CLICK);
   });
