@@ -16,10 +16,11 @@ import { PseudoStateWrapperComponent } from './PseudoStateWrapperComponent.compo
 import { PseudoStateWrapperContainer } from './PseudoStateWrapperContainer.component';
 
 function getModuleMetadata(metadata: any) {
-  const { moduleMetadata, component } = metadata;
+  let moduleMetadata = metadata?.moduleMetadata;
+  const component = metadata?.component;
 
   if (component && !moduleMetadata) {
-    return {
+    moduleMetadata = {
       declarations: [metadata.component],
     };
   }
