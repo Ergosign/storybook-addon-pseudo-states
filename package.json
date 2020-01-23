@@ -24,10 +24,11 @@
     "dist": "dist"
   },
   "scripts": {
-    "lint": "eslint src/**/*.ts --fix",
+    "lint": "eslint src/**/*.ts",
+    "lint-fix": "eslint src/**/*.ts --fix",
     "angular:build": "tsc --p src/angular",
     "angular:pack": "cd src/angular && npm pack",
-    "prettier": "prettier --config .prettierrc --write ./src/**/*.ts",
+    "prettier": "prettier --config .prettierrc --write src/**/*.{ts,tsx}",
     "pretty-quick": "pretty-quick --staged",
     "react:build": "tsc --p src/react",
     "react:pack": "cd src/react && npm pack",

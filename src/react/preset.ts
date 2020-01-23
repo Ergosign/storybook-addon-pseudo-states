@@ -69,7 +69,7 @@ const webpack = (
     rule = {},
   } = options;
 
-  /*// replace module.scss rule with own to enable post-css
+  /* // replace module.scss rule with own to enable post-css
   webpackConfig.module.rules = webpackConfig.module.rules.map(ruleParam => {
 
     if (ruleParam.test.toString() === '/\\.module\\.(scss|sass)$/') {
@@ -79,7 +79,7 @@ const webpack = (
     }
   });
 
-  return webpackConfig;*/
+  return webpackConfig; */
 
   return {
     ...webpackConfig,

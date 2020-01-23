@@ -10,8 +10,7 @@ export interface PanelProps extends RenderOptions {
 export const PANEL_ID = `${ADDON_ID}/panel`;
 
 export class PseudoStatePanel extends React.Component<PanelProps, any> {
-
-  state = {value: ''};
+  state = { value: '' };
 
   onSomeAction = (text: string) => {
     // do something with the passed data
@@ -24,13 +23,13 @@ export class PseudoStatePanel extends React.Component<PanelProps, any> {
 
   componentDidMount() {
     console.log('myPanel', 'componentDidMount');
-    const {api} = this.props;
+    const { api } = this.props;
     api.on('pseudo/addPseudo', this.onSomeAction);
     api.on(STORY_CHANGED, this.onStoryChange);
   }
 
   componentWillUnmount() {
-    const {api} = this.props;
+    const { api } = this.props;
     api.off('pseudo/addPseudo', this.onSomeAction);
     api.off(STORY_CHANGED, this.onStoryChange);
   }
@@ -40,12 +39,11 @@ export class PseudoStatePanel extends React.Component<PanelProps, any> {
   }
 
   render() {
-    const {value} = this.state;
-    const {active} = this.props;
-    const {api} = this.props;
+    const { value } = this.state;
+    const { active } = this.props;
+    const { api } = this.props;
 
     if (active && api) {
-
       const storyData = api.getCurrentStoryData();
       if (storyData) {
         debugger;
@@ -58,5 +56,4 @@ export class PseudoStatePanel extends React.Component<PanelProps, any> {
 
     return active ? <div>{value}</div> : null;
   }
-
-};
+}

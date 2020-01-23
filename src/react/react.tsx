@@ -71,7 +71,10 @@ function pseudoStateFn(
   }
   if (composition.attributes) {
     for (const attr of composition.attributes) {
-      const storyState = { ...story, props: { ...story.props, [attr]: true } };
+      const storyState = {
+        ...story,
+        props: { ...story.props, [attr]: true },
+      };
 
       states.push(
         <div
@@ -98,17 +101,17 @@ function pseudoStateFn(
         );
 
         const applyPseudoStateToHost = (
-          container: Element,
-          selector: Selector | null
+          containerTmp: Element,
+          selectorTmp: Selector | null
         ) => {
           let host;
-          if (!selector) {
-            host = container.children[0];
-          } else if (typeof selector === 'string') {
-            host = container.querySelector(selector);
-          } else if (Array.isArray(selector)) {
-            for (const s of selector as Array<PseudoState>) {
-              applyPseudoStateToHost(container, s);
+          if (!selectorTmp) {
+            host = containerTmp.children[0];
+          } else if (typeof selectorTmp === 'string') {
+            host = containerTmp.querySelector(selectorTmp);
+          } else if (Array.isArray(selectorTmp)) {
+            for (const s of selectorTmp as Array<PseudoState>) {
+              applyPseudoStateToHost(containerTmp, s);
             }
           }
           // get css module [path][name]__[local] and remove [local]
