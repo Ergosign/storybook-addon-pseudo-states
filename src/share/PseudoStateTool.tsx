@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { useChannel, useAddonState } from '@storybook/api';
+import { useChannel, useAddonState, API } from '@storybook/api';
 import { IconButton, Icons } from '@storybook/components';
 import { SAPS_BUTTON_CLICK } from './events';
 import { ADDON_GLOBAL_DISABLE_STATE } from './constants';
 
-/*interface Props {
+interface Props {
   api: API;
-}*/
+}
 
-export const PseudoStateTool = (/*props: Props*/) => {
+// @ts-ignore
+export const PseudoStateTool = (props: Props) => {
   // active story params
   // const storyParams = useParameter<PseudoStatesParameters>(parameters.parameterName, {stateComposition: StatesCompositionDefault});
 

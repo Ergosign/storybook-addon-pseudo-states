@@ -3,8 +3,5 @@
   "compilerOptions": {
     "outDir": "./dist"
   },
-  "include": [
-    "./public-api.ts",
-    "./register.ts"
-  ]
+  "include": ["./public-api.ts", "./preset.ts", "./register.ts"]
 }
