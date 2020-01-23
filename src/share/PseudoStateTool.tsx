@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useChannel, useAddonState, API } from '@storybook/api';
+import { API, useAddonState, useChannel } from '@storybook/api';
 import { IconButton, Icons } from '@storybook/components';
 import { SAPS_BUTTON_CLICK } from './events';
 import { ADDON_GLOBAL_DISABLE_STATE } from './constants';
@@ -17,12 +17,12 @@ export const PseudoStateTool = (props: Props) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   // isDisabled by user story (active state of button)
-  // const [isDisabled, setIsDisabled] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   // const globallyDisabledDefault = sessionStorage.getItem(ADDON_GLOBAL_DISABLE_STATE) === 'true';
 
   // global state, valid in all stories
-  const [globallyDisabled, setgloballyDisabled] = useAddonState<boolean>(
+  const [, setgloballyDisabled] = useAddonState<boolean>(
     ADDON_GLOBAL_DISABLE_STATE,
     false
   );
@@ -39,11 +39,17 @@ export const PseudoStateTool = (props: Props) => {
     storyChanged: () => {
       // show button only when story uses withPseudo add-on
       setIsVisible(false);
-      // setIsDisabled(false);
     },
     'saps/init-pseudo-states': (addonDisabled: boolean) => {
       // show button only when story uses withPseudo addon and is not disabled
       setIsVisible(!addonDisabled);
+
+      if (!addonDisabled) {
+        const disableStateFromStorage =
+          sessionStorage.getItem(ADDON_GLOBAL_DISABLE_STATE) === 'true';
+        setgloballyDisabled(disableStateFromStorage);
+        setIsDisabled(disableStateFromStorage);
+      }
     },
   });
 
@@ -54,18 +60,17 @@ export const PseudoStateTool = (props: Props) => {
     const disableStateFromStorage =
       sessionStorage.getItem(ADDON_GLOBAL_DISABLE_STATE) === 'true';
 
-    // TODO use shared  useAddonState
+    // TODO use shared useAddonState
     const swap = !disableStateFromStorage;
-    // update
-    // setIsDisabled(swap);
     setgloballyDisabled(swap);
+    setIsDisabled(swap);
     sessionStorage.setItem(ADDON_GLOBAL_DISABLE_STATE, swap.toString());
     emit(SAPS_BUTTON_CLICK, swap);
   };
 
   return isVisible ? (
     <IconButton
-      active={!globallyDisabled}
+      active={!isDisabled}
       title="Show/hide Pseudo States"
       onClick={onButtonClick}
     >

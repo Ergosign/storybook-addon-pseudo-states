@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { addons } from '@storybook/addons';
 import { PseudoState, PseudoStatesParameters, Selector } from '../share/types';
+import { ADDON_GLOBAL_DISABLE_STATE } from '../share/constants';
 
 @Component({
   selector: 'pseudo-state-wrapper',
@@ -96,7 +97,9 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
 
   private _storyComponent: string;
 
-  @Input() isDisabled = false;
+  // TODO replace with shared useAddonState
+  @Input() isDisabled =
+    sessionStorage.getItem(ADDON_GLOBAL_DISABLE_STATE) === 'true';
 
   constructor(/* private _cdRef: ChangeDetectorRef */ private ngZone: NgZone) {}
 
