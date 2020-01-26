@@ -31,10 +31,6 @@ import { PseudoState, PseudoStatesParameters } from '../share/types';
         display: flex;
       }
 
-      .container:not(.addonDisabled) {
-        padding: 10px;
-      }
-
       .header {
         margin-bottom: 5px;
       }
@@ -44,7 +40,7 @@ import { PseudoState, PseudoStatesParameters } from '../share/types';
       }
 
       .story:not(.addonDisabled) {
-        padding: 10px;
+        padding: 0 0 10px 0;
       }
     `,
   ],

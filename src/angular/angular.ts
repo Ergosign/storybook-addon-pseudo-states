@@ -6,7 +6,7 @@ import {
   StoryGetter,
 } from '@storybook/addons';
 import {
-  PseudoStatesDefaultPrefix,
+  PseudoStatesDefaultPrefix_ANGULAR,
   PseudoStatesParameters,
   StatesCompositionDefault,
   WrapperPseudoStateSettings,
@@ -78,10 +78,13 @@ export const withPseudo = makeDecorator({
     // use user values or default
     parameters.stateComposition =
       parameters.stateComposition || StatesCompositionDefault;
-    if (parameters.prefix || options?.prefix) {
-      parameters.prefix =
-        parameters.prefix || options.prefix || PseudoStatesDefaultPrefix;
-    }
+
+    // use prefix without `:` because angular add component scope before each `:`
+    parameters.prefix =
+      parameters?.prefix ||
+      options?.prefix ||
+      PseudoStatesDefaultPrefix_ANGULAR;
+
     storyParameters = escape(JSON.stringify(parameters));
 
     let storyComponent = null;

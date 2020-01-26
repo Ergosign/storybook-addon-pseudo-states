@@ -47,6 +47,8 @@
     "@storybook/api": "^5.2.6",
     "@storybook/components": "^5.2.6",
     "@storybook/core-events": "^5.2.6",
+    "postcss-loader": "^3.0.0",
+    "postcss-pseudo-classes": "^0.3.0",
     "react": "^16.11.0"
   },
   "gitHead": "d4da46cfaa23af0376366e6e7c2fe6b20e196845"
