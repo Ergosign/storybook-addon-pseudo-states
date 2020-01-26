@@ -2,6 +2,7 @@
 import { logger } from '@storybook/node-logger';
 import { Configuration } from 'webpack';
 import postcssPseudoClasses from 'postcss-pseudo-classes';
+import * as util from 'util';
 import { PseudoStatesDefaultPrefix_ANGULAR } from '../share/types';
 
 export interface Options {
@@ -9,6 +10,23 @@ export interface Options {
     prefix: string;
   };
 }
+
+/* export function webpack(
+  webpackConfig: Configuration = {},
+  options: Options = {}
+) {
+  logger.info(
+    `== webpack() ==> Pseudo States Addon Webpack ${util.inspect(
+      options?.postCssLoaderOptions,
+      {
+        showHidden: false,
+        depth: null,
+      }
+    )}`
+  );
+  return webpackConfig;
+}
+*/
 
 /**
  * append postcss' pseudo state postcss-pseudo-classes
@@ -21,6 +39,16 @@ export function webpackFinal(
   options: Options = {}
 ): Configuration {
   logger.info(`=> Loading Pseudo States Addon Webpack config (Angular Cli)`);
+
+  logger.info(
+    `==> Pseudo States Addon Webpack ${util.inspect(
+      options?.postCssLoaderOptions,
+      {
+        showHidden: false,
+        depth: null,
+      }
+    )}`
+  );
 
   const postCSSDefaultOptions = {
     // overwrite default prefix `\\:`
