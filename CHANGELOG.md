@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.14](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.13...v0.0.1-alpha.14) (2020-01-26)
+
+### Bug Fixes
+
+- **angular:** allow empty/no moduleMetadata property on story ([1b25e8d](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/1b25e8decd650c936c1e1c9a1bef06bd316faa96))
+
+### Features
+
+- **angular:** added persistent toggle button state ([a4a3232](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/a4a3232cb313c8f5b022dedc4603d50123a9da59))
+- **angular:** added preset for postcss webpack config ([b7b0962](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/b7b0962ea1e3b9980b545f1d65c8c6f82e130cd8))
+- **global disable state:** added global disable state for react ([4d8bef5](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/4d8bef56dfc5dd859c634330d97e3cf1f2174dd5))
+- **lit:** added attribute state rendering to lit version ([b1f3cdb](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/b1f3cdb98ac32bbf62d6fc48f51783e9f39dc7da))
+
 ## [0.0.1-alpha.13](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.12...v0.0.1-alpha.13) (2019-12-18)
 
 ### Bug Fixes

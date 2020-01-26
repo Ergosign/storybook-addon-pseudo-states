@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.14](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.13...v0.0.1-alpha.14) (2020-01-26)
+
+**Note:** Version bump only for package storybook-addon-pseudo-states-html
+
 ## [0.0.1-alpha.13](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.12...v0.0.1-alpha.13) (2019-12-18)
 
 ### Bug Fixes

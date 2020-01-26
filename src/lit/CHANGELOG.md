@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.14](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.13...v0.0.1-alpha.14) (2020-01-26)
+
+### Features
+
+- **lit:** added attribute state rendering to lit version ([b1f3cdb](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/b1f3cdb98ac32bbf62d6fc48f51783e9f39dc7da))
+
 ## [0.0.1-alpha.13](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.12...v0.0.1-alpha.13) (2019-12-18)
 
 ### Bug Fixes
