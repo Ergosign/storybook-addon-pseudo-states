@@ -3,5 +3,5 @@
   "compilerOptions": {
     "outDir": "./dist"
   },
-  "include": ["./public-api.ts", "./register.ts"]
+  "include": ["./public-api.ts", "./register.ts", "preset-postcss.ts"]
 }
