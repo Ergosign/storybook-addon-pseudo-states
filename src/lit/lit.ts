@@ -7,6 +7,7 @@ import {
 } from '@storybook/addons';
 import { html, render, TemplateResult } from 'lit-html';
 import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
+import { cache } from 'lit-html/directives/cache';
 import {
   AttributeState,
   PseudoState,
@@ -126,25 +127,24 @@ const modifyState = (
   prefix: string | null
 ) => {
   /* console.log('templatResult of story', story, story.getTemplateElement());
-
-  const storyTemplateElement: HTMLTemplateElement = story.getTemplateElement();
-  const storyFragment: DocumentFragment = storyTemplateElement.content;
-
-  // t.content.firstElementChild
-  storyFragment.querySelector('es-button')
-    ?.classList
-    .add(state);
-
-  console.log(' altered', story, story.getTemplateElement());
-  const s = story.strings;
-  console.log('story.strings', s);
-  debugger;
-  const newStory = new TemplateResult(story.strings, story.values, story.type, story.processor); */
+      
+            const storyTemplateElement: HTMLTemplateElement = story.getTemplateElement();
+            const storyFragment: DocumentFragment = storyTemplateElement.content;
+      
+            // t.content.firstElementChild
+            storyFragment.querySelector('es-button')
+              ?.classList
+              .add(state);
+      
+            console.log(' altered', story, story.getTemplateElement());
+            const s = story.strings;
+            console.log('story.strings', s);
+            debugger;
+            const newStory = new TemplateResult(story.strings, story.values, story.type, story.processor); */
 
   const channel = addons.getChannel();
 
-  channel.addListener(STORY_RENDERED, () => {
-    // setTimeout(() => {
+  const modifyStateFn = () => {
     const storyContainerElement = document.querySelector(
       `.pseudo-states-addon__story--${state} .pseudo-states-addon__story__container`
     );
@@ -154,11 +154,18 @@ const modifyState = (
         addStateClass(host, state, selector, prefix);
       }
     }
-    // }, 100);
+  };
+
+  channel.addListener(STORY_RENDERED, modifyStateFn);
+  channel.addListener(SAPS_BUTTON_CLICK, (value: boolean) => {
+    if (!value) {
+      setTimeout(modifyStateFn);
+    }
   });
 
   channel.once(STORY_CHANGED, () => {
     channel.removeAllListeners(STORY_RENDERED);
+    channel.removeAllListeners(SAPS_BUTTON_CLICK);
   });
 
   return html`
@@ -178,6 +185,7 @@ const addStateClass = (
   prefix: string | null
 ) => {
   const newClass = `${prefix || ''}${state}`;
+
   if (!selector) {
     host.classList.add(newClass);
   } else if (typeof selector === 'string') {
@@ -204,11 +212,11 @@ const generatePseudoStates = (
   let globallyDisabled =
     sessionStorage.getItem(ADDON_GLOBAL_DISABLE_STATE) === 'true';
 
-  const tmpl = html`
+  const tmpl = cache(html`
     ${modifyState(story, 'Normal', null, null)}
     ${displayStates(story, composition, selector, prefix)}
     ${displayAtrributes(story, composition, selector, prefix)}
-  `;
+  `);
   const container = html`
     ${globallyDisabled
       ? // show default story in wrapping container
@@ -231,6 +239,7 @@ const generatePseudoStates = (
       if (value) {
         render(story, containerRef);
       } else {
+        // create tmpl again to add pseudo states
         render(tmpl, containerRef);
       }
     }
