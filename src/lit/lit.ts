@@ -17,7 +17,7 @@ import {
   WrapperPseudoStateSettings,
 } from '../share/types';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
-import { parameters } from '../share/constants';
+import { ADDON_GLOBAL_DISABLE_STATE, parameters } from '../share/constants';
 
 const displayAtrributes = (
   story: TemplateResult,
@@ -201,16 +201,28 @@ const generatePseudoStates = (
 ): TemplateResult => {
   const channel = addons.getChannel();
 
+  let globallyDisabled =
+    sessionStorage.getItem(ADDON_GLOBAL_DISABLE_STATE) === 'true';
+
   const tmpl = html`
     ${modifyState(story, 'Normal', null, null)}
     ${displayStates(story, composition, selector, prefix)}
     ${displayAtrributes(story, composition, selector, prefix)}
   `;
   const container = html`
-    <div class="pseudo-states-addon__container">${tmpl}</div>
+    ${globallyDisabled
+      ? // show default story in wrapping container
+        html`
+          <div class="pseudo-states-addon__container">${story}</div>
+        `
+      : html`
+          <div class="pseudo-states-addon__container">${tmpl}</div>
+        `}
   `;
 
   const handleDisableState = (value: boolean) => {
+    globallyDisabled = value;
+
     const containerRef = document.querySelector(
       '.pseudo-states-addon__container'
     );
