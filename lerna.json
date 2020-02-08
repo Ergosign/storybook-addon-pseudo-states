@@ -1,5 +1,5 @@
 {
-  "version": "0.0.1-alpha.14",
+  "version": "0.0.1-alpha.15",
   "packages": ["src/angular", "src/html", "src/lit", "src/react", "src/vue"],
   "npmClient": "npm",
   "command": {

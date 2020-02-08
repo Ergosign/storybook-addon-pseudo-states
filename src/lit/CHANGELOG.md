@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.15](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.14...v0.0.1-alpha.15) (2020-02-08)
+
+### Bug Fixes
+
+- **lit:** rerender pseudo states after toggle disable state ([468474a](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/468474ad5e39421b87ffa1cab37eb1e276420db3))
+
+### Features
+
+- **lit:** added global toggle state handling ([5f099fb](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/5f099fb15016c5fe3c997f254d3db2c2c778e0e2))
+- **lit:** added postcss preset ([eaeb694](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/eaeb6944a358c1a757edabe2a7fa358c360cd4b9))
+
 ## [0.0.1-alpha.14](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.13...v0.0.1-alpha.14) (2020-01-26)
 
 ### Features
