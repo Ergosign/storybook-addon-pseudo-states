@@ -1,7 +1,5 @@
 import React from 'react';
 import addons, { MatchOptions, types } from '@storybook/addons';
-import { logger } from '@storybook/node-logger';
-import * as util from 'util';
 import { API } from '@storybook/api';
 import { PseudoStateTool } from '../share/PseudoStateTool';
 import { ADDON_ID, TOOL_ID, TOOL_TITLE } from '../share/constants';
@@ -33,22 +31,23 @@ addons.register(ADDON_ID, (api: API): void => {
     }); */
 });
 
-logger.info(`==> ADDON - registered`);
-
-// @ts-ignore
-export async function addon(baseConfig, options) {
-  logger.info(
-    `==> ADDON - baseconfig:: ${util.inspect(baseConfig, {
-      showHidden: false,
-      depth: null,
-    })}`
-  );
-  logger.info(
-    `==> ADDON - options:: ${util.inspect(options, {
-      showHidden: false,
-      depth: null,
-    })}`
-  );
-
-  return baseConfig;
-}
+//
+// logger.info(`==> ADDON - registered`);
+//
+// // @ts-ignore
+// export async function addon(baseConfig, options) {
+//   logger.info(
+//     `==> ADDON - baseconfig:: ${util.inspect(baseConfig, {
+//       showHidden: false,
+//       depth: null,
+//     })}`
+//   );
+//   logger.info(
+//     `==> ADDON - options:: ${util.inspect(options, {
+//       showHidden: false,
+//       depth: null,
+//     })}`
+//   );
+//
+//   return baseConfig;
+// }

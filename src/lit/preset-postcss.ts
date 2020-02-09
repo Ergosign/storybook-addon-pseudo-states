@@ -2,6 +2,7 @@
 import { logger } from '@storybook/node-logger';
 import { Configuration, RuleSetCondition, RuleSetRule } from 'webpack';
 import postcssPseudoClasses from 'postcss-pseudo-classes';
+import * as util from 'util';
 
 export interface Options {
   postCssLoaderOptions: {
@@ -11,40 +12,52 @@ export interface Options {
   };
 }
 
+const postCssLoaderOptions = {
+  blacklist: [':root', ':host'],
+};
+
 const applyPostSCSSLoader = (rule: RuleSetCondition): RuleSetCondition => {
   let foundIndex = -1;
   let index = 0;
   for (const loader of rule.use) {
     const loaderPath = loader?.loader || loader;
     if (
-      loaderPath.indexOf('sass-loader') >= 0 ||
+      loaderPath.indexOf('scss-loader') >= 0 ||
       loaderPath.indexOf('sass-loader') >= 0
     ) {
       foundIndex = index;
-      // logger.info(
-      //   `=> added post-scss to scss|sass config: ${rule.test.toString()} -  ${loaderPath} at ${foundIndex}`
-      // );
+      logger.info(
+        `=> added post-scss to scss|sass config: ${rule.test.toString()} -  ${loaderPath} at ${foundIndex}`
+      );
     }
     index += 1;
   }
   if (rule?.use.length > 0 && foundIndex >= 0) {
-    rule.use.splice(foundIndex, 0, {
+    const postCssConfig = {
       loader: 'postcss-loader',
       options: {
         plugins: () => [
           postcssPseudoClasses({
-            /* postCssLoaderOptions */
+            postCssLoaderOptions,
           }),
         ],
       },
-    });
+    };
 
-    // logger.info(
-    //   `==> Final rule::::: ${util.inspect(r, {
-    //     showHidden: false,
-    //     depth: null,
-    //   })}`
-    // );
+    rule.use.splice(foundIndex, 0);
+    logger.info(
+      `==> postcss rule::::: ${util.inspect(postCssConfig.options.plugins(), {
+        showHidden: false,
+        depth: null,
+      })}`
+    );
+
+    logger.info(
+      `==> Final rule::::: ${util.inspect(rule, {
+        showHidden: false,
+        depth: null,
+      })}`
+    );
   }
 
   return rule;
@@ -68,7 +81,6 @@ export function webpackFinal(
   //   prefix: PseudoStatesDefaultPrefix,
   // };
 
-  const postCssLoaderOptions = {};
   // options?.postCssLoaderOptions || postCSSDefaultOptions;
 
   if (

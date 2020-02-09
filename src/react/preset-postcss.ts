@@ -7,17 +7,17 @@ import util from 'util';
 function modifyRules(rule) {
   if (rule.test) {
     // logger.info(
-    //     `==> REACT webpack config - rule: ${util.inspect(rule.test, {
-    //         showHidden: false,
-    //         depth: null,
-    //     })}`
+    //   `==> REACT webpack config - rule: ${util.inspect(rule.test, {
+    //     showHidden: false,
+    //     depth: null,
+    //   })}`
     // );
     if (rule.test && rule.test.toString().match(/.(scss|sass)/)) {
       // logger.info(
-      //     `==> REACT webpack config - rule: ${util.inspect(rule, {
-      //         showHidden: false,
-      //         depth: null,
-      //     })}`
+      //   `==> REACT webpack config - rule: ${util.inspect(rule, {
+      //     showHidden: false,
+      //     depth: null,
+      //   })}`
       // );
       rule.use.map(loader => {
         if (
@@ -26,16 +26,19 @@ function modifyRules(rule) {
           loader.loader.indexOf('/postcss-loader') >= 0
         ) {
           // logger.info(
-          //     `==> REACT webpack config - loader: ${util.inspect(loader, {
-          //         showHidden: false,
-          //         depth: null,
-          //     })}`
+          //   `==> REACT webpack config - loader: ${util.inspect(loader, {
+          //     showHidden: false,
+          //     depth: null,
+          //   })}`
           // );
           // logger.info(
-          //     `==> REACT webpack config - loader: ${util.inspect(loader.options.plugins(), {
-          //         showHidden: false,
-          //         depth: null,
-          //     })}`
+          //   `==> REACT webpack config - loader: ${util.inspect(
+          //     loader.options.plugins(),
+          //     {
+          //       showHidden: false,
+          //       depth: null,
+          //     }
+          //   )}`
           // );
 
           const defaultPlugins = loader.options.plugins;
@@ -44,10 +47,13 @@ function modifyRules(rule) {
             return [...defaultPlugins(), postcssPseudoClasses({})];
           };
           // logger.info(
-          //     `==> REACT webpack config - loader: ${util.inspect(loader.options.plugins(), {
-          //         showHidden: false,
-          //         depth: null,
-          //     })}`
+          //   `==> REACT webpack config - loader: ${util.inspect(
+          //     loader.options.plugins(),
+          //     {
+          //       showHidden: false,
+          //       depth: null,
+          //     }
+          //   )}`
           // );
         }
 
@@ -56,12 +62,12 @@ function modifyRules(rule) {
           loader.loader &&
           loader.loader.indexOf('/css-loader') >= 0
         ) {
-          logger.info(
-            `==> REACT webpack config - css-loader: ${util.inspect(loader, {
-              showHidden: false,
-              depth: null,
-            })}`
-          );
+          // logger.info(
+          //   `==> REACT webpack config - css-loader: ${util.inspect(loader, {
+          //     showHidden: false,
+          //     depth: null,
+          //   })}`
+          // );
 
           // overwrite css-loader's module ident name
           if (loader.options && loader.options.modules) {
