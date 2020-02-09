@@ -2,7 +2,6 @@
 import { logger } from '@storybook/node-logger';
 import { Configuration, RuleSetCondition, RuleSetRule } from 'webpack';
 import postcssPseudoClasses from 'postcss-pseudo-classes';
-import * as util from 'util';
 
 export interface Options {
   postCssLoaderOptions: {
@@ -31,9 +30,13 @@ const applyPostSCSSLoader = (rule: RuleSetCondition): RuleSetCondition => {
   if (rule?.use.length > 0 && foundIndex >= 0) {
     rule.use.splice(foundIndex, 0, {
       loader: 'postcss-loader',
-      // options: {
-      //   plugins: () => [postcssPseudoClasses(postCssLoaderOptions)],
-      // },
+      options: {
+        plugins: () => [
+          postcssPseudoClasses({
+            /* postCssLoaderOptions */
+          }),
+        ],
+      },
     });
 
     // logger.info(

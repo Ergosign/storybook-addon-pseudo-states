@@ -43,7 +43,6 @@
   "peerDependencies": {
     "@storybook/addons": "^5.3.8",
     "@storybook/api": "^5.3.8",
-    "@storybook/client-api": "^5.3.8",
     "@storybook/components": "^5.3.8",
     "@storybook/core-events": "^5.3.8",
     "react": "^16.12.0"
