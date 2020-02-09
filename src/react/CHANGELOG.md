@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.17](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.16...v0.0.1-alpha.17) (2020-02-09)
+
+### Features
+
+- **react:** preset-postcss exported correctly ([603431c](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/603431cffa64065bbf22b4d589dc552b1d91b726))
+
 ## [0.0.1-alpha.16](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.15...v0.0.1-alpha.16) (2020-02-09)
 
 ### Features
