@@ -1,8 +1,6 @@
 // @ts-nocheck
 
-import { logger } from '@storybook/node-logger';
 import postcssPseudoClasses from 'postcss-pseudo-classes';
-import util from 'util';
 
 function modifyRules(rule) {
   if (rule.test) {

@@ -65,13 +65,27 @@ export class PseudoStateWrapperContainer implements AfterViewInit {
   constructor(private renderer: Renderer2) {}
 
   ngAfterViewInit() {
+    // TODO find better solution to get component
+    // get component ref of template, little bit hacky...
+    // @ts-ignore
+    let component = this.template?._projectedViews[
+      // @ts-ignore
+      this.template._projectedViews.length - 1
+    ]?.nodes.filter((item: any) => item?.instance);
+
+    if (component.length >= 1) {
+      component = component[0]?.instance;
+    } else {
+      component = null;
+    }
+
     if (!this.selector) {
-      this._modifyStateClass(null);
+      this._modifyStateClass(null, component);
     } else if (typeof this.selector === 'string') {
-      this._modifyStateClass(this.selector);
+      this._modifyStateClass(this.selector, component);
     } else if (Array.isArray(this.selector)) {
       for (const selectorName of this.selector as Array<string>) {
-        this._modifyStateClass(selectorName);
+        this._modifyStateClass(selectorName, component);
       }
     }
   }
@@ -80,9 +94,10 @@ export class PseudoStateWrapperContainer implements AfterViewInit {
    * add pseudo state/attribute state to host or element found by selector
    *
    * @param selector
+   * @param component
    * @private
    */
-  private _modifyStateClass(selector: string | null) {
+  private _modifyStateClass(selector: string | null, component: any) {
     if (!selector && !this.componentSelector) {
       return;
     }
@@ -96,6 +111,10 @@ export class PseudoStateWrapperContainer implements AfterViewInit {
     }
 
     if (this.isAttribute) {
+      // enable attribute on component
+      // eslint-disable-next-line no-param-reassign
+      component[this.pseudoState] = true;
+
       this.renderer.setAttribute(hostElement, this.pseudoState, 'true');
       // add also to host element
       if (selector && this.componentSelector) {

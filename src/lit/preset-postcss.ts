@@ -13,7 +13,7 @@ export interface Options {
 }
 
 const postCssLoaderOptions = {
-  blacklist: [':root', ':host'],
+  /* blacklist: [':root', ':host'], */
 };
 
 const applyPostSCSSLoader = (rule: RuleSetCondition): RuleSetCondition => {
@@ -36,15 +36,18 @@ const applyPostSCSSLoader = (rule: RuleSetCondition): RuleSetCondition => {
     const postCssConfig = {
       loader: 'postcss-loader',
       options: {
-        plugins: () => [
-          postcssPseudoClasses({
-            postCssLoaderOptions,
-          }),
-        ],
+        plugins: () => {
+          return [
+            postcssPseudoClasses({
+              postCssLoaderOptions,
+            }),
+          ];
+        },
       },
     };
 
-    rule.use.splice(foundIndex, 0);
+    rule.use.splice(foundIndex, 0, postCssConfig);
+
     logger.info(
       `==> postcss rule::::: ${util.inspect(postCssConfig.options.plugins(), {
         showHidden: false,
