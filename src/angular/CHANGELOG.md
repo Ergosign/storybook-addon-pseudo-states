@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.18](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.17...v0.0.1-alpha.18) (2020-02-13)
+
+### Features
+
+- **angular:** set attributes on related subStory in angular context ([afe5c86](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/afe5c864183ea73d49e1d4d4ec5ffc70ab73d0df))
+
 ## [0.0.1-alpha.17](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.16...v0.0.1-alpha.17) (2020-02-09)
 
 **Note:** Version bump only for package storybook-addon-pseudo-states-angular
