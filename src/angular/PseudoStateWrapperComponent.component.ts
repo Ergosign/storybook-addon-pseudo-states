@@ -8,7 +8,13 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { addons } from '@storybook/addons';
-import { PseudoState, PseudoStatesParameters, Selector } from '../share/types';
+import {
+  AttributeStates,
+  PseudoState,
+  PseudoStates,
+  PseudoStatesParameters,
+  Selector,
+} from '../share/types';
 import { ADDON_GLOBAL_DISABLE_STATE } from '../share/constants';
 
 @Component({
@@ -67,11 +73,8 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
     this._parameters = value;
     if (value) {
       this.storyParams = JSON.parse(unescape(value)) as PseudoStatesParameters;
-      this.pseudoStates = this.storyParams?.stateComposition?.pseudo as Array<
-        PseudoState
-      >;
-      this.attributeStates = this.storyParams?.stateComposition
-        ?.attributes as Array<PseudoState>;
+      this.pseudoStates = this.storyParams?.pseudos as PseudoStates;
+      this.attributeStates = this.storyParams?.attributes as AttributeStates;
       this.selector = this.storyParams?.selector || null;
     }
   }

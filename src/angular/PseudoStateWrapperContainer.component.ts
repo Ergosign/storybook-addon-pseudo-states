@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   Input,
@@ -62,7 +63,7 @@ export class PseudoStateWrapperContainer implements AfterViewInit {
 
   @ViewChild('origStoryWrapper', { static: true }) story!: ElementRef;
 
-  constructor(private renderer: Renderer2) {}
+  constructor(private renderer: Renderer2, private _cdRef: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
     // TODO find better solution to get component
@@ -114,6 +115,7 @@ export class PseudoStateWrapperContainer implements AfterViewInit {
       // enable attribute on component
       // eslint-disable-next-line no-param-reassign
       component[this.pseudoState] = true;
+      this._cdRef.detectChanges();
 
       this.renderer.setAttribute(hostElement, this.pseudoState, 'true');
       // add also to host element

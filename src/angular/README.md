@@ -134,10 +134,8 @@ storiesOf('Button', module)
   .addParameters({
     withPseudo: {
       selector: 'button', // css selector of pseudo state's host element
-      stateComposition: {
-        pseudo: ['focus', 'hover', 'hover & focus', 'active'],
-        attributes: ['disabled', 'readonly', 'error'],
-      },
+      pseudos: ['focus', 'hover', 'hover & focus', 'active'],
+      attributes: ['disabled', 'readonly', 'error'],
     },
   })
   .add('Icon Button', () => <Button />);
@@ -151,30 +149,22 @@ There is a default configuration for `StateComposition`.
 export interface PseudoStatesParameters {
   disabled?: boolean;
   // query for selector to host element[s] that have to be modified
-  selector?: string | Array<string>;
+  selector?: Selector;
   // prefix for state classes that will be added to host element
   prefix?: string;
-  stateComposition?: StatesComposition;
-}
-
-export interface StatesComposition {
-  pseudo?: Array<PseudoState>;
-  attributes?: Array<AttributeState>;
+  pseudos?: PseudoStates;
+  attributes?: AttributeStates;
 }
 
 export type PseudoState = PseudoStateEnum | string;
-export const StatesCompositionDefault: StatesComposition = {
-  pseudo: PseudoStateOrderDefault,
-  attributes: AttributesStateOrderDefault,
-};
+export type AttributeState = AttributeStatesEnum | string;
 
-export const PseudoStateOrderDefault: Array<PseudoState> = [
-  FOCUS,
-  HOVER,
-  ACTIVE,
-];
-export const AttributesStateOrderDefault: Array<AttributeState> = [DISABLED];
-export const AttributesStateOrderInputDefault: Array<AttributeState> = [
+export type PseudoStates = Array<PseudoState>;
+export type AttributeStates = Array<AttributeState>;
+
+export const PseudoStatesDefault: PseudoStates = [FOCUS, HOVER, ACTIVE];
+export const AttributesStatesDefault: AttributeStates = [DISABLED];
+export const AttributesStatesInputDefault: AttributeStates = [
   DISABLED,
   READONLY,
 ];

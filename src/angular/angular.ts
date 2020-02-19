@@ -6,9 +6,10 @@ import {
   StoryGetter,
 } from '@storybook/addons';
 import {
+  AttributesStatesDefault,
+  PseudoStatesDefault,
   PseudoStatesDefaultPrefix_ANGULAR,
   PseudoStatesParameters,
-  StatesCompositionDefault,
   WrapperPseudoStateSettings,
 } from '../share/types';
 import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
@@ -53,21 +54,19 @@ export const withPseudo = makeDecorator({
     settings: WrapperPseudoStateSettings
   ) => {
     const story = getStory(context);
-
+    const channel = addons.getChannel();
     const compInternal = story.component.__annotations__[0];
 
     // are options set by user
     const options: OptionsParameter = settings?.options;
 
-    // are parameters set by user
+    // Are parameters set by user
     const parameters: PseudoStatesParameters = settings?.parameters || {};
 
-    const channel = addons.getChannel();
+    const addonDisabled = settings?.parameters?.disabled || false;
+
     // notify toolbar button
-    channel.emit(
-      SAPS_INIT_PSEUDO_STATES,
-      parameters.disabled ? parameters.disabled : false
-    );
+    channel.emit(SAPS_INIT_PSEUDO_STATES, addonDisabled);
 
     if (parameters?.disabled) {
       return story;
@@ -75,11 +74,14 @@ export const withPseudo = makeDecorator({
 
     let storyParameters = null;
 
-    // use user values or default
-    parameters.stateComposition =
-      parameters.stateComposition || StatesCompositionDefault;
+    // Use user values, default user options or default values
+    parameters.pseudos =
+      parameters?.pseudos || options?.pseudos || PseudoStatesDefault;
+    parameters.attributes =
+      parameters?.attributes || options?.attributes || AttributesStatesDefault;
 
-    // use prefix without `:` because angular add component scope before each `:`
+    // Use prefix without `:` because angular add component scope before each `:`
+    // Maybe not editable by user in angular context?
     parameters.prefix =
       parameters?.prefix ||
       options?.prefix ||
