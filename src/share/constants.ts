@@ -1,4 +1,4 @@
-export const parameters = {
+export const addonParameters = {
   name: 'withPseudo',
   parameterName: 'withPseudo',
   // This means don't run this decorator if the withPseudo decorator is not set

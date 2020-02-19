@@ -15,7 +15,7 @@ import {
   WrapperPseudoStateSettings,
 } from '../share/types';
 import { styles } from '../share/styles';
-import { parameters } from '../share/constants';
+import { addonParameters } from '../share/constants';
 import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
 
 function enablePseudoState(
@@ -132,8 +132,8 @@ function pseudoStateFn(
   // are options set by user
   const options: OptionsParameter = settings?.options;
 
-  // Are addonParameters set by user
-  const addonParameters: PseudoStatesParameters = settings?.parameters || {};
+  // Are parameters set by user
+  const parameters: PseudoStatesParameters = settings?.parameters || {};
 
   let addonDisabled = settings?.parameters?.disabled || false;
   channel.on('saps/toolbutton-click', value => {
@@ -143,7 +143,7 @@ function pseudoStateFn(
       container.append(story);
     } else {
       container.innerHTML = '';
-      renderStates(story, container, addonParameters);
+      renderStates(story, container, parameters);
     }
   });
   channel.emit(SAPS_INIT_PSEUDO_STATES, addonDisabled);
@@ -152,28 +152,26 @@ function pseudoStateFn(
     return story;
   }
 
-  // use selector form addonParameters or if not set use settings selector or null
-  addonParameters.selector = settings?.parameters?.selector || null;
+  // use selector form parameters or if not set use settings selector or null
+  parameters.selector = settings?.parameters?.selector || null;
   // TODO support Array<string>
 
   // Use user values, default user options or default values
-  addonParameters.pseudos =
-    addonParameters?.pseudos || options?.pseudos || PseudoStatesDefault;
-  addonParameters.attributes =
-    addonParameters?.attributes ||
-    options?.attributes ||
-    AttributesStatesDefault;
+  parameters.pseudos =
+    parameters?.pseudos || options?.pseudos || PseudoStatesDefault;
+  parameters.attributes =
+    parameters?.attributes || options?.attributes || AttributesStatesDefault;
 
   // Use prefix without `:` because angular add component scope before each `:`
   // Maybe not editable by user in angular context?
-  addonParameters.prefix =
-    addonParameters?.prefix || options?.prefix || PseudoStatesDefaultPrefix;
+  parameters.prefix =
+    parameters?.prefix || options?.prefix || PseudoStatesDefaultPrefix;
 
-  return renderStates(story, container, addonParameters);
+  return renderStates(story, container, parameters);
 }
 
 export const withPseudo = makeDecorator({
-  ...parameters,
+  ...addonParameters,
   wrapper: (
     getStory: StoryGetter,
     context: StoryContext,

@@ -8,7 +8,10 @@ import {
 } from '@storybook/addons';
 // import { useAddonState } from '@storybook/client-api';
 import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
-import { ADDON_GLOBAL_DISABLE_STATE, parameters } from '../share/constants';
+import {
+  ADDON_GLOBAL_DISABLE_STATE,
+  addonParameters,
+} from '../share/constants';
 import {
   AttributesStatesDefault,
   PseudoState,
@@ -32,7 +35,7 @@ function pseudoStateFn(
   // are options set by user
   const options: OptionsParameter = settings?.options;
 
-  // Are parameters set by user
+  // Are addonParameters set by user
   const parameters: PseudoStatesParameters = settings?.parameters || {};
 
   const addonDisabled = settings?.parameters?.disabled || false;
@@ -192,7 +195,7 @@ function pseudoStateFn(
 }
 
 export const withPseudo = makeDecorator({
-  ...parameters,
+  ...addonParameters,
   wrapper: (
     getStory: StoryGetter,
     context: StoryContext,
