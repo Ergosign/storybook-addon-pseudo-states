@@ -1,17 +1,19 @@
 import {
   addons,
   makeDecorator,
+  OptionsParameter,
   StoryContext,
   StoryGetter,
 } from '@storybook/addons';
 import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
-import { parameters } from '../share/constants';
+import { addonParameters } from '../share/constants';
 import {
+  AttributesStatesDefault,
   PseudoState,
+  PseudoStatesDefault,
   PseudoStatesDefaultPrefix,
+  PseudoStatesParameters,
   Selector,
-  StatesComposition,
-  StatesCompositionDefault,
   WrapperPseudoStateSettings,
 } from '../share/types';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
@@ -24,6 +26,13 @@ const pseudoStateFn = (
   settings: WrapperPseudoStateSettings
 ): any => {
   const channel = addons.getChannel();
+
+  // are options set by user
+  const options: OptionsParameter = settings?.options;
+
+  // Are parameters set by user
+  const parameters: PseudoStatesParameters = settings?.parameters || {};
+
   const addonDisabled = settings?.parameters?.disabled || false;
 
   // notify toolbar button
@@ -33,14 +42,19 @@ const pseudoStateFn = (
     return getStory(context);
   }
 
-  // use selector form parameters or if not set use settings selector or null
-  const selector: Selector | null = settings?.parameters?.selector || null;
+  // Use user values, default user options or default values
+  parameters.pseudos =
+    parameters?.pseudos || options?.pseudos || PseudoStatesDefault;
+  parameters.attributes =
+    parameters?.attributes || options?.attributes || AttributesStatesDefault;
 
-  const composition: StatesComposition =
-    settings?.parameters?.stateComposition || StatesCompositionDefault;
+  // Use prefix without `:` because angular add component scope before each `:`
+  // Maybe not editable by user in angular context?
+  parameters.prefix =
+    parameters?.prefix || options?.prefix || PseudoStatesDefaultPrefix;
 
-  const prefix: string =
-    settings?.parameters?.prefix || PseudoStatesDefaultPrefix;
+  // use selector form addonParameters or if not set use settings selector or null
+  parameters.selector = settings?.parameters?.selector || null;
 
   return {
     template: `
@@ -94,9 +108,7 @@ const pseudoStateFn = (
     data() {
       return {
         styles,
-        selector,
-        composition,
-        prefix,
+        parameters,
         isDisabled: false,
       };
     },
@@ -122,8 +134,8 @@ const pseudoStateFn = (
     },
     methods: {
       updatePseudoStates() {
-        if (composition.pseudo) {
-          for (const pState of composition.pseudo) {
+        if (parameters.pseudos) {
+          for (const pState of parameters.pseudos) {
             const container = document.querySelector(
               `.pseudo-states-addon__story--${pState} .pseudo-states-addon__story__container`
             );
@@ -147,23 +159,23 @@ const pseudoStateFn = (
 
               if (subPseudoStates.length >= 1) {
                 for (const s of subPseudoStates) {
-                  host?.classList.add(prefix + s.trim());
+                  host?.classList.add(parameters.prefix + s.trim());
                 }
               } else {
                 // and append pseudo class
-                host?.classList.add(prefix + pState);
+                host?.classList.add(parameters.prefix + pState);
               }
             };
 
             if (container) {
-              applyPseudoStateToHost(container, selector);
+              applyPseudoStateToHost(container, parameters.selector);
             }
           }
         }
       },
       updateAttributes() {
-        if (composition.attributes) {
-          for (const attr of composition.attributes) {
+        if (parameters.attributes) {
+          for (const attr of parameters.attributes) {
             const container = document.querySelector(
               `.pseudo-states-addon__story--attr-${attr} .pseudo-states-addon__story__container`
             );
@@ -196,7 +208,7 @@ const pseudoStateFn = (
 };
 
 export const withPseudo = makeDecorator({
-  ...parameters,
+  ...addonParameters,
   wrapper: (
     getStory: StoryGetter,
     context: StoryContext,

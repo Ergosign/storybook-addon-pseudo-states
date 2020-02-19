@@ -146,16 +146,20 @@ parameters: {
 
 </details>
 
-### Show/Hide Button (alpha only)
+### Show/Hide Toolbar-Button
 
 You can enable a toolbar button that toggles the Pseudo States in the Preview area.
 
 See [Framework Support](##Framework Support) which Frameworks support this feature.
 
-Enable the button by adding it to your `addons.js` file (located in the Storybook config directory):
+Enable the button by adding it to your `main.js` file (located in the Storybook config directory):
 
 ```js
-import 'storybook-addon-pseudo-states-vue/register';
+// main.js
+
+module.exports = {
+  addons: ['storybook-addon-pseudo-states-angular/register'],
+};
 ```
 
 ### Usage
@@ -195,10 +199,8 @@ storiesOf('Button', module)
   .addParameters({
     withPseudo: {
       selector: 'button', // css selector of pseudo state's host element
-      stateComposition: {
-        pseudo: ['focus', 'hover', 'hover & focus', 'active'],
-        attributes: ['disabled', 'readonly', 'error'],
-      },
+      pseudo: ['focus', 'hover', 'hover & focus', 'active'],
+      attributes: ['disabled', 'readonly', 'error'],
     },
   })
   .add('Icon Button', () => <Button />);
@@ -236,153 +238,28 @@ export const text = () => ({
 });
 ```
 
-#### With Angular
-
-At the moment, only [Component Story Format](https://storybook.js.org/docs/formats/component-story-format/) is supported (tested).
-
-```js
-import { withPseudo } from 'storybook-addon-pseudo-states-angular';
-
-const section = {
-  component: ButtonComponent,
-  title: 'Button',
-  moduleMetadata: {
-    declarations: [ButtonComponent],
-    imports: [CommonModule],
-  },
-  decorators: [
-    // ButtonComponent's styling has prefixed pseudo-states styling
-    withPseudo({ prefix: 'pseudoclass--' }),
-  ],
-  parameters: {
-    // <button> exists inside of angular component ButtonComponent
-    withPseudo: { selector: 'button' },
-  },
-};
-export default section;
-
-export const Story = () => {
-  return {
-    component: ButtonComponent,
-    moduleMetadata: {
-      declarations: [ButtonComponent],
-      imports: [CommonModule],
-    },
-    // ButtonComponent has same properties as props' keys
-    props: {
-      label: 'Test Label',
-      anotherProperty: true,
-    },
-  };
-};
-
-export const StoryWithTemplate = () => {
-  return {
-    // always provide component!
-    component: ButtonComponent,
-    moduleMetadata: {
-      entryComponents: [ButtonComponent], // required to support other addons, like knobs addon
-      declarations: [ButtonComponent],
-      imports: [CommonModule],
-    },
-    template: `<test-button [label]="label" [anotherProperty]="anotherProperty"></test-button>`,
-    props: {
-      label: 'Test Label',
-      anotherProperty: true,
-    },
-  };
-};
-```
-
-### With React
-
-When using [CSS Modules](https://github.com/css-modules/css-modules), you must use automatically styling generation via `postcss-loader` (see [Styling section](###Styling)).
-
-`StateComposition.attributes` enable component's props.
-
-```js
-storiesOf('Button', module)
-  .addDecorator(withPseudo)
-  .addParameters({
-    withPseudo: {
-      stateComposition: StatesCompositionDefault,
-    },
-  })
-  .add('Button', () => <Button label="I'm a normal button" />)
-
-  .addParameters({
-    withPseudo: {
-      stateComposition: {
-        pseudo: [...PseudoStatesDefault, 'hover & focus'],
-        attributes: [
-          ...AttributesStatesDefault,
-          'selected',
-          'error',
-          'isLoading',
-          'isReady',
-        ],
-      },
-    },
-  })
-  .add('Button', () => <Button label="I'm a normal button" />);
-```
-
-#### With HTML
-
-```js
-storiesOf('Demo', module)
-  .addDecorator(withPseudo)
-  .addParameters({ withPseudo: { selector: null } })
-  .add('story1', () => {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.innerText = 'Hello World!';
-    button.addEventListener('click', e => console.log(e));
-    return button;
-  })
-  // story with selecotr on inner element
-  .addParameters({ withPseudo: { selector: 'span' } })
-  .add('story2', () => {
-    const headline = document.createElement('h1');
-    const span = document.createElement('span');
-    span.innerHTML = 'Hello World';
-
-    headline.appendChild(span);
-
-    return headline;
-  });
-```
-
 ## Parameters
 
 ```typescript
 export interface PseudoStatesParameters {
   disabled?: boolean;
   // query for selector to host element[s] that have to be modified
-  selector?: string | Array<string>;
+  selector?: Selector;
   // prefix for state classes that will be added to host element
   prefix?: string;
-  stateComposition?: StatesComposition;
-}
-
-export interface StatesComposition {
-  pseudo?: Array<PseudoState>;
-  attributes?: Array<AttributeState>;
+  pseudos?: PseudoStates;
+  attributes?: AttributeStates;
 }
 
 export type PseudoState = PseudoStateEnum | string;
-export const StatesCompositionDefault: StatesComposition = {
-  pseudo: PseudoStateOrderDefault,
-  attributes: AttributesStateOrderDefault,
-};
+export type AttributeState = AttributeStatesEnum | string;
 
-export const PseudoStateOrderDefault: Array<PseudoState> = [
-  FOCUS,
-  HOVER,
-  ACTIVE,
-];
-export const AttributesStateOrderDefault: Array<AttributeState> = [DISABLED];
-export const AttributesStateOrderInputDefault: Array<AttributeState> = [
+export type PseudoStates = Array<PseudoState>;
+export type AttributeStates = Array<AttributeState>;
+
+export const PseudoStatesDefault: PseudoStates = [FOCUS, HOVER, ACTIVE];
+export const AttributesStatesDefault: AttributeStates = [DISABLED];
+export const AttributesStatesInputDefault: AttributeStates = [
   DISABLED,
   READONLY,
 ];
