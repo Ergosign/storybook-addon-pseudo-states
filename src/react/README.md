@@ -227,9 +227,9 @@ storiesOf('Button', module)
   .addParameters({
     withPseudo: {
       stateComposition: {
-        pseudo: [...PseudoStateOrderDefault, 'hover & focus'],
+        pseudo: [...PseudoStatesDefault, 'hover & focus'],
         attributes: [
-          ...AttributesStateOrderDefault,
+          ...AttributesStatesDefault,
           'selected',
           'error',
           'isLoading',

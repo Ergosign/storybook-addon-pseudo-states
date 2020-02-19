@@ -20,31 +20,15 @@ export const { DISABLED, READONLY } = AttributeStatesEnum;
 export type PseudoState = PseudoStateEnum | string;
 export type AttributeState = AttributeStatesEnum | string;
 
-export interface StatesComposition {
-  pseudo?: Array<PseudoState>;
-  attributes?: Array<AttributeState>;
-}
+export type PseudoStates = Array<PseudoState>;
+export type AttributeStates = Array<AttributeState>;
 
-export const PseudoStateOrderDefault: Array<PseudoState> = [
-  FOCUS,
-  HOVER,
-  ACTIVE,
-];
-export const AttributesStateOrderDefault: Array<AttributeState> = [DISABLED];
-export const AttributesStateOrderInputDefault: Array<AttributeState> = [
+export const PseudoStatesDefault: PseudoStates = [FOCUS, HOVER, ACTIVE];
+export const AttributesStatesDefault: AttributeStates = [DISABLED];
+export const AttributesStatesInputDefault: AttributeStates = [
   DISABLED,
   READONLY,
 ];
-
-export const StatesCompositionDefault: StatesComposition = {
-  pseudo: PseudoStateOrderDefault,
-  attributes: AttributesStateOrderDefault,
-};
-
-export const StatesCompositionDefaultInputC = {
-  pseudo: PseudoStateOrderDefault,
-  attributes: AttributesStateOrderInputDefault,
-};
 
 export interface WrapperPseudoStateSettings extends WrapperSettings {
   parameters: PseudoStatesParameters;
@@ -62,6 +46,7 @@ export interface PseudoStatesParameters {
   selector?: Selector;
   // prefix for state classes that will be added to host element
   prefix?: string;
-  stateComposition?: StatesComposition;
+  pseudos?: PseudoStates;
+  attributes?: AttributeStates;
   // [key: string]: any;
 }
