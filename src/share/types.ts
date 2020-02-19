@@ -38,7 +38,7 @@ export const PseudoStatesDefaultPrefix = ':';
 
 export const PseudoStatesDefaultPrefix_ANGULAR = 'pseudo-sates--';
 
-export type Selector = string | Array<string>;
+export type Selector = string | Array<string> | null;
 
 export interface PseudoStatesParameters {
   disabled?: boolean;
