@@ -1,6 +1,7 @@
 import {
   addons,
   makeDecorator,
+  OptionsParameter,
   StoryContext,
   StoryGetter,
   WrapperSettings,
@@ -9,27 +10,33 @@ import { html, render, TemplateResult } from 'lit-html';
 import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
 import { cache } from 'lit-html/directives/cache';
 import {
+  AttributesStatesDefault,
   AttributeState,
   PseudoState,
+  PseudoStatesDefault,
   PseudoStatesDefaultPrefix,
+  PseudoStatesParameters,
   Selector,
-  StatesComposition,
-  StatesCompositionDefault,
   WrapperPseudoStateSettings,
 } from '../share/types';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
-import { ADDON_GLOBAL_DISABLE_STATE, parameters } from '../share/constants';
+import {
+  ADDON_GLOBAL_DISABLE_STATE,
+  addonParameters,
+} from '../share/constants';
+
+type PrefixType = string | null | undefined;
 
 const displayAtrributes = (
   story: TemplateResult,
-  composition: StatesComposition,
-  selector: string | Array<string> | null,
-  prefix: string | null
+  parameters: PseudoStatesParameters
 ) => {
-  if (composition?.attributes) {
-    const { attributes } = composition;
+  if (parameters?.attributes) {
+    const { attributes } = parameters;
     return html`
-      ${attributes.map(attr => modifyAttr(story, attr, selector, prefix))}
+      ${attributes.map(attr =>
+        modifyAttr(story, attr, parameters.selector, parameters.prefix)
+      )}
     `;
   }
   return html``;
@@ -38,8 +45,8 @@ const displayAtrributes = (
 const addAttr = (
   host: Element,
   attr: AttributeState | string,
-  selector: string | Array<string> | null,
-  prefix: string | null
+  selector: Selector,
+  prefix: PrefixType
 ) => {
   if (!selector) {
     const elem = host;
@@ -72,8 +79,8 @@ const addAttr = (
 const modifyAttr = (
   story: TemplateResult,
   attr: AttributeState | string,
-  selector: string | Array<string> | null,
-  prefix: string | null
+  selector: Selector,
+  prefix: PrefixType
 ) => {
   const channel = addons.getChannel();
 
@@ -107,14 +114,14 @@ const modifyAttr = (
 
 const displayStates = (
   story: TemplateResult,
-  composition: StatesComposition,
-  selector: string | Array<string> | null,
-  prefix: string | null
+  parameters: PseudoStatesParameters
 ): TemplateResult => {
-  if (composition?.pseudo) {
-    const sates = composition.pseudo;
+  if (parameters?.pseudos) {
+    const sates = parameters.pseudos;
     return html`
-      ${sates.map(state => modifyState(story, state, selector, prefix))}
+      ${sates.map(state =>
+        modifyState(story, state, parameters.selector, parameters.prefix)
+      )}
     `;
   }
   return html``;
@@ -123,24 +130,24 @@ const displayStates = (
 const modifyState = (
   story: TemplateResult,
   state: PseudoState | string,
-  selector: string | Array<string> | null,
-  prefix: string | null
+  selector: Selector,
+  prefix: PrefixType
 ) => {
   /* console.log('templatResult of story', story, story.getTemplateElement());
-      
-            const storyTemplateElement: HTMLTemplateElement = story.getTemplateElement();
-            const storyFragment: DocumentFragment = storyTemplateElement.content;
-      
-            // t.content.firstElementChild
-            storyFragment.querySelector('es-button')
-              ?.classList
-              .add(state);
-      
-            console.log(' altered', story, story.getTemplateElement());
-            const s = story.strings;
-            console.log('story.strings', s);
-            debugger;
-            const newStory = new TemplateResult(story.strings, story.values, story.type, story.processor); */
+        
+              const storyTemplateElement: HTMLTemplateElement = story.getTemplateElement();
+              const storyFragment: DocumentFragment = storyTemplateElement.content;
+        
+              // t.content.firstElementChild
+              storyFragment.querySelector('es-button')
+                ?.classList
+                .add(state);
+        
+              console.log(' altered', story, story.getTemplateElement());
+              const s = story.strings;
+              console.log('story.strings', s);
+              debugger;
+              const newStory = new TemplateResult(story.strings, story.values, story.type, story.processor); */
 
   const channel = addons.getChannel();
 
@@ -181,8 +188,8 @@ const modifyState = (
 const addStateClass = (
   host: Element,
   state: PseudoState | string,
-  selector: string | Array<string> | null,
-  prefix: string | null
+  selector: Selector,
+  prefix: PrefixType
 ) => {
   const newClass = `${prefix || ''}${state}`;
 
@@ -203,9 +210,7 @@ const addStateClass = (
 
 const generatePseudoStates = (
   story: TemplateResult,
-  composition: StatesComposition,
-  selector: string | Array<string> | null,
-  prefix: string | null
+  parameters: PseudoStatesParameters
 ): TemplateResult => {
   const channel = addons.getChannel();
 
@@ -214,8 +219,7 @@ const generatePseudoStates = (
 
   const tmpl = cache(html`
     ${modifyState(story, 'Normal', null, null)}
-    ${displayStates(story, composition, selector, prefix)}
-    ${displayAtrributes(story, composition, selector, prefix)}
+    ${displayStates(story, parameters)} ${displayAtrributes(story, parameters)}
   `);
   const container = html`
     ${globallyDisabled
@@ -264,6 +268,13 @@ const pseudoStateFn = (
 ): any => {
   const story = getStory(context) as TemplateResult;
   const channel = addons.getChannel();
+
+  // are options set by user
+  const options: OptionsParameter = settings?.options;
+
+  // Are addonParameters set by user
+  const parameters: PseudoStatesParameters = settings?.parameters || {};
+
   const addonDisabled = settings?.parameters?.disabled || false;
 
   // notify toolbar button
@@ -273,20 +284,25 @@ const pseudoStateFn = (
     return story;
   }
 
-  // use selector form parameters or if not set use settings selector or null
-  const selector: Selector | null = settings?.parameters?.selector || null;
+  // use selector form addonParameters or if not set use settings selector or null
+  parameters.selector = settings?.parameters?.selector || null;
 
-  const composition: StatesComposition =
-    settings?.parameters?.stateComposition || StatesCompositionDefault;
+  // Use user values, default user options or default values
+  parameters.pseudos =
+    parameters?.pseudos || options?.pseudos || PseudoStatesDefault;
+  parameters.attributes =
+    parameters?.attributes || options?.attributes || AttributesStatesDefault;
 
-  const prefix: string =
-    settings?.parameters?.prefix || PseudoStatesDefaultPrefix;
+  // Use prefix without `:` because angular add component scope before each `:`
+  // Maybe not editable by user in angular context?
+  parameters.prefix =
+    parameters?.prefix || options?.prefix || PseudoStatesDefaultPrefix;
 
-  return generatePseudoStates(story, composition, selector, prefix);
+  return generatePseudoStates(story, parameters);
 };
 
 export const withPseudo = makeDecorator({
-  ...parameters,
+  ...addonParameters,
   wrapper: (
     getStory: StoryGetter,
     context: StoryContext,
