@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   addons,
   makeDecorator,
+  OptionsParameter,
   StoryContext,
   StoryGetter,
 } from '@storybook/addons';
@@ -9,11 +10,12 @@ import {
 import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
 import { ADDON_GLOBAL_DISABLE_STATE, parameters } from '../share/constants';
 import {
+  AttributesStatesDefault,
   PseudoState,
+  PseudoStatesDefault,
   PseudoStatesDefaultPrefix,
+  PseudoStatesParameters,
   Selector,
-  StatesComposition,
-  StatesCompositionDefault,
   WrapperPseudoStateSettings,
 } from '../share/types';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
@@ -26,6 +28,13 @@ function pseudoStateFn(
 ) {
   const story = getStory(context);
   const channel = addons.getChannel();
+
+  // are options set by user
+  const options: OptionsParameter = settings?.options;
+
+  // Are parameters set by user
+  const parameters: PseudoStatesParameters = settings?.parameters || {};
+
   const addonDisabled = settings?.parameters?.disabled || false;
 
   // notify toolbar button
@@ -43,16 +52,21 @@ function pseudoStateFn(
   // use selector form parameters or if not set use settings selector or null
   const selector: Selector | null = settings?.parameters?.selector || null;
 
-  const composition: StatesComposition =
-    settings?.parameters?.stateComposition || StatesCompositionDefault;
+  // Use user values, default user options or default values
+  parameters.pseudos =
+    parameters?.pseudos || options?.pseudos || PseudoStatesDefault;
+  parameters.attributes =
+    parameters?.attributes || options?.attributes || AttributesStatesDefault;
 
-  const prefix: string =
-    settings?.parameters?.prefix || PseudoStatesDefaultPrefix;
+  // Use prefix without `:` because angular add component scope before each `:`
+  // Maybe not editable by user in angular context?
+  parameters.prefix =
+    parameters?.prefix || options?.prefix || PseudoStatesDefaultPrefix;
   const states: Array<JSX.Element> = [];
 
   // create story's new template
-  if (composition.pseudo) {
-    for (const state of composition.pseudo) {
+  if (parameters.pseudos) {
+    for (const state of parameters.pseudos) {
       const pstate = sanitizePseudoName(state);
       // const storyState = {...story, props: {...story.props, [state]: true}};
 
@@ -69,8 +83,8 @@ function pseudoStateFn(
       states.push(pseudoStoryPart);
     }
   }
-  if (composition.attributes) {
-    for (const attr of composition.attributes) {
+  if (parameters.attributes) {
+    for (const attr of parameters.attributes) {
       const storyState = {
         ...story,
         props: { ...story.props, [attr]: true },
@@ -92,8 +106,8 @@ function pseudoStateFn(
 
   // update pseudo states after story is rendered
   const updatePseudoStates = () => {
-    if (composition.pseudo) {
-      for (const pstateRaw of composition.pseudo) {
+    if (parameters.pseudos) {
+      for (const pstateRaw of parameters.pseudos) {
         const pstate = sanitizePseudoName(pstateRaw);
 
         const container = document.querySelector(
@@ -126,11 +140,15 @@ function pseudoStateFn(
 
             if (subPseudoStates.length >= 1) {
               for (const s of subPseudoStates) {
-                host?.classList.add(`${moduleClass[1]}__${prefix}${s.trim()}`);
+                host?.classList.add(
+                  `${moduleClass[1]}__${parameters.prefix}${s.trim()}`
+                );
               }
             } else {
               // and append pseudo class
-              host?.classList.add(`${moduleClass[1]}__${prefix}${pstate}`);
+              host?.classList.add(
+                `${moduleClass[1]}__${parameters.prefix}${pstate}`
+              );
             }
           }
         };

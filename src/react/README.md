@@ -30,7 +30,28 @@ Then, you can set the decorator locally, see [Usage](###Usage).
 
 ### Styling
 
-#### Automatically generated with PostCss Webpack config (recommended)
+### With Preset
+
+Preset-Postcss adds [postcss-loader](https://github.com/postcss/postcss-loader) to Storybook's custom webpack config.
+
+You must also install [postcss-pseudo-classes](https://github.com/giuseppeg/postcss-pseudo-classes).
+Unfortunately, latest version is only tagged and not released. Please use at least [tagged version 0.3.0](https://github.com/giuseppeg/postcss-pseudo-classes/releases/tag/v0.3.0)
+
+```bash
+npm install postcss-pseudo-classes@0.3.0 --save-dev
+```
+
+Then add the preset `preset-postcss` to your configuration in `main.js` (located in the Storybook config directory):
+
+```js
+main.js;
+
+module.exports = {
+  presets: ['storybook-addon-pseudo-states-angular/preset-postcss'],
+};
+```
+
+#### Own Webpack config (but automatically generated with PostCss)
 
 Add [postcss-loader](https://github.com/postcss/postcss-loader) to a Storybook custom webpack config
 
@@ -81,7 +102,6 @@ module.exports = {
   plugins: {
     'postcss-pseudo-classes': {
       // prefix: 'pseudoclass--',
-      // blacklist: ':not'
     },
   },
 };
@@ -146,16 +166,20 @@ parameters: {
 
 </details>
 
-### Show/Hide Button (alpha only)
+### Show/Hide Toolbar-Button
 
 You can enable a toolbar button that toggles the Pseudo States in the Preview area.
 
 See [Framework Support](##Framework Support) which Frameworks support this feature.
 
-Enable the button by adding it to your `addons.js` file (located in the Storybook config directory):
+Enable the button by adding it to your `main.js` file (located in the Storybook config directory):
 
 ```js
-import 'storybook-addon-pseudo-states-react/register';
+// main.js
+
+module.exports = {
+  addons: ['storybook-addon-pseudo-states-angular/register'],
+};
 ```
 
 ### Usage
@@ -195,10 +219,8 @@ storiesOf('Button', module)
   .addParameters({
     withPseudo: {
       selector: 'button', // css selector of pseudo state's host element
-      stateComposition: {
-        pseudo: ['focus', 'hover', 'hover & focus', 'active'],
-        attributes: ['disabled', 'readonly', 'error'],
-      },
+      pseudo: ['focus', 'hover', 'hover & focus', 'active'],
+      attributes: ['disabled', 'readonly', 'error'],
     },
   })
   .add('Icon Button', () => <Button />);
@@ -219,7 +241,7 @@ storiesOf('Button', module)
   .addDecorator(withPseudo)
   .addParameters({
     withPseudo: {
-      stateComposition: StatesCompositionDefault,
+      attribtues: [], // no attributes to show --> overwrite default [DISABLE]
     },
   })
   .add('Button', () => <Button label="I'm a normal button" />)
@@ -331,30 +353,22 @@ storiesOf('Demo', module)
 export interface PseudoStatesParameters {
   disabled?: boolean;
   // query for selector to host element[s] that have to be modified
-  selector?: string | Array<string>;
+  selector?: Selector;
   // prefix for state classes that will be added to host element
   prefix?: string;
-  stateComposition?: StatesComposition;
-}
-
-export interface StatesComposition {
-  pseudo?: Array<PseudoState>;
-  attributes?: Array<AttributeState>;
+  pseudos?: PseudoStates;
+  attributes?: AttributeStates;
 }
 
 export type PseudoState = PseudoStateEnum | string;
-export const StatesCompositionDefault: StatesComposition = {
-  pseudo: PseudoStateOrderDefault,
-  attributes: AttributesStateOrderDefault,
-};
+export type AttributeState = AttributeStatesEnum | string;
 
-export const PseudoStateOrderDefault: Array<PseudoState> = [
-  FOCUS,
-  HOVER,
-  ACTIVE,
-];
-export const AttributesStateOrderDefault: Array<AttributeState> = [DISABLED];
-export const AttributesStateOrderInputDefault: Array<AttributeState> = [
+export type PseudoStates = Array<PseudoState>;
+export type AttributeStates = Array<AttributeState>;
+
+export const PseudoStatesDefault: PseudoStates = [FOCUS, HOVER, ACTIVE];
+export const AttributesStatesDefault: AttributeStates = [DISABLED];
+export const AttributesStatesInputDefault: AttributeStates = [
   DISABLED,
   READONLY,
 ];
