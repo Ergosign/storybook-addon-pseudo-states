@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.19](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.18...v0.0.1-alpha.19) (2020-02-19)
+
+### Features
+
+- **lit:** adapt lit-html to StateComposition removal ([cbd12a7](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/cbd12a72bd155aa653c95f48f6b53c2e6a34693b))
+
 ## [0.0.1-alpha.18](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.17...v0.0.1-alpha.18) (2020-02-13)
 
 ### Features

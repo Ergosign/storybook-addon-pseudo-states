@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.19](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.18...v0.0.1-alpha.19) (2020-02-19)
+
+### Features
+
+- **all:** remove StateComposition; flat attributes and pseudos in Parameters directly ([e8a9925](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/e8a9925d42a16f127bda5c962d70f6f3d64c904c))
+- **all:** rename addon parameters to addonParameters to resolve shadow conflicts ([017d485](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/017d485a96ef8459546e15077662762ac58f9962))
+- **react:** adapt react to StateComposition removal ([e454aa1](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/e454aa18fbf57f2c8fbb4d9acf52b5dff41cdeb3))
+
 ## [0.0.1-alpha.18](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.17...v0.0.1-alpha.18) (2020-02-13)
 
 ### Features

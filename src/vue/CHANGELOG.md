@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.19](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.18...v0.0.1-alpha.19) (2020-02-19)
+
+### Features
+
+- **all:** remove StateComposition; flat attributes and pseudos in Parameters directly ([e8a9925](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/e8a9925d42a16f127bda5c962d70f6f3d64c904c))
+- **vue:** adapt vue to StateComposition removal ([9fbbcef](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/9fbbcefd9063d4ad67df6ba3d957f28d25976e96))
+
 ## [0.0.1-alpha.18](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.17...v0.0.1-alpha.18) (2020-02-13)
 
 **Note:** Version bump only for package storybook-addon-pseudo-states-vue
