@@ -1,5 +1,5 @@
 {
-  "name": "storybook-pseudo-states",
+  "name": "@ergosign/storybook-pseudo-states",
   "version": "0.0.1",
   "description": "Storybook decorator to enable automatic generation and displaying of CSS pseudo states for components.",
   "keywords": [
@@ -40,8 +40,9 @@
     "lerna:version": "lerna version",
     "lerna:build-all": "lerna run build",
     "lerna:publish": "lerna publish --force-publish",
-    "lerna:publish-version": "lerna publish 0.0.1-alpha.16 --conventional-commits",
-    "lerna:publish:github": "lerna publish --registry https://npm.pkg.github.com/"
+    "lerna:publish-version": "lerna publish 0.0.1-alpha.20 --conventional-commits",
+    "lerna:publish:github": "lerna publish --registry https://npm.pkg.github.com/",
+    "publish-manual": "npm publish --access public"
   },
   "husky": {
     "hooks": {

@@ -19,7 +19,7 @@ Storybook Addon Pseudo States allows you to automatically display pseudo states 
 First of all, you need to install Pseudo States into your project as a dev dependency.
 
 ```sh
-npm install storybook-addon-pseudo-states-lit --save-dev
+npm install @ergosign/storybook-addon-pseudo-states-lit --save-dev
 ```
 
 Then, configure it as an addon by adding it to your main.js file (located in the Storybook config directory).
@@ -49,7 +49,7 @@ main.js;
 module.exports = {
   presets: [
     {
-      name: 'storybook-addon-pseudo-states-lit/preset-postcss',
+      name: '@ergosign/storybook-addon-pseudo-states-lit/preset-postcss',
 
       // set rules for which postcss-loader will be attached to
       // if not set, it tries to add postcss-loader to all scss|sass rules
@@ -77,7 +77,7 @@ Enable the button by adding it to your `main.js` file (located in the Storybook 
 module.exports = {
   addons: [
     {
-      name: 'storybook-addon-pseudo-states-lit',
+      name: '@ergosign/storybook-addon-pseudo-states-lit',
       options: {
         visibleByDefault: true,
       },
@@ -95,7 +95,7 @@ module.exports = {
 #### Component Story Format (CSF, recommended)
 
 ```js
-import { withPseudo } from 'storybook-addon-pseudo-states-lit';
+import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-lit';
 
 //not tested yet
 ```
@@ -103,7 +103,7 @@ import { withPseudo } from 'storybook-addon-pseudo-states-lit';
 #### storyOf Format
 
 ```js
-import { withPseudo } from 'storybook-addon-pseudo-states-<framework>';
+import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-<framework>';
 
 storiesOf('Button', module)
   .addDecorator(withPseudo)

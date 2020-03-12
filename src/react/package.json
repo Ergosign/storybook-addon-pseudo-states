@@ -1,5 +1,5 @@
 {
-  "name": "storybook-addon-pseudo-states-react",
+  "name": "@ergosign/storybook-addon-pseudo-states-react",
   "version": "0.0.1-alpha.19",
   "description": "Storybook decorator to enable automatic generation and displaying of CSS pseudo states for components.",
   "keywords": [
@@ -47,5 +47,9 @@
     "@storybook/core-events": "^5.3.8",
     "react": "^16.12.0"
   },
-  "gitHead": "d4da46cfaa23af0376366e6e7c2fe6b20e196845"
+  "gitHead": "d4da46cfaa23af0376366e6e7c2fe6b20e196845",
+  "publishConfig": {
+    "access": "public",
+    "scope": "@ergosign"
+  }
 }
