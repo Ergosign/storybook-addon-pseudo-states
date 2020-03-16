@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.21](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.20...v0.0.1-alpha.21) (2020-03-16)
+
+### Bug Fixes
+
+- **angular:** remove check if prop exists on component ([12d1db3](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/12d1db3601234a55b7d0b3926167d7470994e196))
+
 ## [0.0.1-alpha.20](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.19...v0.0.1-alpha.20) (2020-03-12)
 
 **Note:** Version bump only for package @ergosign/storybook-addon-pseudo-states-vue
