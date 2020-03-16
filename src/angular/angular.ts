@@ -42,6 +42,29 @@ function getModuleMetadata(metadata: any) {
   return moduleMetadata;
 }
 
+const isValidInputOrOutputOfComponent = (
+  storyComponent: any,
+  property: string
+): 'Output' | 'Input' | undefined => {
+  // are not visible in __props__metadata
+  // eslint-disable-next-line camelcase
+  const componentProperty = storyComponent?.__prop__metadata__[property];
+
+  if (!componentProperty && storyComponent?.__proto__) {
+    // look in abstract component
+    return isValidInputOrOutputOfComponent(storyComponent?.__proto__, property);
+  }
+  const isDef = componentProperty.length > 0;
+
+  if (isDef) {
+    const p = componentProperty[0];
+    const proto = p?.__proto__;
+    const meta = proto?.ngMetadataName;
+    return meta;
+  }
+  return undefined;
+};
+
 export const withPseudo = makeDecorator({
   name: 'withPseudo',
   parameterName: 'withPseudo',
@@ -55,7 +78,7 @@ export const withPseudo = makeDecorator({
   ) => {
     const story = getStory(context);
     const channel = addons.getChannel();
-    const compInternal = story.component.__annotations__[0];
+    const compInternal = story.component?.__annotations__[0];
 
     // are options set by user
     const options: OptionsParameter = settings?.options;
@@ -90,9 +113,13 @@ export const withPseudo = makeDecorator({
     storyParameters = escape(JSON.stringify(parameters));
 
     let storyComponent = null;
-    if (story.component && story.component.__annotations__[0]) {
-      storyComponent = escape(
-        JSON.stringify(story.component.__annotations__[0])
+    if (story.component && compInternal) {
+      storyComponent = escape(JSON.stringify(compInternal));
+    } else {
+      // eslint-disable-next-line no-console
+      console.warn(
+        'Pseudo States Addon:',
+        'add component property to your story'
       );
     }
 
@@ -104,14 +131,30 @@ export const withPseudo = makeDecorator({
       for (const property in story?.props) {
         if (story?.props.hasOwnProperty(property)) {
           // check if component has property with the same key
-          // TODO check was removed due to component's properties of component that extends abstract components
-          // are not visible in __props__metadata
-          // const componentProperty =
-          //   story?.component?.__prop__metadata__[property];
-          //
-          // if (componentProperty) {
-          propertyString += `[${property}]="${property}" `;
-          // }
+          if (story?.component) {
+            const ioType = isValidInputOrOutputOfComponent(
+              story.component,
+              property
+            );
+
+            // TODO add two-way-binding
+            switch (ioType) {
+              case 'Input':
+                propertyString += `[${property}]="${property}" `;
+                break;
+              case 'Output':
+                propertyString += `(${property})="${property}($event)" `;
+                break;
+              default:
+                // eslint-disable-next-line no-console
+                console.warn(
+                  'Pseudo States Addon:',
+                  'unkown prop for @Input/@Output',
+                  property
+                );
+                break;
+            }
+          }
         }
       }
 
