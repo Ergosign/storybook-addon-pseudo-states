@@ -104,12 +104,14 @@ export const withPseudo = makeDecorator({
       for (const property in story?.props) {
         if (story?.props.hasOwnProperty(property)) {
           // check if component has property with the same key
-          const componentProperty =
-            story?.component?.__prop__metadata__[property];
-
-          if (componentProperty) {
-            propertyString += `[${property}]="${property}" `;
-          }
+          // TODO check was removed due to component's properties of component that extends abstract components
+          // are not visible in __props__metadata
+          // const componentProperty =
+          //   story?.component?.__prop__metadata__[property];
+          //
+          // if (componentProperty) {
+          propertyString += `[${property}]="${property}" `;
+          // }
         }
       }
 
