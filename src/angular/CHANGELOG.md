@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.22](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.21...v0.0.1-alpha.22) (2020-03-16)
+
+### Features
+
+- **angular:** support for output properties ([17c9abb](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/17c9abb7d41868f9e785f95ef93e11d3d3c819a1))
+
 ## [0.0.1-alpha.21](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.20...v0.0.1-alpha.21) (2020-03-16)
 
 ### Bug Fixes
