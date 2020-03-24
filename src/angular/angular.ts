@@ -20,7 +20,10 @@ function getModuleMetadata(metadata: any) {
   let moduleMetadata = metadata?.moduleMetadata;
   const component = metadata?.component;
 
-  if (component && !moduleMetadata) {
+  if (
+    (component && !moduleMetadata) ||
+    (moduleMetadata && !moduleMetadata.declarations)
+  ) {
     moduleMetadata = {
       declarations: [metadata.component],
     };
@@ -32,7 +35,7 @@ function getModuleMetadata(metadata: any) {
       // add own wrapper components
       declarations: [
         ...moduleMetadata.declarations,
-        metadata.component,
+        // metadata.component,
         PseudoStateWrapperComponent,
         PseudoStateWrapperContainer,
       ],
