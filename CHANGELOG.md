@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.23](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.22...v0.0.1-alpha.23) (2020-03-24)
+
+
+### Bug Fixes
+
+* **angular:** allow moduleMetadata in story without declarations ([9d95d69](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/9d95d69b775ca9efc88b4e4a44eaa4c5e24bf263))
+
+
+
+
+
 ## [0.0.1-alpha.22](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.21...v0.0.1-alpha.22) (2020-03-16)
 
 ### Features
