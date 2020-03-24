@@ -136,7 +136,7 @@ function pseudoStateFn(
   const parameters: PseudoStatesParameters = settings?.parameters || {};
 
   let addonDisabled = settings?.parameters?.disabled || false;
-  channel.on('saps/toolbutton-click', value => {
+  channel.on('saps/toolbutton-click', (value) => {
     addonDisabled = value;
     if (value) {
       container.innerHTML = '';

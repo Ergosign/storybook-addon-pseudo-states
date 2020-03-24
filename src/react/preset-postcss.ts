@@ -17,7 +17,7 @@ function modifyRules(rule) {
       //     depth: null,
       //   })}`
       // );
-      rule.use.map(loader => {
+      rule.use.map((loader) => {
         if (
           loader &&
           loader.loader &&
@@ -81,7 +81,7 @@ function modifyRules(rule) {
       return rule;
     }
   } else if (rule.oneOf) {
-    rule.oneOf.map(innerRule => {
+    rule.oneOf.map((innerRule) => {
       modifyRules(innerRule);
       return rule;
     });
@@ -90,7 +90,7 @@ function modifyRules(rule) {
 }
 
 export function webpackFinal(webpackConfig = {}, options = {}) {
-  webpackConfig.module.rules.map(r => {
+  webpackConfig.module.rules.map((r) => {
     modifyRules(r);
 
     return r;

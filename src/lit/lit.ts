@@ -34,7 +34,7 @@ const displayAtrributes = (
   if (parameters?.attributes) {
     const { attributes } = parameters;
     return html`
-      ${attributes.map(attr =>
+      ${attributes.map((attr) =>
         modifyAttr(story, attr, parameters.selector, parameters.prefix)
       )}
     `;
@@ -119,7 +119,7 @@ const displayStates = (
   if (parameters?.pseudos) {
     const sates = parameters.pseudos;
     return html`
-      ${sates.map(state =>
+      ${sates.map((state) =>
         modifyState(story, state, parameters.selector, parameters.prefix)
       )}
     `;
@@ -224,12 +224,8 @@ const generatePseudoStates = (
   const container = html`
     ${globallyDisabled
       ? // show default story in wrapping container
-        html`
-          <div class="pseudo-states-addon__container">${story}</div>
-        `
-      : html`
-          <div class="pseudo-states-addon__container">${tmpl}</div>
-        `}
+        html` <div class="pseudo-states-addon__container">${story}</div> `
+      : html` <div class="pseudo-states-addon__container">${tmpl}</div> `}
   `;
 
   const handleDisableState = (value: boolean) => {

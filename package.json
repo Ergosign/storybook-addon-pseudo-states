@@ -40,58 +40,59 @@
     "lerna:version": "lerna version",
     "lerna:build-all": "lerna run build",
     "lerna:publish": "lerna publish --force-publish",
-    "lerna:publish-version": "lerna publish 0.0.1-alpha.22 --conventional-commits",
+    "lerna:publish-version": "lerna publish 0.0.1-alpha.23 --conventional-commits",
     "lerna:publish:github": "lerna publish --registry https://npm.pkg.github.com/",
     "publish-manual": "npm publish --access public"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run pretty-quick && npm run lint"
+      "pre-commit": "lint-staged"
     }
   },
   "author": "philippone",
   "license": "MIT",
   "devDependencies": {
-    "@angular/core": "8.2.14",
-    "@babel/core": "7.8.3",
-    "@storybook/addons": "5.3.8",
-    "@storybook/cli": "5.3.8",
-    "@storybook/html": "5.3.8",
-    "@storybook/api": "5.3.8",
-    "@storybook/client-api": "5.3.8",
-    "@types/node": "13.1.8",
-    "@types/react": "16.9.18",
+    "@angular/core": "9.0.7",
+    "@babel/core": "7.9.0",
+    "@storybook/addons": "5.3.17",
+    "@storybook/api": "5.3.17",
+    "@storybook/cli": "5.3.17",
+    "@storybook/client-api": "5.3.17",
+    "@storybook/html": "5.3.17",
+    "@types/node": "13.9.3",
+    "@types/react": "16.9.25",
     "@types/react-dom": "16.9.5",
-    "@typescript-eslint/eslint-plugin": "2.17.0",
-    "@typescript-eslint/parser": "2.17.0",
-    "babel-loader": "8.0.6",
-    "cz-conventional-changelog": "3.0.2",
+    "@types/webpack": "4.41.8",
+    "@typescript-eslint/eslint-plugin": "2.25.0",
+    "@typescript-eslint/parser": "2.25.0",
+    "babel-loader": "8.1.0",
+    "cz-conventional-changelog": "3.1.0",
     "emotion": "10.0.27",
     "eslint": "6.8.0",
-    "eslint-config-airbnb": "18.0.1",
-    "eslint-config-prettier": "6.9.0",
-    "eslint-config-standard": "14.1.0",
-    "eslint-plugin-import": "2.20.0",
+    "eslint-config-airbnb": "18.1.0",
+    "eslint-config-prettier": "6.10.1",
+    "eslint-config-standard": "14.1.1",
+    "eslint-plugin-import": "2.20.1",
     "eslint-plugin-jsx-a11y": "6.2.3",
     "eslint-plugin-node": "11.0.0",
     "eslint-plugin-prettier": "3.1.2",
     "eslint-plugin-promise": "4.2.1",
-    "eslint-plugin-react": "7.18.0",
-    "eslint-plugin-react-hooks": "2.3.0",
+    "eslint-plugin-react": "7.19.0",
+    "eslint-plugin-react-hooks": "2.5.1",
     "eslint-plugin-standard": "4.0.1",
+    "husky": "4.2.3",
+    "lerna": "3.20.2",
+    "lint-staged": "^10.0.9",
+    "lit-html": "1.2.1",
     "postcss-loader": "3.0.0",
     "postcss-pseudo-classes": "0.3.0",
-    "husky": "4.2.0",
-    "lerna": "3.20.2",
-    "lit-html": "1.1.2",
-    "prettier": "1.19.1",
+    "prettier": "2.0.2",
     "pretty-quick": "2.0.1",
-    "typescript": "3.7.5",
+    "typescript": "3.8.3",
     "vue": "2.6.11",
-    "vue-class-component": "7.2.2",
-    "zone.js": "0.10.2",
-    "webpack": "4.41.5",
-    "@types/webpack": "4.41.3"
+    "vue-class-component": "7.2.3",
+    "webpack": "4.42.1",
+    "zone.js": "0.10.3"
   },
   "engines": {
     "node": ">=10.0.0"
@@ -101,5 +102,14 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "lint-staged": {
+    "*.{scss}": ["eslint --fix"],
+    "*.{json}": ["eslint --fix"],
+    "*.{js,jsx}": ["eslint --fix"],
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --cache --fix"
+    ]
   }
 }

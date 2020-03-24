@@ -60,7 +60,7 @@ export function webpackFinal(
     options?.postCssLoaderOptions || postCSSDefaultOptions;
 
   // find rules responsible for styling
-  webpackConfig.module.rules.forEach(r => {
+  webpackConfig.module.rules.forEach((r) => {
     // TODO Is this regex always valid??
     if (r.test.toString() === '/\\.scss$|\\.sass$/') {
       // loggerPack.logger.info(`==> Installed Runle in webpack Final ${util.inspect(r, {showHidden: false, depth: null})}`);
