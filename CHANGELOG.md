@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.24](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.23...v0.0.1-alpha.24) (2020-03-25)
+
+
+### Bug Fixes
+
+* **angular:** add :nth-child, :nth-of-type to post-css-pseudo plugin options due to styling errors in :host-constext() ([f34a9d0](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/f34a9d086a253e5462e7f61ef1393927e6f50e21))
+
+
+
+
+
 ## [0.0.1-alpha.23](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.22...v0.0.1-alpha.23) (2020-03-24)
 
 
