@@ -54,10 +54,13 @@ export function webpackFinal(
     // overwrite default prefix `\\:`
     // use prefix without `:` because angular add component scope before each `:`
     prefix: PseudoStatesDefaultPrefix_ANGULAR,
+    // add to blacklist because it leads to problems with :host-context()
+    blacklist: [':nth-child', 'nth-of-type'],
   };
 
-  const postCssLoaderOptions =
-    options?.postCssLoaderOptions || postCSSDefaultOptions;
+  const postCssLoaderOptions = options?.postCssLoaderOptions
+    ? { ...postCSSDefaultOptions, ...options.postCssLoaderOptions }
+    : postCSSDefaultOptions;
 
   // find rules responsible for styling
   webpackConfig.module.rules.forEach((r) => {
