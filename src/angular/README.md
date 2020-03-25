@@ -51,11 +51,36 @@ module.exports = {
 };
 ```
 
+This creates for each css pseudo class an equivalent as normal css class (for instance `:hover` to `\:hover`), so that 
+you can use it in element's class attribute (`<div class=":hover">Element in hover state</div>`).
+
+You can modify post css loader options:
+
+```js
+module.exports = {
+   presets: [
+       {
+            name:"@ergosign/storybook-addon-pseudo-states-angular/preset-postcss",
+            options: {
+                postCssLoaderOptions: {
+                    //prefix: 'pseudo-sates--', // default for angular
+                    blacklist: [':nth-child', ':nth-of-type']
+                }
+            }
+        }     
+    ] 
+}
+```
+
+It's not recommended to alter the prefix option. But if you need to be change the prefix then it must not start with `:` 
+because Angular's scoping put scope's context before each colon and breaks styling.
+
+
 ### Show/Hide Toolbar-Button
 
 You can enable a toolbar button that toggles the Pseudo States in the Preview area.
 
-See [Framework Support](##Framework Support) which Frameworks support this feature.
+See [Framework Support](#framework-support) which Frameworks support this feature.
 
 Enable the button by adding it to your `main.js` file (located in the Storybook config directory):
 
