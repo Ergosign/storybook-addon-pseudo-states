@@ -6,13 +6,13 @@ Storybook Addon Pseudo States allows you to automatically display pseudo states 
 
 | Framework | Display States | Tool-Button to show/hide |
 | --------- | :------------: | :----------------------: |
-| Angular   |       +        |           +\*            |
-| React     |       +        |           +\*            |
-| Lit       |       +        |           +\*            |
-| HTML      |       +        |           +\*            |
-| Vue       |       +        |           +\*            |
+| Angular   |       +        |           +              |
+| React     |       +        |           +              |
+| Lit       |       +        |           +              |
+| HTML      |       +        |           +              |
+| Vue       |       +        |           +              |
 
-\* Could lead to sync problems with other addons, like knobs
+
 
 ## Getting started
 
@@ -150,7 +150,7 @@ parameters: {
 
 You can enable a toolbar button that toggles the Pseudo States in the Preview area.
 
-See [Framework Support](##Framework Support) which Frameworks support this feature.
+See [Framework Support](#framework-support) which Frameworks support this feature.
 
 Enable the button by adding it to your `main.js` file (located in the Storybook config directory):
 
@@ -206,7 +206,7 @@ storiesOf('Button', module)
   .add('Icon Button', () => <Button />);
 ```
 
-There is a default configuration for `StateComposition`.
+There is a default configuration for `selector`, `pseudos` and `attributes`. Thus, you can leave `withPseudo` options it empty.
 
 ### With Vue
 
@@ -223,11 +223,9 @@ export default {
   decorators: [withPseudo],
   parameters: {
     withPseudo: {
-      stateComposition: {
         pseudo: PseudoStateOrderDefault,
         attributes: [...AttributesStateOrderDefault, 'selected', 'isDisabled'],
       },
-    },
   },
 };
 
@@ -238,29 +236,6 @@ export const text = () => ({
 });
 ```
 
-## Parameters
+#### Parameters & Types
 
-```typescript
-export interface PseudoStatesParameters {
-  disabled?: boolean;
-  // query for selector to host element[s] that have to be modified
-  selector?: Selector;
-  // prefix for state classes that will be added to host element
-  prefix?: string;
-  pseudos?: PseudoStates;
-  attributes?: AttributeStates;
-}
-
-export type PseudoState = PseudoStateEnum | string;
-export type AttributeState = AttributeStatesEnum | string;
-
-export type PseudoStates = Array<PseudoState>;
-export type AttributeStates = Array<AttributeState>;
-
-export const PseudoStatesDefault: PseudoStates = [FOCUS, HOVER, ACTIVE];
-export const AttributesStatesDefault: AttributeStates = [DISABLED];
-export const AttributesStatesInputDefault: AttributeStates = [
-  DISABLED,
-  READONLY,
-];
-```
+See [Types](../share/types.ts)

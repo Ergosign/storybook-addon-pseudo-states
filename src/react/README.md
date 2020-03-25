@@ -2,17 +2,22 @@
 
 Storybook Addon Pseudo States allows you to automatically display pseudo states (and attribute states) of a component in Storybook's preview area.
 
+- <a href="https://philippone.github.io/create-react-app-storybook-addon-pseuo-states/" target="_blank">Live-Demo</a>
+- <a href="https://github.com/philippone/create-react-app-storybook-addon-pseuo-states" target="_blank">Example Repo (CRA)</a>
+
+![example](../../addon-example.png)
+
+
 ## Framework Support
 
 | Framework | Display States | Tool-Button to show/hide |
 | --------- | :------------: | :----------------------: |
-| Angular   |       +        |           +\*            |
-| React     |       +        |           +\*            |
-| Lit       |       +        |           +\*            |
-| HTML      |       +        |           +\*            |
-| Vue       |       +        |           +\*            |
+| Angular   |       +        |           +              |
+| React     |       +        |           +              |
+| Lit       |       +        |           +              |
+| HTML      |       +        |           +              |
+| Vue       |       +        |           +              |
 
-\* Could lead to sync problems with other addons, like knobs
 
 ## Getting started
 
@@ -170,7 +175,7 @@ parameters: {
 
 You can enable a toolbar button that toggles the Pseudo States in the Preview area.
 
-See [Framework Support](##Framework Support) which Frameworks support this feature.
+See [Framework Support](#framework-support) which Frameworks support this feature.
 
 Enable the button by adding it to your `main.js` file (located in the Storybook config directory):
 
@@ -226,13 +231,13 @@ storiesOf('Button', module)
   .add('Icon Button', () => <Button />);
 ```
 
-There is a default configuration for `StateComposition`.
+There is a default configuration for `selector`, `pseudos` and `attributes`. Thus, you can leave `withPseudo` options it empty.
 
 ### With React
 
 When using [CSS Modules](https://github.com/css-modules/css-modules), you must use automatically styling generation via `postcss-loader` (see [Styling section](###Styling)).
 
-`StateComposition.attributes` enable component's props.
+`attributes` enable component's props.
 
 ```js
 import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-react';
@@ -248,7 +253,6 @@ storiesOf('Button', module)
 
   .addParameters({
     withPseudo: {
-      stateComposition: {
         pseudo: [...PseudoStatesDefault, 'hover & focus'],
         attributes: [
           ...AttributesStatesDefault,
@@ -256,8 +260,7 @@ storiesOf('Button', module)
           'error',
           'isLoading',
           'isReady',
-        ],
-      },
+        ]
     },
   })
   .add('Button', () => <Button label="I'm a normal button" />);
@@ -347,29 +350,6 @@ storiesOf('Demo', module)
   });
 ```
 
-## Parameters
+#### Parameters & Types
 
-```typescript
-export interface PseudoStatesParameters {
-  disabled?: boolean;
-  // query for selector to host element[s] that have to be modified
-  selector?: Selector;
-  // prefix for state classes that will be added to host element
-  prefix?: string;
-  pseudos?: PseudoStates;
-  attributes?: AttributeStates;
-}
-
-export type PseudoState = PseudoStateEnum | string;
-export type AttributeState = AttributeStatesEnum | string;
-
-export type PseudoStates = Array<PseudoState>;
-export type AttributeStates = Array<AttributeState>;
-
-export const PseudoStatesDefault: PseudoStates = [FOCUS, HOVER, ACTIVE];
-export const AttributesStatesDefault: AttributeStates = [DISABLED];
-export const AttributesStatesInputDefault: AttributeStates = [
-  DISABLED,
-  READONLY,
-];
-```
+See [Types](../share/types.ts)

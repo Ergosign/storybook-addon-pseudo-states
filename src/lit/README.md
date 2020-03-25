@@ -6,13 +6,13 @@ Storybook Addon Pseudo States allows you to automatically display pseudo states 
 
 | Framework | Display States | Tool-Button to show/hide |
 | --------- | :------------: | :----------------------: |
-| Angular   |       +        |           +\*            |
-| React     |       +        |           +\*            |
-| Lit       |       +        |           +\*            |
-| HTML      |       +        |           +\*            |
-| Vue       |       +        |           +\*            |
+| Angular   |       +        |           +              |
+| React     |       +        |           +              |
+| Lit       |       +        |           +              |
+| HTML      |       +        |           +              |
+| Vue       |       +        |           +              |
 
-\* Could lead to sync problems with other addons, like knobs
+
 
 ## Getting started
 
@@ -110,48 +110,15 @@ storiesOf('Button', module)
   .addParameters({
     withPseudo: {
       selector: 'button', // css selector of pseudo state's host element
-      stateComposition: {
-        pseudo: ['focus', 'hover', 'hover & focus', 'active'],
-        attributes: ['disabled', 'readonly', 'error'],
-      },
+      pseudo: ['focus', 'hover', 'hover & focus', 'active'],
+      attributes: ['disabled', 'readonly', 'error']
     },
   })
   .add('Icon Button', () => <Button />);
 ```
 
-There is a default configuration for `StateComposition`. Thus, you can leave it empty.
+There is a default configuration for `selector`, `pseudos` and `attributes`. Thus, you can leave `withPseudo` options it empty.
 
-## Parameters
+#### Parameters & Types
 
-```typescript
-export interface PseudoStatesParameters {
-  disabled?: boolean;
-  // query for selector to host element[s] that have to be modified
-  selector?: string | Array<string>;
-  // prefix for state classes that will be added to host element
-  prefix?: string;
-  stateComposition?: StatesComposition;
-}
-
-export interface StatesComposition {
-  pseudo?: Array<PseudoState>;
-  attributes?: Array<AttributeState>;
-}
-
-export type PseudoState = PseudoStateEnum | string;
-export const StatesCompositionDefault: StatesComposition = {
-  pseudo: PseudoStateOrderDefault,
-  attributes: AttributesStateOrderDefault,
-};
-
-export const PseudoStateOrderDefault: Array<PseudoState> = [
-  FOCUS,
-  HOVER,
-  ACTIVE,
-];
-export const AttributesStateOrderDefault: Array<AttributeState> = [DISABLED];
-export const AttributesStateOrderInputDefault: Array<AttributeState> = [
-  DISABLED,
-  READONLY,
-];
-```
+See [Types](../share/types.ts)

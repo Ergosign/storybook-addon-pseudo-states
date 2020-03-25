@@ -10,13 +10,13 @@ This is how it looks like:
 
 | Framework | Display States | Tool-Button to show/hide |
 | --------- | :------------: | :----------------------: |
-| Angular   |       +        |           +\*            |
-| React     |       +        |           +\*            |
-| Lit-HTML  |       +        |           +\*            |
-| HTML      |       +        |           +\*            |
-| Vue       |       +        |           +\*            |
+| Angular   |       +        |           +              |
+| React     |       +        |           +              |
+| Lit-HTML  |       +        |           +              |
+| HTML      |       +        |           +              |
+| Vue       |       +        |           +              |
 
-\* Could lead to sync problems with other addons, like knobs
+
 
 ## Installation & Usage
 
