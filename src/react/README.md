@@ -52,8 +52,40 @@ Then add the preset `preset-postcss` to your configuration in `main.js` (located
 main.js;
 
 module.exports = {
-  presets: ['@ergosign/storybook-addon-pseudo-states-angular/preset-postcss'],
+  presets: ['@ergosign/storybook-addon-pseudo-states-react/preset-postcss'],
 };
+```
+
+This creates for each css pseudo class an equivalent as normal css class (for instance `:hover` to `\:hover`), so that 
+you can use it in element's class attribute (`<div class=":hover">Element in hover state</div>`).
+
+You can modify post css loader options:
+
+```js
+module.exports = {
+   presets: [
+       {
+            name:"@ergosign/storybook-addon-pseudo-states-react/preset-postcss",
+            options: {
+                postCssLoaderOptions: {
+                    //prefix: '\:hover', // default for react
+                    blacklist: [':nth-child', ':nth-of-type']
+                }
+            }
+        }     
+    ] 
+}
+```
+
+If you set another prefix you have to set the same for the addon, too. 
+Therefore, add the following to your `.storybook/preview.js`:
+
+```js
+addParameters({
+    withPseudo: {
+        prefix: "still-pseudo-states--",
+    },
+});
 ```
 
 #### Own Webpack config (but automatically generated with PostCss)
@@ -183,7 +215,7 @@ Enable the button by adding it to your `main.js` file (located in the Storybook 
 // main.js
 
 module.exports = {
-  addons: ['@ergosign/storybook-addon-pseudo-states-angular/register'],
+  addons: ['@ergosign/storybook-addon-pseudo-states-react/register'],
 };
 ```
 
@@ -217,7 +249,7 @@ export const Story = () => {
 ##### storyOf Format
 
 ```js
-import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-<framework>';
+import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-react';
 
 storiesOf('Button', module)
   .addDecorator(withPseudo)
@@ -264,90 +296,6 @@ storiesOf('Button', module)
     },
   })
   .add('Button', () => <Button label="I'm a normal button" />);
-```
-
-#### With Angular
-
-At the moment, only [Component Story Format](https://storybook.js.org/docs/formats/component-story-format/) is supported (tested).
-
-```js
-import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-angular';
-
-const section = {
-  component: ButtonComponent,
-  title: 'Button',
-  moduleMetadata: {
-    declarations: [ButtonComponent],
-    imports: [CommonModule],
-  },
-  decorators: [
-    // ButtonComponent's styling has prefixed pseudo-states styling
-    withPseudo({ prefix: 'pseudoclass--' }),
-  ],
-  parameters: {
-    // <button> exists inside of angular component ButtonComponent
-    withPseudo: { selector: 'button' },
-  },
-};
-export default section;
-
-export const Story = () => {
-  return {
-    component: ButtonComponent,
-    moduleMetadata: {
-      declarations: [ButtonComponent],
-      imports: [CommonModule],
-    },
-    // ButtonComponent has same properties as props' keys
-    props: {
-      label: 'Test Label',
-      anotherProperty: true,
-    },
-  };
-};
-
-export const StoryWithTemplate = () => {
-  return {
-    // always provide component!
-    component: ButtonComponent,
-    moduleMetadata: {
-      entryComponents: [ButtonComponent], // required to support other addons, like knobs addon
-      declarations: [ButtonComponent],
-      imports: [CommonModule],
-    },
-    template: `<test-button [label]="label" [anotherProperty]="anotherProperty"></test-button>`,
-    props: {
-      label: 'Test Label',
-      anotherProperty: true,
-    },
-  };
-};
-```
-
-#### With HTML
-
-```js
-storiesOf('Demo', module)
-  .addDecorator(withPseudo)
-  .addParameters({ withPseudo: { selector: null } })
-  .add('story1', () => {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.innerText = 'Hello World!';
-    button.addEventListener('click', e => console.log(e));
-    return button;
-  })
-  // story with selecotr on inner element
-  .addParameters({ withPseudo: { selector: 'span' } })
-  .add('story2', () => {
-    const headline = document.createElement('h1');
-    const span = document.createElement('span');
-    span.innerHTML = 'Hello World';
-
-    headline.appendChild(span);
-
-    return headline;
-  });
 ```
 
 #### Parameters & Types

@@ -192,7 +192,7 @@ export const Story = () => {
 ##### storyOf Format
 
 ```js
-import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-<framework>';
+import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-vue';
 
 storiesOf('Button', module)
   .addDecorator(withPseudo)

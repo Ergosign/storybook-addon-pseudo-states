@@ -103,7 +103,7 @@ import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-lit';
 #### storyOf Format
 
 ```js
-import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-<framework>';
+import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-lit';
 
 storiesOf('Button', module)
   .addDecorator(withPseudo)

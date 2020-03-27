@@ -36,7 +36,7 @@ export interface WrapperPseudoStateSettings extends WrapperSettings {
 
 export const PseudoStatesDefaultPrefix = ':';
 
-export const PseudoStatesDefaultPrefix_ANGULAR = 'pseudo-sates--';
+export const PseudoStatesDefaultPrefix_ANGULAR = 'pseudo-states--';
 
 export type Selector = string | Array<string> | null | undefined;
 

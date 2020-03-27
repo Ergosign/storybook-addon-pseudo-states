@@ -78,6 +78,16 @@ module.exports = {
 It's not recommended to alter the prefix option. But if you need to be change the prefix then it must not start with `:` 
 because Angular's scoping put scope's context before each colon and breaks styling.
 
+If you set another prefix you have to set the same for the addon, too. 
+Therefore, add the following to your `.storybook/preview.js`:
+
+```js
+addParameters({
+    withPseudo: {
+        prefix: "still-pseudo-states--",
+    },
+});
+```
 
 ### Show/Hide Toolbar-Button
 
@@ -155,7 +165,7 @@ export const StoryWithTemplate = () => {
 #### storyOf Format
 
 ```js
-import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-<framework>';
+import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-angular';
 
 storiesOf('Button', module)
   .addDecorator(withPseudo)
