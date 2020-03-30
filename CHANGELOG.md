@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.25](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.24...v0.0.1-alpha.25) (2020-03-30)
+
+
+### Bug Fixes
+
+* **angular:** added :host and :host-context to  postcss-pseudo-classes plugin options blacklist ([036cb3f](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/036cb3f3cbdf9b28db9f04710b7fd26ebe91d6ef))
+* **angular:** remove componet interal template from newTemplate creation ([0cceeba](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/0cceeba4218bf2993cc9fd8f7422dc390d7afd5a))
+
+
+### Features
+
+* **angular:** extend readme with preset post css options ([8603e05](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/8603e059e9bebef0bb1e9ea076fd27b546735974))
+
+
+
+
+
 ## [0.0.1-alpha.24](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.23...v0.0.1-alpha.24) (2020-03-25)
 
 
