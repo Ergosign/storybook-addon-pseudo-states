@@ -161,7 +161,7 @@ export const withPseudo = makeDecorator({
         }
       }
 
-      newTemplate = `<${compInternal.selector} ${propertyString}>${compInternal.template}</${compInternal.selector}>`;
+      newTemplate = `<${compInternal.selector} ${propertyString}></${compInternal.selector}>`;
     }
 
     return {
