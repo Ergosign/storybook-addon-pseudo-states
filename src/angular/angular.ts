@@ -20,11 +20,13 @@ function getModuleMetadata(metadata: any) {
   let moduleMetadata = metadata?.moduleMetadata;
   const component = metadata?.component;
 
-  if (
-    (component && !moduleMetadata) ||
-    (moduleMetadata && !moduleMetadata.declarations)
-  ) {
+  if (component && !moduleMetadata) {
     moduleMetadata = {
+      declarations: [metadata.component],
+    };
+  } else if (moduleMetadata && !moduleMetadata.declarations) {
+    moduleMetadata = {
+      ...moduleMetadata,
       declarations: [metadata.component],
     };
   }
