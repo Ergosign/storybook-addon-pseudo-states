@@ -62,14 +62,14 @@ export const filterRules = (
       }
 
       /* if (
-                          (((typeof ruleCondition === 'string' ||
-                            typeof ruleCondition === 'function') &&
-                            typeof ruleCondition === typeof condition) ||
-                            (ruleCondition instanceof RegExp && condition instanceof RegExp)) &&
-                          ruleCondition.toString() === condition.toString()
-                        ) {
-                          return true;
-                        } */
+                                      (((typeof ruleCondition === 'string' ||
+                                        typeof ruleCondition === 'function') &&
+                                        typeof ruleCondition === typeof condition) ||
+                                        (ruleCondition instanceof RegExp && condition instanceof RegExp)) &&
+                                      ruleCondition.toString() === condition.toString()
+                                    ) {
+                                      return true;
+                                    } */
     }
 
     // return false;
@@ -111,7 +111,6 @@ const addPostCssLoader = (
   const useItem = use as RuleSetLoader;
   if (useItem?.loader && useItem.loader.includes(postCssLoaderName)) {
     if (useItem.options) {
-      // @ts-ignore
       const { plugins } = useItem.options as { plugins: any };
 
       logger.info(
@@ -141,30 +140,20 @@ const addPostCssLoader = (
         } else if (typeof plugins === 'function') {
           logger.info(`is function`);
 
-          const newFn = () => [
+          const overwrittenPostCssFn = () => [
             plugins,
             postcssPseudoClasses(postCssLoaderOptions),
           ];
           // @ts-ignore
-          useItem.options.plugins = newFn;
-
-          logger.info(
-            `==> assign function ${util.inspect(newFn, {
-              showHidden: false,
-              depth: null,
-            })}`
-          );
+          useItem.options.plugins = overwrittenPostCssFn;
         } else {
           // is object
           logger.info(`is object`);
           // @ts-ignore
-          useItem.options.plugins.add(() =>
-            postcssPseudoClasses(postCssLoaderOptions)
-          );
-          // plugins = [
-          //   ...plugins,
-          //   () => postcssPseudoClasses(postCssLoaderOptions),
-          // ];
+          useItem.options.plugins = {
+            ...plugins,
+            ...() => postcssPseudoClasses(postCssLoaderOptions),
+          };
         }
 
         logger.info(

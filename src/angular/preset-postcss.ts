@@ -1,15 +1,14 @@
-// @ts-nocheck
 import { logger } from '@storybook/node-logger';
 import { Configuration } from 'webpack';
-import postcssPseudoClasses from 'postcss-pseudo-classes';
 import * as util from 'util';
+// eslint-disable-next-line camelcase
 import { PseudoStatesDefaultPrefix_ANGULAR } from '../share/types';
-
-export interface Options {
-  postCssLoaderOptions: {
-    prefix: string;
-  };
-}
+import {
+  addPostCSSLoaderToRule,
+  filterRules,
+  postCSSOptionsDefault,
+  PseudoStatesPresetOptions,
+} from '../share/preset-utils';
 
 /* export function webpack(
   webpackConfig: Configuration = {},
@@ -36,7 +35,7 @@ export interface Options {
  */
 export function webpackFinal(
   webpackConfig: Configuration = {},
-  options: Options = {}
+  options: PseudoStatesPresetOptions = {}
 ): Configuration {
   logger.info(`=> Loading Pseudo States Addon Webpack config (Angular Cli)`);
 
@@ -51,6 +50,7 @@ export function webpackFinal(
   );
 
   const postCSSDefaultOptions = {
+    ...postCSSOptionsDefault,
     // overwrite default prefix `\\:`
     // use prefix without `:` because angular add component scope before each `:`
     prefix: PseudoStatesDefaultPrefix_ANGULAR,
@@ -64,33 +64,67 @@ export function webpackFinal(
     ],
   };
 
-  const postCssLoaderOptions = options?.postCssLoaderOptions
-    ? { ...postCSSDefaultOptions, ...options.postCssLoaderOptions }
-    : postCSSDefaultOptions;
+  if (webpackConfig?.module?.rules) {
+    const postCssLoaderOptions = options?.postCssLoaderOptions
+      ? { ...postCSSDefaultOptions, ...options.postCssLoaderOptions }
+      : postCSSDefaultOptions;
 
-  // find rules responsible for styling
-  webpackConfig.module.rules.forEach((r) => {
-    // TODO Is this regex always valid??
-    if (r.test.toString() === '/\\.scss$|\\.sass$/') {
-      // loggerPack.logger.info(`==> Installed Runle in webpack Final ${util.inspect(r, {showHidden: false, depth: null})}`);
+    const rulesToApply = options?.postCssLoaderOptions?.rules;
+    if (rulesToApply && rulesToApply.length > 0) {
+      const rules = filterRules(webpackConfig.module.rules, rulesToApply);
+      addPostCSSLoaderToRule(rules, postCssLoaderOptions);
+    } else {
+      // find scss rules and apply postscss addon to those
+      const rules = filterRules(webpackConfig.module.rules, [
+        /\.scss$|\.sass$/,
+        // '/\\.scss$|\\.sass$/',
+        // 'scss',
+        // 'sass',
+      ]);
 
-      for (const loader of r.use) {
-        const loaderPath = loader?.loader || loader;
+      addPostCSSLoaderToRule(rules, postCssLoaderOptions);
 
-        // try to find postcss loader in rule.use
-        if (loaderPath.indexOf('postcss-loader') >= 0) {
-          if (loader.options) {
-            // overwrite plugin (hopefully only base-webpack.config
-            // https://github.com/storybookjs/storybook/blob/3026db93031720849576d4064fa2df62e17c8996/lib/core/src/server/preview/base-webpack.config.js
-            // eslint-disable-next-line no-loop-func
-            loader.options.plugins = () => [
-              postcssPseudoClasses(postCssLoaderOptions),
-            ];
+      // logger.info(
+      //   `==> Pseudo States Addon Webpack filtered rules ${util.inspect(rules, {
+      //     showHidden: false,
+      //     depth: null,
+      //   })}`
+      // );
+      //
+      // logger.info(
+      //   `==> Pseudo States Addon Webpack filtered wepack complete ${util.inspect(
+      //     webpackConfig.module.rules,
+      //     {
+      //       showHidden: false,
+      //       depth: null,
+      //     }
+      //   )}`
+      // );
+    }
+  }
+  /* // find rules responsible for styling
+    webpackConfig.module.rules.forEach((r) => {
+      // TODO Is this regex always valid??
+      if (r.test.toString() === '/\\.scss$|\\.sass$/') {
+        // loggerPack.logger.info(`==> Installed Runle in webpack Final ${util.inspect(r, {showHidden: false, depth: null})}`);
+  
+        for (const loader of r.use) {
+          const loaderPath = loader?.loader || loader;
+  
+          // try to find postcss loader in rule.use
+          if (loaderPath.indexOf('postcss-loader') >= 0) {
+            if (loader.options) {
+              // overwrite plugin (hopefully only base-webpack.config
+              // https://github.com/storybookjs/storybook/blob/3026db93031720849576d4064fa2df62e17c8996/lib/core/src/server/preview/base-webpack.config.js
+              // eslint-disable-next-line no-loop-func
+              loader.options.plugins = () => [
+                postcssPseudoClasses(postCssLoaderOptions),
+              ];
+            }
           }
         }
       }
-    }
-  });
+    }); */
 
   logger.info(
     `=> Added PostCSS postcss-pseudo-classes to enable pseudo states styles.`

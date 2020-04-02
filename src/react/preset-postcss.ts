@@ -1,9 +1,10 @@
 // @ts-nocheck
 
 import postcssPseudoClasses from 'postcss-pseudo-classes';
-import { Options } from '../angular/preset-postcss';
+import { Configuration } from 'webpack';
+import { PseudoStatesPresetOptions } from '../share/preset-utils';
 
-function modifyRules(rule, options: Options = {}) {
+function modifyRules(rule, options: PseudoStatesPresetOptions = {}) {
   if (rule.test) {
     // logger.info(
     //   `==> REACT webpack config - rule: ${util.inspect(rule.test, {
@@ -98,7 +99,10 @@ function modifyRules(rule, options: Options = {}) {
   return rule;
 }
 
-export function webpackFinal(webpackConfig = {}, options = {}) {
+export function webpackFinal(
+  webpackConfig: Configuration = {},
+  options: PseudoStatesPresetOptions = {}
+) {
   webpackConfig.module.rules.map((r) => {
     modifyRules(r, options);
     return r;
