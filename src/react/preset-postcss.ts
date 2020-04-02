@@ -1,8 +1,9 @@
 // @ts-nocheck
 
 import postcssPseudoClasses from 'postcss-pseudo-classes';
+import { Options } from '../angular/preset-postcss';
 
-function modifyRules(rule) {
+function modifyRules(rule, options: Options = {}) {
   if (rule.test) {
     // logger.info(
     //   `==> REACT webpack config - rule: ${util.inspect(rule.test, {
@@ -40,9 +41,17 @@ function modifyRules(rule) {
           // );
 
           const defaultPlugins = loader.options.plugins;
+
+          const postCssLoaderOptions = options?.postCssLoaderOptions
+            ? { ...options.postCssLoaderOptions }
+            : {};
+
           // eslint-disable-next-line no-param-reassign
           loader.options.plugins = () => {
-            return [...defaultPlugins(), postcssPseudoClasses({})];
+            return [
+              ...defaultPlugins(),
+              postcssPseudoClasses(postCssLoaderOptions),
+            ];
           };
           // logger.info(
           //   `==> REACT webpack config - loader: ${util.inspect(
@@ -91,8 +100,7 @@ function modifyRules(rule) {
 
 export function webpackFinal(webpackConfig = {}, options = {}) {
   webpackConfig.module.rules.map((r) => {
-    modifyRules(r);
-
+    modifyRules(r, options);
     return r;
   });
 
