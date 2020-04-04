@@ -8,7 +8,7 @@ import {
 import {
   AttributesStatesDefault,
   PseudoStatesDefault,
-  PseudoStatesDefaultPrefix_ANGULAR,
+  PseudoStatesDefaultPrefixAlternative,
   PseudoStatesParameters,
   WrapperPseudoStateSettings,
 } from '../share/types';
@@ -113,7 +113,7 @@ export const withPseudo = makeDecorator({
     parameters.prefix =
       parameters?.prefix ||
       options?.prefix ||
-      PseudoStatesDefaultPrefix_ANGULAR;
+      PseudoStatesDefaultPrefixAlternative;
 
     storyParameters = escape(JSON.stringify(parameters));
 

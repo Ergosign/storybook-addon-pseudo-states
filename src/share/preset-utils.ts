@@ -44,7 +44,9 @@ export interface PseudoStatesPresetOptions {
 }
 
 const postCssLoaderName = 'postcss-loader';
-export const postCSSOptionsDefault: PostCssLoaderOptions = {};
+export const postCSSOptionsDefault: PostCssLoaderOptions = {
+  blacklist: [':root', ':host', ':host-context', ':nth-child', ':nth-of-type'],
+};
 
 const cssLoaderName = 'css-loader';
 export const cssLoaderOptionsDefault: CssLoaderOptions = {
@@ -114,7 +116,7 @@ const addPostCssLoader = (
     return {
       loader: postCssLoaderName,
       options: {
-        plugins: [postcssPseudoClasses(postCssLoaderOptions)],
+        plugins: () => [postcssPseudoClasses(postCssLoaderOptions)],
       },
     };
   }
@@ -186,6 +188,8 @@ const addPostCssLoader = (
     }
     return use;
   }
+
+  // TODO if not found add automatically after scss-loader or css loader
 
   // if not found, do not alter the RuleSetUse
   return use;

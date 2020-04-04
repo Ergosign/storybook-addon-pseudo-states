@@ -1,7 +1,7 @@
 import { logger } from '@storybook/node-logger';
 import { Configuration } from 'webpack';
 import { PostCssLoaderOptions } from 'postcss-pseudo-classes';
-import { PseudoStatesDefaultPrefix_ANGULAR } from '../share/types';
+import { PseudoStatesDefaultPrefixAlternative } from '../share/types';
 import {
   addPostCSSLoaderToRules,
   filterRules,
@@ -43,7 +43,7 @@ export function webpackFinal(
       ...postCSSOptionsDefault,
       // overwrite default prefix `\\:`
       // use prefix without `:` because angular add component scope before each `:`
-      prefix: PseudoStatesDefaultPrefix_ANGULAR,
+      prefix: PseudoStatesDefaultPrefixAlternative,
       // add to blacklist because it leads to problems with :host-context()
       blacklist: [
         ':root',
