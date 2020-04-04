@@ -6,20 +6,17 @@ import {
 } from 'webpack';
 import { logger } from '@storybook/node-logger';
 import * as util from 'util';
-// @ts-ignore
-import postcssPseudoClasses from 'postcss-pseudo-classes';
+import postcssPseudoClasses, {
+  PostCssLoaderOptions,
+} from 'postcss-pseudo-classes';
 
-export interface PostCssLoaderOptions {
-  // pseudo-class postcss addon option prefix
-  prefix?: string;
-  // pseudo-class postcss addon option blacklist
-  blacklist?: Array<string>;
-  // rules to apply postcss plugin, if empty set to existing scss rules
-  rules?: Array<RuleSetCondition>;
-}
-
+/**
+ * Interface to enter PostCss Pseudo-States-Plugin Option to Storybook Preset
+ */
 export interface PseudoStatesPresetOptions {
   postCssLoaderOptions?: PostCssLoaderOptions;
+  // rules to apply postcss plugin, if empty set to existing scss rules
+  rules?: Array<RuleSetCondition>;
 }
 
 export const postCSSOptionsDefault: PostCssLoaderOptions = {};
