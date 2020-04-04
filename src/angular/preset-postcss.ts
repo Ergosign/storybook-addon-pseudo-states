@@ -1,10 +1,9 @@
 import { logger } from '@storybook/node-logger';
 import { Configuration } from 'webpack';
-import * as util from 'util';
-// eslint-disable-next-line camelcase
+import { PostCssLoaderOptions } from 'postcss-pseudo-classes';
 import { PseudoStatesDefaultPrefix_ANGULAR } from '../share/types';
 import {
-  addPostCSSLoaderToRule,
+  addPostCSSLoaderToRules,
   filterRules,
   postCSSOptionsDefault,
   PseudoStatesPresetOptions,
@@ -39,67 +38,36 @@ export function webpackFinal(
 ): Configuration {
   logger.info(`=> Loading Pseudo States Addon Webpack config (Angular Cli)`);
 
-  logger.info(
-    `==> Pseudo States Addon Webpack ${util.inspect(
-      options?.postCssLoaderOptions,
-      {
-        showHidden: false,
-        depth: null,
-      }
-    )}`
-  );
-
-  const postCSSDefaultOptions = {
-    ...postCSSOptionsDefault,
-    // overwrite default prefix `\\:`
-    // use prefix without `:` because angular add component scope before each `:`
-    prefix: PseudoStatesDefaultPrefix_ANGULAR,
-    // add to blacklist because it leads to problems with :host-context()
-    blacklist: [
-      ':root',
-      ':host',
-      ':host-context',
-      ':nth-child',
-      ':nth-of-type',
-    ],
-  };
-
   if (webpackConfig?.module?.rules) {
+    const postCSSDefaultOptions: PostCssLoaderOptions = {
+      ...postCSSOptionsDefault,
+      // overwrite default prefix `\\:`
+      // use prefix without `:` because angular add component scope before each `:`
+      prefix: PseudoStatesDefaultPrefix_ANGULAR,
+      // add to blacklist because it leads to problems with :host-context()
+      blacklist: [
+        ':root',
+        ':host',
+        ':host-context',
+        ':nth-child',
+        ':nth-of-type',
+      ],
+    };
+
     const postCssLoaderOptions = options?.postCssLoaderOptions
       ? { ...postCSSDefaultOptions, ...options.postCssLoaderOptions }
       : postCSSDefaultOptions;
 
-    const rulesToApply = options?.postCssLoaderOptions?.rules;
+    const rulesToApply = options?.rules;
     if (rulesToApply && rulesToApply.length > 0) {
       const rules = filterRules(webpackConfig.module.rules, rulesToApply);
-      addPostCSSLoaderToRule(rules, postCssLoaderOptions);
+      addPostCSSLoaderToRules(rules, postCssLoaderOptions);
     } else {
       // find scss rules and apply postscss addon to those
       const rules = filterRules(webpackConfig.module.rules, [
         /\.scss$|\.sass$/,
-        // '/\\.scss$|\\.sass$/',
-        // 'scss',
-        // 'sass',
       ]);
-
-      addPostCSSLoaderToRule(rules, postCssLoaderOptions);
-
-      // logger.info(
-      //   `==> Pseudo States Addon Webpack filtered rules ${util.inspect(rules, {
-      //     showHidden: false,
-      //     depth: null,
-      //   })}`
-      // );
-      //
-      // logger.info(
-      //   `==> Pseudo States Addon Webpack filtered wepack complete ${util.inspect(
-      //     webpackConfig.module.rules,
-      //     {
-      //       showHidden: false,
-      //       depth: null,
-      //     }
-      //   )}`
-      // );
+      addPostCSSLoaderToRules(rules, postCssLoaderOptions);
     }
   }
   /* // find rules responsible for styling
