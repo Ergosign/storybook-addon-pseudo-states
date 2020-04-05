@@ -15,7 +15,7 @@ import { PseudoStatesDefaultPrefixAlternative } from '../share/types';
 ) {
   logger.info(
     `== webpack() ==> Pseudo States Addon Webpack ${util.inspect(
-      options?.postCssLoaderOptions,
+      options?.postCssLoaderPseudoClassesPluginOptions,
       {
         showHidden: false,
         depth: null,
@@ -40,7 +40,7 @@ export function webpackFinal(
 
   logger.info(
     `== webpack() ==> Pseudo States Addon Options ${util.inspect(
-      options.postCssLoaderOptions,
+      options.postCssLoaderPseudoClassesPluginOptions,
       {
         showHidden: false,
         depth: null,
@@ -59,11 +59,11 @@ export function webpackFinal(
   // );
 
   if (webpackConfig?.module?.rules) {
-    const postCssLoaderOptions = options?.postCssLoaderOptions
+    const postCssLoaderOptions = options?.postCssLoaderPseudoClassesPluginOptions
       ? {
           prefix: PseudoStatesDefaultPrefixAlternative,
           ...postCSSOptionsDefault,
-          ...options.postCssLoaderOptions,
+          ...options.postCssLoaderPseudoClassesPluginOptions,
         }
       : {
           prefix: PseudoStatesDefaultPrefixAlternative,
@@ -82,6 +82,13 @@ export function webpackFinal(
       );
 
       addPostCSSLoaderToRules(rules, postCssLoaderOptions);
+
+      logger.info(
+        `== webpack() ==> altered rules ${util.inspect(rules, {
+          showHidden: false,
+          depth: null,
+        })}`
+      );
     } else {
       // find scss rules and apply postscss addon to those
       const rules = filterRules(webpackConfig.module.rules, [

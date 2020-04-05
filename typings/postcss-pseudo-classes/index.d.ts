@@ -1,7 +1,7 @@
 declare module 'postcss-pseudo-classes' {
   export type BlackListItem = string | { [key: string]: boolean };
 
-  export interface PostCssLoaderOptions {
+  export interface PostCssLoaderPseudoClassesPluginOptions {
     // pseudo-class postcss addon option blacklist
     blacklist?: Array<BlackListItem>;
     // pseudo-class postcss addon option prefix
@@ -10,7 +10,7 @@ declare module 'postcss-pseudo-classes' {
   }
 
   const postcssPseudoClasses = (
-    option: PostCssLoaderOptions
+    option: PostCssLoaderPseudoClassesPluginOptions
   ): ((css: Array<any>) => void) => {};
 
   const createCombinations = (a: string, b: string): Array<string> => {};

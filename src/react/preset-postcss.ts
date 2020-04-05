@@ -1,4 +1,4 @@
-import { PostCssLoaderOptions } from 'postcss-pseudo-classes';
+import { PostCssLoaderPseudoClassesPluginOptions } from 'postcss-pseudo-classes';
 import { logger } from '@storybook/node-logger';
 import { Configuration } from 'webpack';
 // import * as util from 'util';
@@ -25,8 +25,11 @@ export function webpackFinal(
   logger.info(`=> Loading Pseudo States Addon Webpack config (for CRA)`);
 
   if (webpackConfig?.module?.rules) {
-    const postCssLoaderOptions: PostCssLoaderOptions = options?.postCssLoaderOptions
-      ? { ...postCSSOptionsDefault, ...options.postCssLoaderOptions }
+    const postCssLoaderOptions: PostCssLoaderPseudoClassesPluginOptions = options?.postCssLoaderPseudoClassesPluginOptions
+      ? {
+          ...postCSSOptionsDefault,
+          ...options.postCssLoaderPseudoClassesPluginOptions,
+        }
       : postCSSOptionsDefault;
 
     const rulesToApply = options?.rules;

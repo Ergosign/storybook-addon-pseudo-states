@@ -5,7 +5,7 @@ import {
   RuleSetUse,
 } from 'webpack';
 import postcssPseudoClasses, {
-  PostCssLoaderOptions,
+  PostCssLoaderPseudoClassesPluginOptions,
 } from 'postcss-pseudo-classes';
 
 export interface CssLoaderOptions {
@@ -37,14 +37,14 @@ export interface CssLoaderOptions {
  * Interface to enter PostCss Pseudo-States-Plugin Option to Storybook Preset
  */
 export interface PseudoStatesPresetOptions {
-  postCssLoaderOptions?: PostCssLoaderOptions;
+  postCssLoaderPseudoClassesPluginOptions?: PostCssLoaderPseudoClassesPluginOptions;
   // rules to apply postcss plugin, if empty set to existing scss rules
   rules?: Array<RuleSetCondition>;
   cssLoaderOptions?: CssLoaderOptions;
 }
 
 const postCssLoaderName = 'postcss-loader';
-export const postCSSOptionsDefault: PostCssLoaderOptions = {
+export const postCSSOptionsDefault: PostCssLoaderPseudoClassesPluginOptions = {
   blacklist: [':root', ':host', ':host-context', ':nth-child', ':nth-of-type'],
 };
 
@@ -110,7 +110,7 @@ export const filterRules = (
  */
 const addPostCssLoader = (
   use: RuleSetUse,
-  postCssLoaderOptions: PostCssLoaderOptions
+  postCssLoaderOptions: PostCssLoaderPseudoClassesPluginOptions
 ): RuleSetUse => {
   if (typeof use === 'string' && use.includes(postCssLoaderName)) {
     return {
@@ -202,7 +202,7 @@ const addPostCssLoader = (
  */
 export const addPostCSSLoaderToRules = (
   rules: Array<RuleSetRule>,
-  postCssLoaderOptions: PostCssLoaderOptions
+  postCssLoaderOptions: PostCssLoaderPseudoClassesPluginOptions
 ) => {
   for (const rule of rules) {
     // check if RuleSetRule has use property
