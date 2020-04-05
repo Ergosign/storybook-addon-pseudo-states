@@ -1,100 +1,74 @@
-// @ts-nocheck
+import { PostCssLoaderPseudoClassesPluginOptions } from 'postcss-pseudo-classes';
+import { logger } from '@storybook/node-logger';
+import { Configuration } from 'webpack';
+// import * as util from 'util';
+import {
+  addPostCSSLoaderToRules,
+  CssLoaderOptions,
+  cssLoaderOptionsDefault,
+  filterRules,
+  modifyCssLoaderModuleOption,
+  postCSSOptionsDefault,
+  PseudoStatesPresetOptions,
+} from '../share/preset-utils';
 
-import postcssPseudoClasses from 'postcss-pseudo-classes';
+/**
+ * append postcss' pseudo state postcss-pseudo-classes
+ *
+ * @param webpackConfig
+ * @param options
+ */
+export function webpackFinal(
+  webpackConfig: Configuration = {},
+  options: PseudoStatesPresetOptions = {}
+) {
+  logger.info(`=> Loading Pseudo States Addon Webpack config (for CRA)`);
 
-function modifyRules(rule) {
-  if (rule.test) {
-    // logger.info(
-    //   `==> REACT webpack config - rule: ${util.inspect(rule.test, {
-    //     showHidden: false,
-    //     depth: null,
-    //   })}`
-    // );
-    if (rule.test && rule.test.toString().match(/.(scss|sass)/)) {
-      // logger.info(
-      //   `==> REACT webpack config - rule: ${util.inspect(rule, {
-      //     showHidden: false,
-      //     depth: null,
-      //   })}`
-      // );
-      rule.use.map((loader) => {
-        if (
-          loader &&
-          loader.loader &&
-          loader.loader.indexOf('/postcss-loader') >= 0
-        ) {
-          // logger.info(
-          //   `==> REACT webpack config - loader: ${util.inspect(loader, {
-          //     showHidden: false,
-          //     depth: null,
-          //   })}`
-          // );
-          // logger.info(
-          //   `==> REACT webpack config - loader: ${util.inspect(
-          //     loader.options.plugins(),
-          //     {
-          //       showHidden: false,
-          //       depth: null,
-          //     }
-          //   )}`
-          // );
-
-          const defaultPlugins = loader.options.plugins;
-          // eslint-disable-next-line no-param-reassign
-          loader.options.plugins = () => {
-            return [...defaultPlugins(), postcssPseudoClasses({})];
-          };
-          // logger.info(
-          //   `==> REACT webpack config - loader: ${util.inspect(
-          //     loader.options.plugins(),
-          //     {
-          //       showHidden: false,
-          //       depth: null,
-          //     }
-          //   )}`
-          // );
+  if (webpackConfig?.module?.rules) {
+    const postCssLoaderOptions: PostCssLoaderPseudoClassesPluginOptions = options?.postCssLoaderPseudoClassesPluginOptions
+      ? {
+          ...postCSSOptionsDefault,
+          ...options.postCssLoaderPseudoClassesPluginOptions,
         }
+      : postCSSOptionsDefault;
 
-        if (
-          loader &&
-          loader.loader &&
-          loader.loader.indexOf('/css-loader') >= 0
-        ) {
-          // logger.info(
-          //   `==> REACT webpack config - css-loader: ${util.inspect(loader, {
-          //     showHidden: false,
-          //     depth: null,
-          //   })}`
-          // );
-
-          // overwrite css-loader's module ident name
-          if (loader.options && loader.options.modules) {
-            // eslint-disable-next-line no-param-reassign
-            loader.options.modules.localIdentName = '[path][name]__[local]';
-            // TODO check if nothing breaks
-            // eslint-disable-next-line no-param-reassign
-            delete loader.options.modules.getLocalIdent; // = () => '[path][name]__[local]';
-          }
-        }
-        return loader;
-      });
-      return rule;
+    const rulesToApply = options?.rules;
+    let filteredRules;
+    if (rulesToApply && rulesToApply.length > 0) {
+      filteredRules = filterRules(webpackConfig.module.rules, rulesToApply);
+    } else {
+      // find scss rules and apply postscss addon to those
+      filteredRules = filterRules(webpackConfig.module.rules, [
+        /\.module\.(scss|sass)$/,
+        /\.(scss|sass)$/,
+      ]);
     }
-  } else if (rule.oneOf) {
-    rule.oneOf.map((innerRule) => {
-      modifyRules(innerRule);
-      return rule;
-    });
+
+    if (filteredRules) {
+      addPostCSSLoaderToRules(filteredRules, postCssLoaderOptions);
+
+      // change 'css-loader' module option
+      const cssLoaderOptions: CssLoaderOptions = options?.cssLoaderOptions
+        ? { ...cssLoaderOptionsDefault, ...options.cssLoaderOptions }
+        : cssLoaderOptionsDefault;
+
+      modifyCssLoaderModuleOption(filteredRules, cssLoaderOptions);
+    }
   }
-  return rule;
-}
 
-export function webpackFinal(webpackConfig = {}, options = {}) {
-  webpackConfig.module.rules.map((r) => {
-    modifyRules(r);
+  // logger.info(
+  //   `==> Pseudo States Addon Webpack config rules ${util.inspect(
+  //     webpackConfig,
+  //     {
+  //       showHidden: false,
+  //       depth: null,
+  //     }
+  //   )}`
+  // );
 
-    return r;
-  });
+  logger.info(
+    `=> Added PostCSS postcss-pseudo-classes to enable pseudo states styles.`
+  );
 
   return webpackConfig;
 }

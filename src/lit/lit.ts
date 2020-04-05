@@ -14,7 +14,7 @@ import {
   AttributeState,
   PseudoState,
   PseudoStatesDefault,
-  PseudoStatesDefaultPrefix,
+  PseudoStatesDefaultPrefixAlternative,
   PseudoStatesParameters,
   Selector,
   WrapperPseudoStateSettings,
@@ -292,7 +292,9 @@ const pseudoStateFn = (
   // Use prefix without `:` because angular add component scope before each `:`
   // Maybe not editable by user in angular context?
   parameters.prefix =
-    parameters?.prefix || options?.prefix || PseudoStatesDefaultPrefix;
+    parameters?.prefix ||
+    options?.prefix ||
+    PseudoStatesDefaultPrefixAlternative;
 
   return generatePseudoStates(story, parameters);
 };
