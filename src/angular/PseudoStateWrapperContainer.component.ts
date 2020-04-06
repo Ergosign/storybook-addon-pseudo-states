@@ -4,10 +4,13 @@ import {
   Component,
   ElementRef,
   Input,
+  OnDestroy,
   Renderer2,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
+import { addons } from '@storybook/addons';
+import { FORCE_RE_RENDER } from '@storybook/core-events';
 import { PseudoState, PseudoStatesParameters } from '../share/types';
 
 @Component({
@@ -46,7 +49,17 @@ import { PseudoState, PseudoStatesParameters } from '../share/types';
     `,
   ],
 })
-export class PseudoStateWrapperContainer implements AfterViewInit {
+export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
+  /**
+   * storybook channel for communication between tool and component
+   */
+  private channel = addons.getChannel();
+
+  /**
+   * original component of story
+   */
+  private component: any;
+
   @Input() template: TemplateRef<any>;
 
   @Input() pseudoState: PseudoState;
@@ -69,24 +82,37 @@ export class PseudoStateWrapperContainer implements AfterViewInit {
     // TODO find better solution to get component
     // get component ref of template, little bit hacky...
     // @ts-ignore
-    let component = this.template?._projectedViews[
+    this.component = this.template?._projectedViews[
       // @ts-ignore
       this.template._projectedViews.length - 1
     ]?.nodes.filter((item: any) => item?.instance);
 
-    if (component.length >= 1) {
-      component = component[0]?.instance;
+    if (this.component.length >= 1) {
+      this.component = this.component[0]?.instance;
     } else {
-      component = null;
+      this.component = null;
     }
 
+    this.applyStates();
+
+    // re-apply states when story was forced to rerender
+    this.channel.addListener(FORCE_RE_RENDER, () => {
+      this.applyStates();
+    });
+  }
+
+  ngOnDestroy() {
+    this.channel.removeAllListeners(FORCE_RE_RENDER);
+  }
+
+  applyStates() {
     if (!this.selector) {
-      this._modifyStateClass(null, component);
+      this._modifyStateClass(null, this.component);
     } else if (typeof this.selector === 'string') {
-      this._modifyStateClass(this.selector, component);
+      this._modifyStateClass(this.selector, this.component);
     } else if (Array.isArray(this.selector)) {
       for (const selectorName of this.selector as Array<string>) {
-        this._modifyStateClass(selectorName, component);
+        this._modifyStateClass(selectorName, this.component);
       }
     }
   }
