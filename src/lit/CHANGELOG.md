@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.28](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.27...v0.0.1-alpha.28) (2020-04-06)
+
+
+### Features
+
+* **lit:** used/applied preset utils ([1761943](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/1761943361f1fe14f455618582971d383f4b9b2c))
+* **lit, html, vue:** added default postcss preset. ([7463338](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/74633383258efc9c8eaed9b205f9d47640f06fdf))
+
+
+
+
+
 ## [0.0.1-alpha.27](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.26...v0.0.1-alpha.27) (2020-04-02)
 
 **Note:** Version bump only for package @ergosign/storybook-addon-pseudo-states-lit

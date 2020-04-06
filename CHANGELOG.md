@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.28](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.27...v0.0.1-alpha.28) (2020-04-06)
+
+
+### Bug Fixes
+
+* **angular:** re-apply pseudo states when FORCE_RE_RENDER Hook was called (issue [#8](https://github.com/Ergosign/storybook-addon-pseudo-states/issues/8)) ([9128b67](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/9128b67092217283494a9d8cac591ffaca268e65))
+
+
+### Features
+
+* **angular:** applied preset-utils ([a2b47db](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/a2b47db388e9760befbdd853c7af8ec33fe1abdf))
+* **lit:** used/applied preset utils ([1761943](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/1761943361f1fe14f455618582971d383f4b9b2c))
+* **lit, html, vue:** added default postcss preset. ([7463338](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/74633383258efc9c8eaed9b205f9d47640f06fdf))
+* **presets:** added preset utils ([31442a0](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/31442a0fda60cf43290d3a89f6a6e866d0749681))
+* **react:** ability to extend postCSSLoaderOptions ([127f61c](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/127f61cdc81a88540bab72b94de81cb91ae7f6fd))
+* **react:** used/applied preset utils ([80ca134](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/80ca13466a937cdcfd00b6aad32d6afcef70391b))
+
+
+
+
+
 ## [0.0.1-alpha.27](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.26...v0.0.1-alpha.27) (2020-04-02)
 
 
