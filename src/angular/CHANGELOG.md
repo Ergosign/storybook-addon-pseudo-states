@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.29](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.28...v0.0.1-alpha.29) (2020-04-07)
+
+
+### Bug Fixes
+
+* **angular:** set pseudoe-state-wrapper-container's container to flex ([e812000](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/e81200058a843bbb680a5bc6ef64839046627531))
+
+
+
+
+
 ## [0.0.1-alpha.28](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.27...v0.0.1-alpha.28) (2020-04-06)
 
 
