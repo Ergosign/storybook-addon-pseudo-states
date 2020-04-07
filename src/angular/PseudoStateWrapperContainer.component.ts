@@ -35,6 +35,10 @@ import { PseudoState, PseudoStatesParameters } from '../share/types';
         display: flex;
       }
 
+      .container {
+        flex: 1 1 100%;
+      }
+
       .header {
         margin-bottom: 5px;
       }
