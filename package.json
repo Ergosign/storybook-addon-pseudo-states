@@ -40,7 +40,7 @@
     "lerna:version": "lerna version",
     "lerna:build-all": "lerna run build",
     "lerna:publish": "lerna publish --force-publish",
-    "lerna:publish-version": "lerna publish 0.0.1-alpha.29 --conventional-commits",
+    "lerna:publish-version": "lerna publish 0.0.1-alpha.30 --conventional-commits",
     "lerna:publish:github": "lerna publish --registry https://npm.pkg.github.com/",
     "publish-manual": "npm publish --access public"
   },

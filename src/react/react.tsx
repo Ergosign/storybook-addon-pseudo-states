@@ -133,26 +133,29 @@ function pseudoStateFn(
           }
           // get css module [path][name]__[local] and remove [local]
           // TODO test if first class represents always css module
-          let moduleClass = [''];
+          let moduleClass = null;
+          // try to find css module prefix
           if (host?.classList[0]) {
             moduleClass = host?.classList[0].match(/(.+?)?__/) as Array<string>;
           }
 
+          let cssModulePrefix = '';
           if (moduleClass && moduleClass?.length >= 1) {
-            const subPseudoStates = getMixedPseudoStates(pstateRaw);
+            cssModulePrefix = `${moduleClass[1]}__`;
+          }
 
-            if (subPseudoStates.length >= 1) {
-              for (const s of subPseudoStates) {
-                host?.classList.add(
-                  `${moduleClass[1]}__${parameters.prefix}${s.trim()}`
-                );
-              }
-            } else {
-              // and append pseudo class
+          const subPseudoStates = getMixedPseudoStates(pstateRaw);
+          if (subPseudoStates.length >= 1) {
+            for (const s of subPseudoStates) {
               host?.classList.add(
-                `${moduleClass[1]}__${parameters.prefix}${pstate}`
+                `${cssModulePrefix}${parameters.prefix}${s.trim()}`
               );
             }
+          } else {
+            // and append pseudo class
+            host?.classList.add(
+              `${cssModulePrefix}${parameters.prefix}${pstate}`
+            );
           }
         };
 

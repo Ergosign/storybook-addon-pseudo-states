@@ -37,10 +37,14 @@ export function webpackFinal(
     if (rulesToApply && rulesToApply.length > 0) {
       filteredRules = filterRules(webpackConfig.module.rules, rulesToApply);
     } else {
+      // regex from CRA: https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/config/webpack.config.js#L526
+      const sassRegex = /\.(scss|sass)$/;
+      const sassModuleRegex = /\.module\.(scss|sass)$/;
+
       // find scss rules and apply postscss addon to those
       filteredRules = filterRules(webpackConfig.module.rules, [
-        /\.module\.(scss|sass)$/,
-        /\.(scss|sass)$/,
+        sassModuleRegex,
+        sassRegex,
       ]);
     }
 
