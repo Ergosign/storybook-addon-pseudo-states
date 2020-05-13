@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.30](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.29...v0.0.1-alpha.30) (2020-05-13)
+
+
+### Bug Fixes
+
+* **react:** add pseudo state classes correctly when not using css modules ([86b9f46](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/86b9f46fb066ba666f083419bb53fa0ba2c61fa4))
+
+
+
+
+
 ## [0.0.1-alpha.29](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.28...v0.0.1-alpha.29) (2020-04-07)
 
 
