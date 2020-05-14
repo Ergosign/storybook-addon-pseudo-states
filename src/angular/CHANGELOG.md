@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.31](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.30...v0.0.1-alpha.31) (2020-05-14)
+
+
+### Bug Fixes
+
+* **angular:** remove FORCE_RE_RENDER correctly (issue [#11](https://github.com/Ergosign/storybook-addon-pseudo-states/issues/11)) ([826f4ed](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/826f4eda69fc7dc8469b3682e7f2ca1309c1840b))
+
+
+
+
+
 ## [0.0.1-alpha.30](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.29...v0.0.1-alpha.30) (2020-05-13)
 
 **Note:** Version bump only for package @ergosign/storybook-addon-pseudo-states-angular
