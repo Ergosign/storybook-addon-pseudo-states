@@ -100,13 +100,20 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
     this.applyStates();
 
     // re-apply states when story was forced to rerender
-    this.channel.addListener(FORCE_RE_RENDER, () => {
-      this.applyStates();
-    });
+    this.channel.addListener(FORCE_RE_RENDER, this.forceReRenderListener);
   }
 
+  /**
+   * Re-apply states whenever story was forced to re-render.
+   */
+  forceReRenderHandler() {
+    this.applyStates();
+  }
+
+  forceReRenderListener = this.forceReRenderHandler.bind(this);
+
   ngOnDestroy() {
-    this.channel.removeAllListeners(FORCE_RE_RENDER);
+    this.channel.removeListener(FORCE_RE_RENDER, this.forceReRenderListener);
   }
 
   applyStates() {
