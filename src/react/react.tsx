@@ -145,16 +145,9 @@ function pseudoStateFn(
           }
 
           const subPseudoStates = getMixedPseudoStates(pstateRaw);
-          if (subPseudoStates.length >= 1) {
-            for (const s of subPseudoStates) {
-              host?.classList.add(
-                `${cssModulePrefix}${parameters.prefix}${s.trim()}`
-              );
-            }
-          } else {
-            // and append pseudo class
+          for (const s of subPseudoStates) {
             host?.classList.add(
-              `${cssModulePrefix}${parameters.prefix}${pstate}`
+              `${cssModulePrefix}${parameters.prefix}${s.trim()}`
             );
           }
         };

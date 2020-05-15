@@ -12,6 +12,7 @@ import {
 import { addons } from '@storybook/addons';
 import { FORCE_RE_RENDER } from '@storybook/core-events';
 import { PseudoState, PseudoStatesParameters } from '../share/types';
+import { getMixedPseudoStates } from '../share/utils';
 
 @Component({
   selector: 'pseudoe-state-wrapper-container',
@@ -164,10 +165,12 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
         );
       }
     } else {
-      this.renderer.addClass(
-        hostElement,
-        `${this.parameters?.prefix}${this.pseudoState}`
-      );
+      // get mixed pseudo states
+      const subPseudoStates = getMixedPseudoStates(this.pseudoState);
+      // apply pseudo states
+      for (const s of subPseudoStates) {
+        this.renderer.addClass(hostElement, `${this.parameters?.prefix}${s}`);
+      }
     }
   }
 }

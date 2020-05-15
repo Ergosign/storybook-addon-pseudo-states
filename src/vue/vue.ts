@@ -156,14 +156,9 @@ const pseudoStateFn = (
               }
 
               const subPseudoStates = getMixedPseudoStates(pState);
-
-              if (subPseudoStates.length >= 1) {
-                for (const s of subPseudoStates) {
-                  host?.classList.add(parameters.prefix + s.trim());
-                }
-              } else {
-                // and append pseudo class
-                host?.classList.add(parameters.prefix + pState);
+              // and append pseudo class
+              for (const s of subPseudoStates) {
+                host?.classList.add(parameters.prefix + s.trim());
               }
             };
 
