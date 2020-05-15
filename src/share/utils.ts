@@ -1,10 +1,18 @@
 import { PseudoState } from './types';
 
 /**
- * Sanitize pseudoname so that you can use it as css classe
+ * Sanitize pseudoname so that you can use it as css class
  */
 export const sanitizePseudoName = (pseudoStateName: PseudoState) =>
-  pseudoStateName.replace(/\s/g, '').replace('&', '-');
+  // remove whitespace
+  pseudoStateName.replace(/\s/g, '').replace(/\W/g, '').replace('&', '-');
 
-export const getMixedPseudoStates = (pseudoState: PseudoState) =>
-  pseudoState.split('&');
+/**
+ * Get mixed pseudo states
+ * @param pseudoState
+ */
+export const getMixedPseudoStates = (pseudoState: PseudoState): Array<String> =>
+  // split at &
+  // replace non-word character
+  // trim
+  pseudoState.split('&').map((item: string) => item.replace(/\W/g, '').trim());
