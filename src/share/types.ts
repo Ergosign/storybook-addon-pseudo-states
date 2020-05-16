@@ -17,6 +17,12 @@ export enum AttributeStatesEnum {
 
 export const { DISABLED, READONLY } = AttributeStatesEnum;
 
+export enum Orientation {
+  ROW,
+  COLUMN,
+}
+export const { ROW, COLUMN } = Orientation;
+
 export type PseudoState = PseudoStateEnum | string;
 export type AttributeState = AttributeStatesEnum | string;
 
@@ -48,5 +54,9 @@ export interface PseudoStatesParameters {
   prefix?: string;
   pseudos?: PseudoStates;
   attributes?: AttributeStates;
+  styles?: {
+    // orientation of pseudo states wrapper
+    orientation?: Orientation;
+  };
   // [key: string]: any;
 }
