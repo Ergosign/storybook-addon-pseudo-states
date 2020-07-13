@@ -278,7 +278,7 @@ storiesOf('Button', module)
   .addDecorator(withPseudo)
   .addParameters({
     withPseudo: {
-      attribtues: [], // no attributes to show --> overwrite default [DISABLE]
+      attributes: [], // no attributes to show --> overwrite default [DISABLE]
     },
   })
   .add('Button', () => <Button label="I'm a normal button" />)
