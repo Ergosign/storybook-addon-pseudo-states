@@ -8,19 +8,28 @@ import {
   Renderer2,
   TemplateRef,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { addons } from '@storybook/addons';
 import { FORCE_RE_RENDER } from '@storybook/core-events';
 import { PseudoState, PseudoStatesParameters } from '../share/types';
-import { getMixedPseudoStates } from '../share/utils';
+import { getMixedPseudoStates, sanitizePseudoName } from '../share/utils';
+import { story, storyHeader } from '../share/styles.css';
 
 @Component({
-  selector: 'pseudoe-state-wrapper-container',
+  selector: 'pseudo-state-wrapper-container',
   template: `
-    <div class="container">
-      <div class="header" *ngIf="!addonDisabled">{{ pseudoState }}:</div>
+    <div
+      class="pseudo-states-addon__story pseudo-states-addon__story--{{
+        sanitizePseudoNameFn(pseudoState)
+      }}"
+      [class.row]="rowOrientation"
+    >
+      <div class="pseudo-states-addon__story__header" *ngIf="!addonDisabled">
+        {{ pseudoState }}:
+      </div>
       <div
-        class="story"
+        class="pseudo-states-addon__story__container"
         [class.addonDisabled]="addonDisabled"
         #origStoryWrapper
       >
@@ -28,30 +37,16 @@ import { getMixedPseudoStates } from '../share/utils';
       </div>
     </div>
   `,
-  // TODO allow styling from outside
-  // encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
   styles: [
     `
-      :host {
+      :host,
+      pseudo-state-wrapper-container {
         display: flex;
       }
-
-      .container {
-        flex: 1 1 100%;
-      }
-
-      .header {
-        margin-bottom: 5px;
-      }
-
-      .header::first-letter {
-        text-transform: uppercase;
-      }
-
-      .story:not(.addonDisabled) {
-        padding: 0 0 10px 0;
-      }
     `,
+    story,
+    storyHeader,
   ],
 })
 export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
@@ -78,6 +73,8 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
   @Input() isAttribute = false;
 
   @Input() addonDisabled = false;
+
+  @Input() rowOrientation = false;
 
   @ViewChild('origStoryWrapper', { static: true }) story!: ElementRef;
 
@@ -172,5 +169,14 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
         this.renderer.addClass(hostElement, `${this.parameters?.prefix}${s}`);
       }
     }
+  }
+
+  /**
+   * Wrapper method to use utility method in template.
+   * @param pseudoState
+   */
+  // eslint-disable-next-line class-methods-use-this
+  public sanitizePseudoNameFn(pseudoState: PseudoState): string {
+    return sanitizePseudoName(pseudoState);
   }
 }

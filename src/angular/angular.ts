@@ -129,7 +129,7 @@ export const withPseudo = makeDecorator({
     }
 
     let newTemplate = story.template;
-    // if story has no template, set up component with provided proerties
+    // if story has no template, set up component with provided properties
     if (!newTemplate) {
       let propertyString = '';
 
