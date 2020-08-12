@@ -59,7 +59,7 @@ module.exports = {
 This creates for each css pseudo class an equivalent as normal css class (for instance `:hover` to `\:hover`), so that 
 you can use it in element's class attribute (`<div class=":hover">Element in hover state</div>`).
 
-You can modify post css loader options:
+You can modify post css loader options (see type definition of [PseudoStatesPresetOptions](../share/preset-utils.ts)):
 
 ```js
 module.exports = {
@@ -67,8 +67,10 @@ module.exports = {
        {
             name:"@ergosign/storybook-addon-pseudo-states-react/preset-postcss",
             options: {
-                postCssLoaderOptions: {
-                    //prefix: '\:hover', // default for react
+                rules: [/\.scss$|\.sass$/, ".sass", ...],
+                cssLoaderOptions: CssLoaderOptions,
+                postCssLoaderPseudoClassesPluginOptions: {
+                    prefix: 'pseudo-sates--', // default for angular
                     blacklist: [':nth-child', ':nth-of-type']
                 }
             }
