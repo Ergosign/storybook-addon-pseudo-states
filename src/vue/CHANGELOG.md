@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.32](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.31...v0.0.1-alpha.32) (2020-08-12)
+
+
+### Bug Fixes
+
+* **angular:** mixed pseudo states (issue [#13](https://github.com/Ergosign/storybook-addon-pseudo-states/issues/13)) ([ba36e70](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/ba36e70cebea8edbab9eebe500bdb63cc8b69e18))
+
+
+
+
+
 ## [0.0.1-alpha.31](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.30...v0.0.1-alpha.31) (2020-05-14)
 
 **Note:** Version bump only for package @ergosign/storybook-addon-pseudo-states-vue

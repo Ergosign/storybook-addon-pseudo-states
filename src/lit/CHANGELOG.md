@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.32](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.31...v0.0.1-alpha.32) (2020-08-12)
+
+
+### Bug Fixes
+
+* correct postCssLoaderPseudoClassesPluginOptions usage in README ([#17](https://github.com/Ergosign/storybook-addon-pseudo-states/issues/17)) ([e2bed1e](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/e2bed1ef32382c3af89836057dbf76e36f9ab1dd))
+
+
+
+
+
 ## [0.0.1-alpha.31](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.30...v0.0.1-alpha.31) (2020-05-14)
 
 **Note:** Version bump only for package @ergosign/storybook-addon-pseudo-states-lit
