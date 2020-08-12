@@ -47,21 +47,31 @@ Then add the preset `preset-postcss` to your configuration in `main.js` (located
 main.js;
 
 module.exports = {
-  presets: [
-    {
-      name: '@ergosign/storybook-addon-pseudo-states-lit/preset-postcss',
-
-      // set rules for which postcss-loader will be attached to
-      // if not set, it tries to add postcss-loader to all scss|sass rules
-      options: {
-        postCssLoaderOptions: {
-          rules: [/\.comp\.scss$/],
-        },
-      },
-    },
-  ],
+  presets: ['@ergosign/storybook-addon-pseudo-states-lit/preset-postcss'],
 };
 ```
+
+
+You can modify post css loader options (see type definition of [PseudoStatesPresetOptions](../share/preset-utils.ts)):
+
+```js
+module.exports = {
+   presets: [
+       {
+            name: '@ergosign/storybook-addon-pseudo-states-lit/preset-postcss',
+            options: {
+                rules: [/\.scss$|\.sass$/, ".sass", ...],
+                cssLoaderOptions: CssLoaderOptions,
+                postCssLoaderPseudoClassesPluginOptions: {
+                    prefix: 'pseudo-sates--', // default for angular
+                    blacklist: [':nth-child', ':nth-of-type']
+                }
+            }
+        }     
+    ] 
+}
+```
+
 
 If `postCssLoaderOptions` are not set, the preset tries to add `postcss-loader` to all available `scss|sass` rules.
 
