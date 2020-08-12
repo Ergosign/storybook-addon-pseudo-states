@@ -40,7 +40,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
-* **angular:** set pseudoe-state-wrapper-container's container to flex ([e812000](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/e81200058a843bbb680a5bc6ef64839046627531))
+* **angular:** set pseudo-state-wrapper-container's container to flex ([e812000](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/e81200058a843bbb680a5bc6ef64839046627531))
 
 
 

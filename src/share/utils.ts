@@ -1,9 +1,9 @@
 import { PseudoState } from './types';
 
 /**
- * Sanitize pseudoname so that you can use it as css class
+ * Sanitize pseudo name so that you can use it as css class.
  */
-export const sanitizePseudoName = (pseudoStateName: PseudoState): PseudoState =>
+export const sanitizePseudoName = (pseudoStateName: PseudoState): string =>
   // remove whitespace
   pseudoStateName.replace(/\s/g, '').replace(/\W/g, '').replace('&', '-');
 
