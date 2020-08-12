@@ -44,23 +44,33 @@ export function webpackFinal(
       // overwrite default prefix `\\:`
       // use prefix without `:` because angular add component scope before each `:`
       prefix: PseudoStatesDefaultPrefixAlternative,
-      // add to blacklist because it leads to problems with :host-context()
-      blacklist: [
-        ':root',
-        ':host',
-        ':host-context',
-        ':nth-child',
-        ':nth-of-type',
-      ],
     };
 
-    const postCssLoaderOptions = options?.postCssLoaderPseudoClassesPluginOptions
-      ? {
+    // default
+    let postCssLoaderOptions = postCSSDefaultOptions;
+    // if user set options
+    if (options?.postCssLoaderPseudoClassesPluginOptions) {
+      // if user set blacklist options, merge with default
+      if (options.postCssLoaderPseudoClassesPluginOptions?.blacklist) {
+        const mergedBlacklist = new Set([
+          // @ts-ignore
+          ...postCSSDefaultOptions.blacklist,
+          // @ts-ignore
+          ...options.postCssLoaderPseudoClassesPluginOptions?.blacklist,
+        ]);
+
+        postCssLoaderOptions = {
           ...postCSSDefaultOptions,
           ...options.postCssLoaderPseudoClassesPluginOptions,
-        }
-      : postCSSDefaultOptions;
-
+          blacklist: Array.from(mergedBlacklist),
+        };
+      } else {
+        postCssLoaderOptions = {
+          ...postCSSDefaultOptions,
+          ...options.postCssLoaderPseudoClassesPluginOptions,
+        };
+      }
+    }
     const rulesToApply = options?.rules;
     if (rulesToApply && rulesToApply.length > 0) {
       const rules = filterRules(webpackConfig.module.rules, rulesToApply);
