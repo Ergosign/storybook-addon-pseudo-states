@@ -15,6 +15,7 @@ import { FORCE_RE_RENDER } from '@storybook/core-events';
 import { PseudoState, PseudoStatesParameters } from '../share/types';
 import { getMixedPseudoStates, sanitizePseudoName } from '../share/utils';
 import { story, storyHeader } from '../share/styles.css';
+import { AttributeStatesObj } from '../share/AttributeStatesObj';
 
 @Component({
   selector: 'pseudo-state-wrapper-container',
@@ -70,7 +71,7 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
 
   @Input() componentSelector: string;
 
-  @Input() isAttribute = false;
+  @Input() attribute: AttributeStatesObj;
 
   @Input() addonDisabled = false;
 
@@ -146,19 +147,23 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
       );
     }
 
-    if (this.isAttribute) {
+    if (this.attribute) {
       // enable attribute on component
       // eslint-disable-next-line no-param-reassign
-      component[this.pseudoState] = true;
+      component[this.attribute.name] = this.attribute.value;
       this._cdRef.detectChanges();
 
-      this.renderer.setAttribute(hostElement, this.pseudoState, 'true');
+      this.renderer.setAttribute(
+        hostElement,
+        this.attribute.name,
+        String(this.attribute.value)
+      );
       // add also to host element
       if (selector && this.componentSelector) {
         this.renderer.setAttribute(
           this.story.nativeElement.querySelector(this.componentSelector),
-          this.pseudoState,
-          'true'
+          this.attribute.name,
+          String(this.attribute.value)
         );
       }
     } else {
