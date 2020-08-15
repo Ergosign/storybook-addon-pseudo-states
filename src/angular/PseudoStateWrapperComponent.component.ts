@@ -19,6 +19,7 @@ import {
 } from '../share/types';
 import { ADDON_GLOBAL_DISABLE_STATE } from '../share/constants';
 import { container } from '../share/styles.css';
+import { AttributeStatesObj } from '../share/AttributeStatesObj';
 
 @Component({
   selector: 'pseudo-state-wrapper',
@@ -50,8 +51,8 @@ import { container } from '../share/styles.css';
             [selector]="selector"
             [componentSelector]="componentSelector"
             [parameters]="storyParams"
-            [isAttribute]="true"
-            [pseudoState]="attrState"
+            [attribute]="attrState"
+            [pseudoState]="attrState.name"
             [rowOrientation]="rowOrientation"
           >
           </pseudo-state-wrapper-container>
@@ -91,7 +92,10 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
       this.rowOrientation =
         this.storyParams?.styles?.orientation === Orientation.ROW;
       this.pseudoStates = this.storyParams?.pseudos as PseudoStates;
-      this.attributeStates = this.storyParams?.attributes as AttributeStates;
+      this.attributeStates = (this.storyParams
+        ?.attributes as AttributeStates).map((item) =>
+        AttributeStatesObj.fromAttributeState(item)
+      );
       this.selector = this.storyParams?.selector || null;
     }
   }
@@ -160,7 +164,7 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
   /**
    * All attribute states to be rendered
    */
-  attributeStates: Array<PseudoState> = [];
+  attributeStates: Array<AttributeStatesObj> = [];
 
   /**
    * PseudoSTateParameters (holds selector and stateComposition)
