@@ -12,11 +12,23 @@ export const { HOVER, ACTIVE, FOCUS, FOCUS_WITHIN, VISITED } = PseudoStateEnum;
 
 export enum AttributeStatesEnum {
   DISABLED = 'disabled',
+  ENABLED = 'enabled',
   READONLY = 'readonly',
 }
-
 export const { DISABLED, READONLY } = AttributeStatesEnum;
 
+/**
+ * AttributeStatesObject denotes an Attribute by name and value.
+ * Default value is true.
+ */
+export interface AttributeStatesObject {
+  name: AttributeStatesEnum | string;
+  value?: unknown | true;
+}
+
+/**
+ * Orientation of components inside the story canvas.
+ */
 export enum Orientation {
   ROW,
   COLUMN,
@@ -24,7 +36,10 @@ export enum Orientation {
 export const { ROW, COLUMN } = Orientation;
 
 export type PseudoState = PseudoStateEnum | string;
-export type AttributeState = AttributeStatesEnum | string;
+export type AttributeState =
+  | AttributeStatesEnum
+  | AttributeStatesObject
+  | string;
 
 export type PseudoStates = Array<PseudoState>;
 export type AttributeStates = Array<AttributeState>;
@@ -54,6 +69,7 @@ export interface PseudoStatesParameters {
   prefix?: string;
   pseudos?: PseudoStates;
   attributes?: AttributeStates;
+  permutations?: AttributeStates;
   styles?: {
     // orientation of pseudo states wrapper
     orientation?: Orientation;
