@@ -19,6 +19,7 @@ import {
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
 import { getMixedPseudoStates } from '../share/utils';
 import { styles } from '../share/styles';
+import { AttributeStatesObj } from '../share/AttributeStatesObj';
 
 const pseudoStateFn = (
   getStory: StoryGetter,
@@ -47,6 +48,11 @@ const pseudoStateFn = (
     parameters?.pseudos || options?.pseudos || PseudoStatesDefault;
   parameters.attributes =
     parameters?.attributes || options?.attributes || AttributesStatesDefault;
+
+  // convert attributes to object notation
+  const attributesAsObject: Array<AttributeStatesObj> = [
+    ...parameters.attributes,
+  ].map((item) => AttributeStatesObj.fromAttributeState(item));
 
   // Use prefix without `:` because angular add component scope before each `:`
   // Maybe not editable by user in angular context?
@@ -169,10 +175,10 @@ const pseudoStateFn = (
         }
       },
       updateAttributes() {
-        if (parameters.attributes) {
-          for (const attr of parameters.attributes) {
+        if (attributesAsObject) {
+          for (const attr of attributesAsObject) {
             const container = document.querySelector(
-              `.pseudo-states-addon__story--attr-${attr} .pseudo-states-addon__story__container`
+              `.pseudo-states-addon__story--attr-${attr.name} .pseudo-states-addon__story__container`
             );
 
             const elem = container?.children[0];
@@ -183,13 +189,13 @@ const pseudoStateFn = (
 
             if (vm) {
               // set attribute to true
-              if (Object.prototype.hasOwnProperty.call(vm, attr)) {
-                vm[attr] = true;
+              if (Object.prototype.hasOwnProperty.call(vm, attr.name)) {
+                vm[attr.name] = attr.value;
               }
 
               // set attribute to element to support :disabled, :readonly, etc.
               if (vm?.$el.hasOwnProperty(attr)) {
-                vm.$el[attr] = true;
+                vm.$el[attr.name] = attr.value;
               }
 
               // force update
