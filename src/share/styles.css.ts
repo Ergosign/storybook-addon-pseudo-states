@@ -16,12 +16,18 @@
 export const container = `
   .pseudo-states-addon__container {
       display: flex;
-      flex: 1 1 auto;
+      // flex: 1 1 auto;
       flex-direction: column;
     }
    .pseudo-states-addon__container.row {
         flex-direction: row;
         flex-wrap: wrap;
+    }
+    .pseudo-states-addon__container--permutation {
+      margin: 0 20px;
+    }
+    .pseudo-states-addon__container--permutation.row {
+      margin: 20px 0;
     }
 `;
 

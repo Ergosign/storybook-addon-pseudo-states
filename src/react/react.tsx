@@ -95,15 +95,15 @@ function pseudoStateFn(
     for (const attr of attributesAsObject) {
       const storyState = {
         ...story,
-        props: { ...story.props, [attr.name]: attr.value },
+        props: { ...story.props, [attr.attr]: attr.value },
       };
 
       states.push(
         <div
-          className={`pseudo-states-addon__story pseudo-states-addon__story--attr-${attr.name}`}
-          key={`attr-${attr.name}`}
+          className={`pseudo-states-addon__story pseudo-states-addon__story--attr-${attr.attr}`}
+          key={`attr-${attr.attr}`}
         >
-          <div className="pseudo-states-addon__story__header">{attr.name}:</div>
+          <div className="pseudo-states-addon__story__header">{attr.attr}:</div>
           <div className="pseudo-states-addon__story__container">
             {storyState}
           </div>
