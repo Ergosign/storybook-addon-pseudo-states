@@ -7,7 +7,7 @@ import {
 } from '@storybook/addons';
 import {
   AttributesStatesDefault,
-  AttributeState,
+  AttributeStatesObject,
   PseudoState,
   PseudoStatesDefault,
   PseudoStatesDefaultPrefix,
@@ -17,6 +17,7 @@ import {
 import { styles } from '../share/styles';
 import { addonParameters } from '../share/constants';
 import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
+import { AttributeStatesObj } from '../share/AttributeStatesObj';
 
 function enablePseudoState(
   story: any,
@@ -38,7 +39,7 @@ function enablePseudoState(
 
 function enableAttributeState(
   story: any,
-  attribute: AttributeState,
+  attribute: AttributeStatesObj,
   selector: string | Array<string> | null
 ) {
   const element = story.cloneNode(true);
@@ -48,7 +49,7 @@ function enableAttributeState(
     stateHostElement = element.querySelector(selector);
   }
   if (stateHostElement) {
-    stateHostElement.setAttribute(attribute, 'true');
+    stateHostElement.setAttribute(attribute.name, String(attribute.value));
   }
 
   // set on host too
@@ -65,11 +66,15 @@ function getStoryContainer() {
 
 function wrapStoryinStateContainer(
   story: HTMLElement,
-  state: PseudoState | AttributeState
+  state: PseudoState | AttributeStatesObj
 ) {
   const stateContainer = document.createElement('div');
   const header = document.createElement('div');
-  header.innerHTML = state;
+  if ((state as AttributeStatesObject).name) {
+    header.innerHTML = (state as AttributeStatesObject).name;
+  } else {
+    header.innerHTML = state as PseudoState;
+  }
   stateContainer.appendChild(header);
 
   const content = document.createElement('div');
@@ -105,8 +110,13 @@ function renderStates(
   }
 
   if (params?.attributes) {
+    // convert attributes to object notation
+    const attributesAsObject: Array<AttributeStatesObj> = [
+      ...params.attributes,
+    ].map((item) => AttributeStatesObj.fromAttributeState(item));
+
     // create attribute states of story
-    for (const state of params?.attributes) {
+    for (const state of attributesAsObject) {
       const elementWithPseudo = enableAttributeState(
         story,
         state,
