@@ -23,6 +23,7 @@ import {
 } from '../share/types';
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
 import { getMixedPseudoStates, sanitizePseudoName } from '../share/utils';
+import { AttributeStatesObj } from '../share/AttributeStatesObj';
 
 function pseudoStateFn(
   getStory: StoryGetter,
@@ -61,6 +62,10 @@ function pseudoStateFn(
   parameters.attributes =
     parameters?.attributes || options?.attributes || AttributesStatesDefault;
 
+  const attributesAsObject: Array<AttributeStatesObj> = [
+    ...parameters?.attributes,
+  ].map((item) => AttributeStatesObj.fromAttributeState(item));
+
   // Use prefix without `:` because angular add component scope before each `:`
   // Maybe not editable by user in angular context?
   parameters.prefix =
@@ -86,19 +91,19 @@ function pseudoStateFn(
       states.push(pseudoStoryPart);
     }
   }
-  if (parameters.attributes) {
-    for (const attr of parameters.attributes) {
+  if (attributesAsObject) {
+    for (const attr of attributesAsObject) {
       const storyState = {
         ...story,
-        props: { ...story.props, [attr]: true },
+        props: { ...story.props, [attr.name]: attr.value },
       };
 
       states.push(
         <div
-          className={`pseudo-states-addon__story pseudo-states-addon__story--attr-${attr}`}
-          key={`attr-${attr}`}
+          className={`pseudo-states-addon__story pseudo-states-addon__story--attr-${attr.name}`}
+          key={`attr-${attr.name}`}
         >
-          <div className="pseudo-states-addon__story__header">{attr}:</div>
+          <div className="pseudo-states-addon__story__header">{attr.name}:</div>
           <div className="pseudo-states-addon__story__container">
             {storyState}
           </div>
