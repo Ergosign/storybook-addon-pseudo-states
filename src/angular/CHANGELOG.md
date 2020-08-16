@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.33](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.32...v0.0.1-alpha.33) (2020-08-16)
+
+
+### Features
+
+* **angular:** Added support for `permutations` option ([6afee84](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/6afee84533bf063897e9f7f71f007e47636e2dc3))
+* **angular:** Added support to input `AttributeStatesObject` for `attributes` option ([8734897](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/87348979189ef4e4b634e78c9c0fb757af58aae1))
+* **angular:** render components as row ([#5](https://github.com/Ergosign/storybook-addon-pseudo-states/issues/5)) ([1bc416c](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/1bc416c0d0811e73c9a40ca4d267d9b5c1550fc7))
+
+
+
+
+
 ## [0.0.1-alpha.32](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.31...v0.0.1-alpha.32) (2020-08-12)
 
 

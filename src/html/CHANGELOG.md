@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.33](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.32...v0.0.1-alpha.33) (2020-08-16)
+
+
+### Features
+
+* **html:** Added support to input `AttributeStatesObject` for `attributes` option ([214a6a1](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/214a6a135dcc1c431569ceed5dbbc9404df91e62))
+
+
+
+
+
 ## [0.0.1-alpha.32](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.31...v0.0.1-alpha.32) (2020-08-12)
 
 **Note:** Version bump only for package @ergosign/storybook-addon-pseudo-states-html
