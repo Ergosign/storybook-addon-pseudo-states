@@ -11,7 +11,6 @@ import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
 import { cache } from 'lit-html/directives/cache';
 import {
   AttributesStatesDefault,
-  AttributeState,
   PseudoState,
   PseudoStatesDefault,
   PseudoStatesDefaultPrefixAlternative,
@@ -24,6 +23,7 @@ import {
   ADDON_GLOBAL_DISABLE_STATE,
   addonParameters,
 } from '../share/constants';
+import { AttributeStatesObj } from '../share/AttributeStatesObj';
 
 type PrefixType = string | null | undefined;
 
@@ -34,9 +34,15 @@ const displayAtrributes = (
   if (parameters?.attributes) {
     const { attributes } = parameters;
     return html`
-      ${attributes.map((attr) =>
-        modifyAttr(story, attr, parameters.selector, parameters.prefix)
-      )}
+      ${attributes.map((attr) => {
+        const attrAsObj = AttributeStatesObj.fromAttributeState(attr);
+        return modifyAttr(
+          story,
+          attrAsObj,
+          parameters.selector,
+          parameters.prefix
+        );
+      })}
     `;
   }
   return html``;
@@ -44,41 +50,41 @@ const displayAtrributes = (
 
 const addAttr = (
   host: Element,
-  attr: AttributeState | string,
+  attr: AttributeStatesObj,
   selector: Selector,
   prefix: PrefixType
 ) => {
   if (!selector) {
     const elem = host;
-    elem.setAttribute(attr, 'true');
+    elem.setAttribute(attr.name, String(attr.value));
     // @ts-ignore
-    elem[attr] = true;
+    elem[attr.name] = attr.value;
   } else if (typeof selector === 'string') {
     if (host.shadowRoot) {
       const elem = host.shadowRoot.querySelector(selector);
       if (elem) {
-        elem.setAttribute(attr, 'true');
+        elem.setAttribute(attr.name, String(attr.value));
         // @ts-ignore
-        elem[attr] = true;
+        elem[attr.name] = attr.value;
       }
     } else {
       const elem = host.querySelector(selector);
       if (elem) {
-        elem.setAttribute(attr, 'true');
+        elem.setAttribute(attr.name, String(attr.value));
         // @ts-ignore
-        elem[attr] = true;
+        elem[attr.name] = attr.value;
       }
     }
   } else if (Array.isArray(selector)) {
     for (const s of selector) {
-      addStateClass(host, attr, s, prefix);
+      addAttr(host, attr, s, prefix);
     }
   }
 };
 
 const modifyAttr = (
   story: TemplateResult,
-  attr: AttributeState | string,
+  attr: AttributeStatesObj,
   selector: Selector,
   prefix: PrefixType
 ) => {
@@ -87,7 +93,7 @@ const modifyAttr = (
   channel.addListener(STORY_RENDERED, () => {
     // setTimeout(() => {
     const storyContainerElement = document.querySelector(
-      `.pseudo-states-addon__story--attr-${attr} .pseudo-states-addon__story__container`
+      `.pseudo-states-addon__story--attr-${attr.name} .pseudo-states-addon__story__container`
     );
     if (storyContainerElement) {
       const host = storyContainerElement.firstElementChild;
@@ -104,9 +110,9 @@ const modifyAttr = (
 
   return html`
     <div
-      class="pseudo-states-addon__story pseudo-states-addon__story--attr-${attr}"
+      class="pseudo-states-addon__story pseudo-states-addon__story--attr-${attr.name}"
     >
-      <div class="pseudo-states-addon__story__header">${attr}:</div>
+      <div class="pseudo-states-addon__story__header">${attr.name}:</div>
       <div class="pseudo-states-addon__story__container">${story}</div>
     </div>
   `;
