@@ -49,7 +49,7 @@ function enableAttributeState(
     stateHostElement = element.querySelector(selector);
   }
   if (stateHostElement) {
-    stateHostElement.setAttribute(attribute.name, String(attribute.value));
+    stateHostElement.setAttribute(attribute.attr, String(attribute.value));
   }
 
   // set on host too
@@ -70,8 +70,8 @@ function wrapStoryinStateContainer(
 ) {
   const stateContainer = document.createElement('div');
   const header = document.createElement('div');
-  if ((state as AttributeStatesObject).name) {
-    header.innerHTML = (state as AttributeStatesObject).name;
+  if ((state as AttributeStatesObject).attr) {
+    header.innerHTML = (state as AttributeStatesObject).attr;
   } else {
     header.innerHTML = state as PseudoState;
   }

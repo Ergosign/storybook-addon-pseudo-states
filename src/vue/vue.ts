@@ -178,7 +178,7 @@ const pseudoStateFn = (
         if (attributesAsObject) {
           for (const attr of attributesAsObject) {
             const container = document.querySelector(
-              `.pseudo-states-addon__story--attr-${attr.name} .pseudo-states-addon__story__container`
+              `.pseudo-states-addon__story--attr-${attr.attr} .pseudo-states-addon__story__container`
             );
 
             const elem = container?.children[0];
@@ -189,13 +189,13 @@ const pseudoStateFn = (
 
             if (vm) {
               // set attribute to true
-              if (Object.prototype.hasOwnProperty.call(vm, attr.name)) {
-                vm[attr.name] = attr.value;
+              if (Object.prototype.hasOwnProperty.call(vm, attr.attr)) {
+                vm[attr.attr] = attr.value;
               }
 
               // set attribute to element to support :disabled, :readonly, etc.
               if (vm?.$el.hasOwnProperty(attr)) {
-                vm.$el[attr.name] = attr.value;
+                vm.$el[attr.attr] = attr.value;
               }
 
               // force update

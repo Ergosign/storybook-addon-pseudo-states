@@ -18,13 +18,26 @@ export enum AttributeStatesEnum {
 
 export const { DISABLED, READONLY } = AttributeStatesEnum;
 
+export enum PermutationStatesObjectType {
+  PROPERTY = 'property',
+  HOST_CLASS = 'host-class',
+}
+export const { PROPERTY, HOST_CLASS } = PermutationStatesObjectType;
+
 /**
- * AttributeStatesObject denotes an Attribute by name and value.
+ * AttributeStatesObject denotes an Attribute by attr and value.
  * Default value is true.
  */
 export interface AttributeStatesObject {
-  name: AttributeStatesEnum | string;
+  attr: AttributeStatesEnum | string;
   value?: unknown | true;
+}
+
+export interface PermutationStatesObject extends AttributeStatesObject {
+  // custom label for permutation, if not set attr is used
+  label?: string;
+  // default type is PROPERTY
+  type?: PermutationStatesObjectType;
 }
 
 /**
@@ -42,17 +55,19 @@ export type AttributeState =
   | AttributeStatesEnum
   | AttributeStatesObject
   | string;
+export type PermutationState = PermutationStatesObject | string;
 
 export type PseudoStates = Array<PseudoState>;
 export type AttributeStates = Array<AttributeState>;
+export type PermutationStates = Array<PermutationState>;
 
 export const PseudoStatesDefault: PseudoStates = [FOCUS, HOVER, ACTIVE];
 export const AttributesStatesDefault: AttributeStates = [
-  { name: DISABLED, value: true },
+  { attr: DISABLED, value: true },
 ];
 export const AttributesStatesInputDefault: AttributeStates = [
-  { name: DISABLED, value: true },
-  { name: READONLY, value: true },
+  { attr: DISABLED, value: true },
+  { attr: READONLY, value: true },
 ];
 
 export interface WrapperPseudoStateSettings extends WrapperSettings {
@@ -73,7 +88,7 @@ export interface PseudoStatesParameters {
   prefix?: string;
   pseudos?: PseudoStates;
   attributes?: AttributeStates;
-  permutations?: AttributeStates;
+  permutations?: PermutationStates;
   styles?: {
     // orientation of pseudo states wrapper
     orientation?: Orientation;

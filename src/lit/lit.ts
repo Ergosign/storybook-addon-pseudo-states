@@ -56,23 +56,23 @@ const addAttr = (
 ) => {
   if (!selector) {
     const elem = host;
-    elem.setAttribute(attr.name, String(attr.value));
+    elem.setAttribute(attr.attr, String(attr.value));
     // @ts-ignore
-    elem[attr.name] = attr.value;
+    elem[attr.attr] = attr.value;
   } else if (typeof selector === 'string') {
     if (host.shadowRoot) {
       const elem = host.shadowRoot.querySelector(selector);
       if (elem) {
-        elem.setAttribute(attr.name, String(attr.value));
+        elem.setAttribute(attr.attr, String(attr.value));
         // @ts-ignore
-        elem[attr.name] = attr.value;
+        elem[attr.attr] = attr.value;
       }
     } else {
       const elem = host.querySelector(selector);
       if (elem) {
-        elem.setAttribute(attr.name, String(attr.value));
+        elem.setAttribute(attr.attr, String(attr.value));
         // @ts-ignore
-        elem[attr.name] = attr.value;
+        elem[attr.attr] = attr.value;
       }
     }
   } else if (Array.isArray(selector)) {
@@ -93,7 +93,7 @@ const modifyAttr = (
   channel.addListener(STORY_RENDERED, () => {
     // setTimeout(() => {
     const storyContainerElement = document.querySelector(
-      `.pseudo-states-addon__story--attr-${attr.name} .pseudo-states-addon__story__container`
+      `.pseudo-states-addon__story--attr-${attr.attr} .pseudo-states-addon__story__container`
     );
     if (storyContainerElement) {
       const host = storyContainerElement.firstElementChild;
@@ -110,9 +110,9 @@ const modifyAttr = (
 
   return html`
     <div
-      class="pseudo-states-addon__story pseudo-states-addon__story--attr-${attr.name}"
+      class="pseudo-states-addon__story pseudo-states-addon__story--attr-${attr.attr}"
     >
-      <div class="pseudo-states-addon__story__header">${attr.name}:</div>
+      <div class="pseudo-states-addon__story__header">${attr.attr}:</div>
       <div class="pseudo-states-addon__story__container">${story}</div>
     </div>
   `;
