@@ -100,7 +100,8 @@
     "emitDecoratorMetadata": true,
     /* Enables experimental support for emitting type metadata for decorators. */
     "skipDefaultLibCheck": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "downlevelIteration": true
   },
   "exclude": [
     "**/dist",

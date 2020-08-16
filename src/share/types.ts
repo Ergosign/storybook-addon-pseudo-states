@@ -15,6 +15,7 @@ export enum AttributeStatesEnum {
   ENABLED = 'enabled',
   READONLY = 'readonly',
 }
+
 export const { DISABLED, READONLY } = AttributeStatesEnum;
 
 /**
@@ -33,6 +34,7 @@ export enum Orientation {
   ROW,
   COLUMN,
 }
+
 export const { ROW, COLUMN } = Orientation;
 
 export type PseudoState = PseudoStateEnum | string;
@@ -45,10 +47,12 @@ export type PseudoStates = Array<PseudoState>;
 export type AttributeStates = Array<AttributeState>;
 
 export const PseudoStatesDefault: PseudoStates = [FOCUS, HOVER, ACTIVE];
-export const AttributesStatesDefault: AttributeStates = [DISABLED];
+export const AttributesStatesDefault: AttributeStates = [
+  { name: DISABLED, value: true },
+];
 export const AttributesStatesInputDefault: AttributeStates = [
-  DISABLED,
-  READONLY,
+  { name: DISABLED, value: true },
+  { name: READONLY, value: true },
 ];
 
 export interface WrapperPseudoStateSettings extends WrapperSettings {

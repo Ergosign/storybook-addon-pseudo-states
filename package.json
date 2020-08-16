@@ -32,6 +32,8 @@
     "pretty-quick": "pretty-quick --staged",
     "react:build": "tsc --p src/react",
     "react:pack": "cd src/react && npm pack",
+    "vue:build": "tsc --p src/vue",
+    "vue:pack": "cd src/vue && npm pack",
     "html:build": "tsc --p src/html",
     "html:pack": "cd src/html && npm pack",
     "lit:build": "tsc --p src/lit",

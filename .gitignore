@@ -30,3 +30,4 @@ htpasswd
 package/
 bazel-out
 .eslintcache
+.tests-out
