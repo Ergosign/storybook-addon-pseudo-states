@@ -16,6 +16,7 @@ import { PseudoState, PseudoStatesParameters } from '../share/types';
 import { getMixedPseudoStates, sanitizePseudoName } from '../share/utils';
 import { story, storyHeader } from '../share/styles.css';
 import { AttributeStatesObj } from '../share/AttributeStatesObj';
+import { PermutationStatsObj } from '../share/PermutationsStatesObj';
 
 @Component({
   selector: 'pseudo-state-wrapper-container',
@@ -76,6 +77,8 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
   @Input() addonDisabled = false;
 
   @Input() rowOrientation = false;
+
+  @Input() permutation: PermutationStatsObj;
 
   @ViewChild('origStoryWrapper', { static: true }) story!: ElementRef;
 
@@ -147,25 +150,12 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
       );
     }
 
-    if (this.attribute) {
-      // enable attribute on component
-      // eslint-disable-next-line no-param-reassign
-      component[this.attribute.name] = this.attribute.value;
-      this._cdRef.detectChanges();
+    if (this.permutation) {
+      this.applyAttribute(component, selector, hostElement, this.permutation);
+    }
 
-      this.renderer.setAttribute(
-        hostElement,
-        this.attribute.name,
-        String(this.attribute.value)
-      );
-      // add also to host element
-      if (selector && this.componentSelector) {
-        this.renderer.setAttribute(
-          this.story.nativeElement.querySelector(this.componentSelector),
-          this.attribute.name,
-          String(this.attribute.value)
-        );
-      }
+    if (this.attribute) {
+      this.applyAttribute(component, selector, hostElement, this.attribute);
     } else {
       // get mixed pseudo states
       const subPseudoStates = getMixedPseudoStates(this.pseudoState);
@@ -173,6 +163,32 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
       for (const s of subPseudoStates) {
         this.renderer.addClass(hostElement, `${this.parameters?.prefix}${s}`);
       }
+    }
+  }
+
+  applyAttribute(
+    component: any,
+    selector: string | null,
+    hostElement: HTMLElement,
+    attribute: AttributeStatesObj | PermutationStatsObj
+  ) {
+    // enable attribute on component
+    // eslint-disable-next-line no-param-reassign
+    component[attribute.attr] = attribute.value;
+    this._cdRef.detectChanges();
+
+    this.renderer.setAttribute(
+      hostElement,
+      attribute.attr,
+      String(attribute.value)
+    );
+    // add also to host element
+    if (selector && this.componentSelector) {
+      this.renderer.setAttribute(
+        this.story.nativeElement.querySelector(this.componentSelector),
+        attribute.attr,
+        String(attribute.value)
+      );
     }
   }
 
