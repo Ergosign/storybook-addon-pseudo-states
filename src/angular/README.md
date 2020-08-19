@@ -181,7 +181,58 @@ storiesOf('Button', module)
   .add('Icon Button', () => <Button />);
 ```
 
-There is a default configuration for `selector`, `pseudos` and `attributes`. Thus, you can leave `withPseudo` options it empty.
+There is a default configuration for `selector`, `pseudos` and `attributes`. Thus, you can leave `withPseudo` options empty.
+
+
+#### Attributes & Permutations
+
+You can display the component in an attribute/`@Inputs` state by adding the attribute name (and value) to `attributes` option.
+
+The `permutations` option displays the component in each pseudo (from `pseudos`) and attribute (from `attributes`) state 
+mixed with the applied attribute added to `permutations` option.
+
+```js
+import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-angular';
+
+const section = {
+  component: ButtonComponent,
+  title: 'Button',
+  moduleMetadata: {
+    declarations: [ButtonComponent],
+    imports: [CommonModule],
+  },
+  decorators: [withPseudo()],
+  parameters: {
+    withPseudo: { selector: 'button' },
+    pseudos: ['focus', 'hover', 'hover & focus', 'active'],
+    attributes: ['disabled', 'readonly'],
+    permutations: [
+        'error', // applied default value is true
+        {
+            label: "Light theme",
+            name: "theme", // @Input name
+            value: "dark"
+        }
+    ]
+  },
+};
+export default section;
+
+export const Story = () => {
+  return {
+    component: ButtonComponent,
+    moduleMetadata: {
+      declarations: [ButtonComponent],
+      imports: [CommonModule],
+    },
+    // ButtonComponent has same properties as props' keys
+    props: {
+      label: 'Test Label',
+      anotherProperty: true,
+    },
+  };
+};
+``` 
 
 #### Parameters & Types
 

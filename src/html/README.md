@@ -206,7 +206,7 @@ storiesOf('Button', module)
   .add('Icon Button', () => <Button />);
 ```
 
-There is a default configuration for `selector`, `pseudos` and `attributes`. Thus, you can leave `withPseudo` options it empty.
+There is a default configuration for `selector`, `pseudos` and `attributes`. Thus, you can leave `withPseudo` options empty.
 
 #### With html
 
