@@ -1,9 +1,11 @@
 import {
   AfterViewInit,
+  ApplicationRef,
   ChangeDetectorRef,
   Component,
   ElementRef,
   Input,
+  NgZone,
   OnDestroy,
   Renderer2,
   TemplateRef,
@@ -35,7 +37,7 @@ import { PermutationStatsObj } from '../share/PermutationsStatesObj';
         [class.addonDisabled]="addonDisabled"
         #origStoryWrapper
       >
-        <ng-container [ngTemplateOutlet]="template"></ng-container>
+        <ng-container [ngTemplateOutlet]="template" #viewRef></ng-container>
       </div>
     </div>
   `,
@@ -82,11 +84,27 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
 
   @ViewChild('origStoryWrapper', { static: true }) story!: ElementRef;
 
-  constructor(private renderer: Renderer2, private _cdRef: ChangeDetectorRef) {}
+  constructor(
+    private renderer: Renderer2,
+    private _cdRef: ChangeDetectorRef,
+    private _appRef: ApplicationRef,
+    private ngZone: NgZone
+  ) {}
+
+  componentView: any = null;
 
   ngAfterViewInit() {
     // TODO find better solution to get component
     // get component ref of template, little bit hacky...
+
+    // @ts-ignore
+    this.componentView = this.template?._projectedViews[
+      // @ts-ignore
+      this.template._projectedViews.length - 1
+    ]?.nodes.filter((item: any) => item?.componentView);
+
+    console.log('ngAfterViewInit', 'componentView', this.componentView);
+
     // @ts-ignore
     this.component = this.template?._projectedViews[
       // @ts-ignore
@@ -128,6 +146,15 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
         this._modifyStateClass(selectorName, this.component);
       }
     }
+
+    setTimeout(() => {
+      this.ngZone.run(() => {
+        this._appRef.tick();
+      });
+    }, 100);
+    this._cdRef.detectChanges();
+
+    console.log('applyStates', 'componentView', this.componentView);
   }
 
   /**
@@ -174,8 +201,11 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
   ) {
     // enable attribute on component
     // eslint-disable-next-line no-param-reassign
-    component[attribute.attr] = attribute.value;
-    this._cdRef.detectChanges();
+    // component[attribute.attr] = attribute.value;
+    this.ngZone.run(() => {
+      // eslint-disable-next-line no-param-reassign
+      component[attribute.attr] = attribute.value;
+    });
 
     this.renderer.setAttribute(
       hostElement,
@@ -190,6 +220,7 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
         String(attribute.value)
       );
     }
+    this._cdRef.detectChanges();
   }
 
   /**

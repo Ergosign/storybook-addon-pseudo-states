@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   ContentChild,
   HostBinding,
@@ -183,13 +184,12 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
 
   private _storyComponent: string;
 
-  // TODO replace with shared useAddonState
   @Input() isDisabled =
     sessionStorage.getItem(ADDON_GLOBAL_DISABLE_STATE) === 'true';
 
   @HostBinding('class') hostOrientationClass = 'column';
 
-  constructor(/* private _cdRef: ChangeDetectorRef */ private ngZone: NgZone) {}
+  constructor(private _cdRef: ChangeDetectorRef, private ngZone: NgZone) {}
 
   /**
    * update disabled state when received toolbutton-click event
@@ -202,7 +202,7 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
       this.isDisabled = value;
     });
     // this._cdRef.markForCheck();
-    // this._cdRef.detectChanges();
+    this._cdRef.detectChanges();
     // this._cdRef.checkNoChanges();
   }
 
