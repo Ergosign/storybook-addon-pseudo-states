@@ -79,7 +79,7 @@ const pseudoStateFn = (
                 </div>
 
                 <!-- pseudo states -->
-                <div v-for="state in composition.pseudo"
+                <div v-for="state in parameters.pseudos"
                      class="pseudo-states-addon__story"
                      :style="styles.storyContainer"
                      :class="'pseudo-states-addon__story--' + state">
@@ -92,15 +92,15 @@ const pseudoStateFn = (
                 </div>
 
                 <!-- attributes -->
-                <div v-for="attr in composition.attributes"
+                <div v-for="attr in attributesAsObject"
                      class="pseudo-states-addon__story"
                      :style="styles.storyContainer"
-                     :class="'pseudo-states-addon__story--attr-' + attr">
+                     :class="'pseudo-states-addon__story--attr-' + attr.attr">
                     <div class="pseudo-states-addon__story__header"
-                         :style="styles.storyHeader">{{attr}}:
+                         :style="styles.storyHeader">{{attr.attr}}:
                     </div>
                     <div class="pseudo-states-addon__story__container">
-                        <story ref="attr"/>
+                        <story ref="attr.attr"/>
                     </div>
                 </div>
 
@@ -115,6 +115,7 @@ const pseudoStateFn = (
       return {
         styles,
         parameters,
+        attributesAsObject,
         isDisabled: false,
       };
     },
