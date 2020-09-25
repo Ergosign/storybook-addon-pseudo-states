@@ -128,6 +128,25 @@ export const withPseudo = makeDecorator({
       );
     }
 
+    let permutations = parameters.permutations?.map(value => {
+      if (typeof value === 'string') {
+        return value;
+      }
+      return value.attr;
+    });
+
+    const generateLetBlock = () => {
+      return permutations
+        ?.map((value) => {
+          return `let-${value}="${value}"`;
+        })
+        .join(' ');
+    };
+
+    let permutationBinding = permutations?.map(value => {
+      return `[${value}]="${value}"`;
+    }).join(' ');
+
     let newTemplate = story.template;
     // if story has no template, set up component with provided properties
     if (!newTemplate) {
@@ -163,7 +182,12 @@ export const withPseudo = makeDecorator({
         }
       }
 
-      newTemplate = `<${compInternal.selector} ${propertyString}></${compInternal.selector}>`;
+      newTemplate = `<${compInternal.selector} ${propertyString} ${permutationBinding}></${compInternal.selector}>`;
+    } else {
+      newTemplate = newTemplate.replace(
+        `<${compInternal.selector} `,
+        `<${compInternal.selector} ${permutationBinding}`
+      );
     }
 
     return {
@@ -171,7 +195,9 @@ export const withPseudo = makeDecorator({
       template: `<pseudo-state-wrapper 
                         [parameters]="'${storyParameters}'"
                         [storyComponent]="'${storyComponent}'"
-                    ><ng-template #storyTmpl>      
+                    ><ng-template 
+                        ${generateLetBlock()}
+                        #storyTmpl>      
                         ${newTemplate}
                         </ng-template>
                     </pseudo-state-wrapper>`,

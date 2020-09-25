@@ -57,6 +57,7 @@
   "devDependencies": {
     "@angular/core": "9.1.7",
     "@babel/core": "7.9.6",
+    "@storybook/angular": "5.3.18",
     "@storybook/addons": "5.3.18",
     "@storybook/api": "5.3.18",
     "@storybook/cli": "5.3.18",

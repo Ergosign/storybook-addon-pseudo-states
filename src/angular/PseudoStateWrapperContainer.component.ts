@@ -1,11 +1,8 @@
 import {
   AfterViewInit,
-  ApplicationRef,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   Input,
-  NgZone,
   OnDestroy,
   Renderer2,
   TemplateRef,
@@ -37,7 +34,11 @@ import { PermutationStatsObj } from '../share/PermutationsStatesObj';
         [class.addonDisabled]="addonDisabled"
         #origStoryWrapper
       >
-        <ng-container [ngTemplateOutlet]="template" #viewRef></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="template"
+          [ngTemplateOutletContext]="context"
+          #viewRef
+        ></ng-container>
       </div>
     </div>
   `,
@@ -59,10 +60,7 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
    */
   private channel = addons.getChannel();
 
-  /**
-   * original component of story
-   */
-  private component: any;
+  context: any = {};
 
   @Input() template: TemplateRef<any>;
 
@@ -84,39 +82,9 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
 
   @ViewChild('origStoryWrapper', { static: true }) story!: ElementRef;
 
-  constructor(
-    private renderer: Renderer2,
-    private _cdRef: ChangeDetectorRef,
-    private _appRef: ApplicationRef,
-    private ngZone: NgZone
-  ) {}
-
-  componentView: any = null;
+  constructor(private renderer: Renderer2) {}
 
   ngAfterViewInit() {
-    // TODO find better solution to get component
-    // get component ref of template, little bit hacky...
-
-    // @ts-ignore
-    this.componentView = this.template?._projectedViews[
-      // @ts-ignore
-      this.template._projectedViews.length - 1
-    ]?.nodes.filter((item: any) => item?.componentView);
-
-    console.log('ngAfterViewInit', 'componentView', this.componentView);
-
-    // @ts-ignore
-    this.component = this.template?._projectedViews[
-      // @ts-ignore
-      this.template._projectedViews.length - 1
-    ]?.nodes.filter((item: any) => item?.instance);
-
-    if (this.component.length >= 1) {
-      this.component = this.component[0]?.instance;
-    } else {
-      this.component = null;
-    }
-
     this.applyStates();
 
     // re-apply states when story was forced to rerender
@@ -138,33 +106,23 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
 
   applyStates() {
     if (!this.selector) {
-      this._modifyStateClass(null, this.component);
+      this._modifyStateClass(null);
     } else if (typeof this.selector === 'string') {
-      this._modifyStateClass(this.selector, this.component);
+      this._modifyStateClass(this.selector);
     } else if (Array.isArray(this.selector)) {
       for (const selectorName of this.selector as Array<string>) {
-        this._modifyStateClass(selectorName, this.component);
+        this._modifyStateClass(selectorName);
       }
     }
-
-    setTimeout(() => {
-      this.ngZone.run(() => {
-        this._appRef.tick();
-      });
-    }, 100);
-    this._cdRef.detectChanges();
-
-    console.log('applyStates', 'componentView', this.componentView);
   }
 
   /**
    * add pseudo state/attribute state to host or element found by selector
    *
    * @param selector
-   * @param component
    * @private
    */
-  private _modifyStateClass(selector: string | null, component: any) {
+  private _modifyStateClass(selector: string | null) {
     if (!selector && !this.componentSelector) {
       return;
     }
@@ -178,11 +136,11 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
     }
 
     if (this.permutation) {
-      this.applyAttribute(component, selector, hostElement, this.permutation);
+      this.context[this.permutation.attr] = this.permutation.value;
     }
 
     if (this.attribute) {
-      this.applyAttribute(component, selector, hostElement, this.attribute);
+      this.applyAttribute(selector, hostElement, this.attribute);
     } else {
       // get mixed pseudo states
       const subPseudoStates = getMixedPseudoStates(this.pseudoState);
@@ -194,19 +152,10 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
   }
 
   applyAttribute(
-    component: any,
     selector: string | null,
     hostElement: HTMLElement,
     attribute: AttributeStatesObj | PermutationStatsObj
   ) {
-    // enable attribute on component
-    // eslint-disable-next-line no-param-reassign
-    // component[attribute.attr] = attribute.value;
-    this.ngZone.run(() => {
-      // eslint-disable-next-line no-param-reassign
-      component[attribute.attr] = attribute.value;
-    });
-
     this.renderer.setAttribute(
       hostElement,
       attribute.attr,
@@ -220,7 +169,6 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
         String(attribute.value)
       );
     }
-    this._cdRef.detectChanges();
   }
 
   /**
