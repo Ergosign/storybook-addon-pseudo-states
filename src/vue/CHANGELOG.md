@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.34](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.33...v0.0.1-alpha.34) (2020-09-25)
+
+
+### Bug Fixes
+
+* **vue:** replace broken references ([4990118](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/4990118476e282ca3922d4eb83183eb6dcada83e))
+
+
+
+
+
 ## [0.0.1-alpha.33](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.32...v0.0.1-alpha.33) (2020-08-16)
 
 
