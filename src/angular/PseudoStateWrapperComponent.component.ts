@@ -1,5 +1,4 @@
 import {
-  ChangeDetectorRef,
   Component,
   ContentChild,
   HostBinding,
@@ -189,7 +188,7 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
 
   @HostBinding('class') hostOrientationClass = 'column';
 
-  constructor(private _cdRef: ChangeDetectorRef, private ngZone: NgZone) {}
+  constructor(private ngZone: NgZone) {}
 
   /**
    * update disabled state when received toolbutton-click event
@@ -201,9 +200,6 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
     this.ngZone.run(() => {
       this.isDisabled = value;
     });
-    // this._cdRef.markForCheck();
-    this._cdRef.detectChanges();
-    // this._cdRef.checkNoChanges();
   }
 
   boundButtonClickHandler = this._onDisabledStateChangedHandler.bind(this);
