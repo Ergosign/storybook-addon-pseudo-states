@@ -60,7 +60,8 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
    */
   private channel = addons.getChannel();
 
-  context: any = {};
+  // eslint-disable-next-line react/static-property-placement
+  public context: any = {};
 
   @Input() template: TemplateRef<any>;
 
@@ -140,7 +141,8 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
     }
 
     if (this.attribute) {
-      this.applyAttribute(selector, hostElement, this.attribute);
+      this.context[this.attribute.attr] = this.attribute.value;
+      // this.applyAttribute(selector, hostElement, this.attribute);
     } else {
       // get mixed pseudo states
       const subPseudoStates = getMixedPseudoStates(this.pseudoState);
@@ -151,25 +153,27 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
     }
   }
 
-  applyAttribute(
-    selector: string | null,
-    hostElement: HTMLElement,
-    attribute: AttributeStatesObj | PermutationStatsObj
-  ) {
-    this.renderer.setAttribute(
-      hostElement,
-      attribute.attr,
-      String(attribute.value)
-    );
-    // add also to host element
-    if (selector && this.componentSelector) {
-      this.renderer.setAttribute(
-        this.story.nativeElement.querySelector(this.componentSelector),
-        attribute.attr,
-        String(attribute.value)
-      );
-    }
-  }
+  /*
+    applyAttribute(
+        selector: string | null,
+        hostElement: HTMLElement,
+        attribute: AttributeStatesObj | PermutationStatsObj
+      ) {
+        this.renderer.setAttribute(
+          hostElement,
+          attribute.attr,
+          String(attribute.value)
+        );
+        // add also to host element
+        if (selector && this.componentSelector) {
+          this.renderer.setAttribute(
+            this.story.nativeElement.querySelector(this.componentSelector),
+            attribute.attr,
+            String(attribute.value)
+          );
+        }
+      }
+      */
 
   /**
    * Wrapper method to use utility method in template.

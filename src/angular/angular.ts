@@ -15,6 +15,7 @@ import {
 import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
 import { PseudoStateWrapperComponent } from './PseudoStateWrapperComponent.component';
 import { PseudoStateWrapperContainer } from './PseudoStateWrapperContainer.component';
+import { AttributeStatesObj } from '../share/AttributeStatesObj';
 
 function getModuleMetadata(metadata: any) {
   let moduleMetadata = metadata?.moduleMetadata;
@@ -128,24 +129,39 @@ export const withPseudo = makeDecorator({
       );
     }
 
-    let permutations = parameters.permutations?.map(value => {
-      if (typeof value === 'string') {
-        return value;
-      }
-      return value.attr;
-    });
+    let permutationsAndAttributes: Array<AttributeStatesObj> = [];
+    if (parameters.permutations && parameters.attributes) {
+      permutationsAndAttributes = [
+        ...parameters.permutations.map((item) =>
+          AttributeStatesObj.fromAttributeState(item)
+        ),
+        ...parameters.attributes.map((item) =>
+          AttributeStatesObj.fromAttributeState(item)
+        ),
+      ];
+    } else if (parameters.attributes) {
+      permutationsAndAttributes = parameters.attributes.map((item) =>
+        AttributeStatesObj.fromAttributeState(item)
+      );
+    } else if (parameters.permutations) {
+      permutationsAndAttributes = parameters.permutations.map((item) =>
+        AttributeStatesObj.fromAttributeState(item)
+      );
+    }
 
     const generateLetBlock = () => {
-      return permutations
+      return permutationsAndAttributes
         ?.map((value) => {
-          return `let-${value}="${value}"`;
+          return `let-${value.attr}="${value.attr}"`;
         })
         .join(' ');
     };
 
-    let permutationBinding = permutations?.map(value => {
-      return `[${value}]="${value}"`;
-    }).join(' ');
+    const permutationBinding = permutationsAndAttributes
+      ?.map((value) => {
+        return `[${value.attr}]="${value.attr}"`;
+      })
+      .join(' ');
 
     let newTemplate = story.template;
     // if story has no template, set up component with provided properties
