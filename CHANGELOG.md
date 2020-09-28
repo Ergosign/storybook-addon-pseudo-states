@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.35](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.34...v0.0.1-alpha.35) (2020-09-28)
+
+
+### Bug Fixes
+
+* **angular:**  working in permission context mode ([#22](https://github.com/Ergosign/storybook-addon-pseudo-states/issues/22)) ([0c22a50](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/0c22a500c3937c9b6876f9c00bf5a2d0a876de2e))
+* **angular:** support ChangeDetectionStrategy.OnPush ([#22](https://github.com/Ergosign/storybook-addon-pseudo-states/issues/22)) ([e5ce482](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/e5ce4820c5e88020e445b3516e3cbf3cc00f1b3f))
+* **angular:** support disable addon ([c5e974c](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/c5e974c6727cac3fe9d4861cf58321637182a8e1))
+* **angular:** support row layout ([5ec4fa6](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/5ec4fa6d06b2eb934fee88e17cb43d7d56824acf)), closes [#5](https://github.com/Ergosign/storybook-addon-pseudo-states/issues/5)
+
+
+
+
+
 ## [0.0.1-alpha.34](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.33...v0.0.1-alpha.34) (2020-09-25)
 
 
