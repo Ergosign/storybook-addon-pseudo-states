@@ -34,10 +34,12 @@ export const container = `
 export const story = `
   .pseudo-states-addon__story {
       flex: 1 1 100%;
+      /* todo: remove margin */
       margin: 0 0 10px 0;
   }
   .pseudo-states-addon__story.row {
       flex: 1 1 100%;
+      /* todo: remove margin */
       margin: 0 15px 15px 0;
   }
 `;
@@ -45,6 +47,7 @@ export const story = `
 export const storyHeader = `
   .pseudo-states-addon__story__header {
       margin-bottom: 5px;
+      white-space: nowrap;
    }
 
    .pseudo-states-addon__story__header::first-letter {

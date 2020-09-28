@@ -26,85 +26,77 @@ import { PermutationStatsObj } from '../share/PermutationsStatesObj';
 @Component({
   selector: 'pseudo-state-wrapper',
   // TODO wrap permutations into own component
-  template: `
-    <div class="pseudo-states-addon__container" [class.row]="rowOrientation">
+  template: `          
+    <pseudo-state-wrapper-container
+      [template]="storyTempl"
+      [parameters]="storyParams"
+      [addonDisabled]="isDisabled"
+      [pseudoState]="'Normal'"
+      [rowOrientation]="rowOrientation"
+    >
+    </pseudo-state-wrapper-container>
+    <ng-container *ngIf="!isDisabled">
+      <ng-container *ngFor="let state of pseudoStates">
+        <pseudo-state-wrapper-container
+          [template]="storyTempl"
+          [selector]="selector"
+          [componentSelector]="componentSelector"
+          [parameters]="storyParams"
+          [pseudoState]="state"
+          [rowOrientation]="rowOrientation"
+        >
+        </pseudo-state-wrapper-container>
+      </ng-container>
+      <ng-container *ngFor="let attrState of attributeStates">
+        <pseudo-state-wrapper-container
+          [template]="storyTempl"
+          [selector]="selector"
+          [componentSelector]="componentSelector"
+          [parameters]="storyParams"
+          [attribute]="attrState"
+          [pseudoState]="attrState.attr"
+          [rowOrientation]="rowOrientation"
+        >
+        </pseudo-state-wrapper-container>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngFor="let permutation of permutationStates">
       <pseudo-state-wrapper-container
         [template]="storyTempl"
         [parameters]="storyParams"
         [addonDisabled]="isDisabled"
-        [pseudoState]="'Normal'"
+        [pseudoState]="permutation.label || permutation.attr"
+        [componentSelector]="componentSelector"
+        [permutation]="permutation"
         [rowOrientation]="rowOrientation"
       >
       </pseudo-state-wrapper-container>
-      <ng-container *ngIf="!isDisabled">
-        <ng-container *ngFor="let state of pseudoStates">
-          <pseudo-state-wrapper-container
-            [template]="storyTempl"
-            [selector]="selector"
-            [componentSelector]="componentSelector"
-            [parameters]="storyParams"
-            [pseudoState]="state"
-            [rowOrientation]="rowOrientation"
-          >
-          </pseudo-state-wrapper-container>
-        </ng-container>
-        <ng-container *ngFor="let attrState of attributeStates">
-          <pseudo-state-wrapper-container
-            [template]="storyTempl"
-            [selector]="selector"
-            [componentSelector]="componentSelector"
-            [parameters]="storyParams"
-            [attribute]="attrState"
-            [pseudoState]="attrState.attr"
-            [rowOrientation]="rowOrientation"
-          >
-          </pseudo-state-wrapper-container>
-        </ng-container>
-      </ng-container>
-    </div>
-    <ng-container *ngFor="let permutation of permutationStates">
-      <div
-        class="pseudo-states-addon__container pseudo-states-addon__container--permutation"
-        *ngIf="!isDisabled"
-        [class.row]="rowOrientation"
-      >
+
+      <ng-container *ngFor="let state of pseudoStates">
         <pseudo-state-wrapper-container
           [template]="storyTempl"
-          [parameters]="storyParams"
-          [addonDisabled]="isDisabled"
-          [pseudoState]="permutation.label || permutation.attr"
+          [selector]="selector"
           [componentSelector]="componentSelector"
+          [parameters]="storyParams"
+          [pseudoState]="state"
           [permutation]="permutation"
           [rowOrientation]="rowOrientation"
         >
         </pseudo-state-wrapper-container>
-
-        <ng-container *ngFor="let state of pseudoStates">
-          <pseudo-state-wrapper-container
-            [template]="storyTempl"
-            [selector]="selector"
-            [componentSelector]="componentSelector"
-            [parameters]="storyParams"
-            [pseudoState]="state"
-            [permutation]="permutation"
-            [rowOrientation]="rowOrientation"
-          >
-          </pseudo-state-wrapper-container>
-        </ng-container>
-        <ng-container *ngFor="let attrState of attributeStates">
-          <pseudo-state-wrapper-container
-            [template]="storyTempl"
-            [selector]="selector"
-            [componentSelector]="componentSelector"
-            [parameters]="storyParams"
-            [permutation]="permutation"
-            [attribute]="attrState"
-            [pseudoState]="attrState.attr"
-            [rowOrientation]="rowOrientation"
-          >
-          </pseudo-state-wrapper-container>
-        </ng-container>
-      </div>
+      </ng-container>
+      <ng-container *ngFor="let attrState of attributeStates">
+        <pseudo-state-wrapper-container
+          [template]="storyTempl"
+          [selector]="selector"
+          [componentSelector]="componentSelector"
+          [parameters]="storyParams"
+          [permutation]="permutation"
+          [attribute]="attrState"
+          [pseudoState]="attrState.attr"
+          [rowOrientation]="rowOrientation"
+        >
+        </pseudo-state-wrapper-container>
+      </ng-container>
     </ng-container>
   `,
   encapsulation: ViewEncapsulation.None,
@@ -112,12 +104,14 @@ import { PermutationStatsObj } from '../share/PermutationsStatesObj';
     `
       :host,
       pseudo-state-wrapper {
-        display: flex;
+        display: grid;
+        grid-auto-flow: column;
+        grid-gap: 15px;
       }
 
       :host(.row),
       pseudo-state-wrapper.row {
-        flex-direction: column;
+        grid-auto-flow: row;
       }
     `,
     container,
@@ -187,6 +181,22 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
     sessionStorage.getItem(ADDON_GLOBAL_DISABLE_STATE) === 'true';
 
   @HostBinding('class') hostOrientationClass = 'column';
+
+  @HostBinding('style.grid-template')
+  get columnCount(): string {
+    if (this.rowOrientation) {
+      return `repeat(${
+        1 + this.permutationStates.length
+      }, min-content) / repeat(${
+        1 + this.pseudoStates.length + this.attributeStates.length
+      }, min-content)`;
+    }
+    return `repeat(${
+      1 + this.pseudoStates.length + this.attributeStates.length
+    }, min-content) / repeat(${
+      1 + this.permutationStates.length
+    }, min-content)`;
+  }
 
   constructor(private ngZone: NgZone) {}
 
