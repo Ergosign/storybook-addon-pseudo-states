@@ -20,35 +20,36 @@ import { PermutationStatsObj } from '../share/PermutationsStatesObj';
 @Component({
   selector: 'pseudo-state-wrapper-container',
   template: `
-    <div
-      class="pseudo-states-addon__story pseudo-states-addon__story--{{
+      <div
+              class="pseudo-states-addon__story pseudo-states-addon__story--{{
         sanitizePseudoNameFn(pseudoState)
       }}"
-      [class.row]="rowOrientation"
-    >
-      <div class="pseudo-states-addon__story__header" *ngIf="!addonDisabled">
-        {{ pseudoState }}:
-      </div>
-      <div
-        class="pseudo-states-addon__story__container"
-        [class.addonDisabled]="addonDisabled"
-        #origStoryWrapper
+              [class.row]="rowOrientation"
       >
-        <ng-container
-          [ngTemplateOutlet]="template"
-          [ngTemplateOutletContext]="context"
-          #viewRef
-        ></ng-container>
+          <div class="pseudo-states-addon__story__header"
+               *ngIf="!addonDisabled">
+              {{ pseudoState }}:
+          </div>
+          <div
+                  class="pseudo-states-addon__story__container"
+                  [class.addonDisabled]="addonDisabled"
+                  #origStoryWrapper
+          >
+              <ng-container
+                      [ngTemplateOutlet]="template"
+                      [ngTemplateOutletContext]="context"
+                      #viewRef
+              ></ng-container>
+          </div>
       </div>
-    </div>
   `,
   encapsulation: ViewEncapsulation.None,
   styles: [
-    `
-      :host,
-      pseudo-state-wrapper-container {
-        display: flex;
-      }
+      `
+          :host,
+          pseudo-state-wrapper-container {
+              display: flex;
+          }
     `,
     story,
     storyHeader,
@@ -83,10 +84,13 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
 
   @ViewChild('origStoryWrapper', { static: true }) story!: ElementRef;
 
-  constructor(private renderer: Renderer2) {}
+  constructor(private renderer: Renderer2) {
+  }
 
   ngAfterViewInit() {
-    this.applyStates();
+    setTimeout(() => {
+      this.applyStates();
+    });
 
     // re-apply states when story was forced to rerender
     this.channel.addListener(FORCE_RE_RENDER, this.forceReRenderListener);
@@ -132,7 +136,7 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
       hostElement = this.story.nativeElement.querySelector(selector);
     } else {
       hostElement = this.story.nativeElement.querySelector(
-        this.componentSelector
+        this.componentSelector,
       );
     }
 
@@ -142,7 +146,6 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
 
     if (this.attribute) {
       this.context[this.attribute.attr] = this.attribute.value;
-      // this.applyAttribute(selector, hostElement, this.attribute);
     } else {
       // get mixed pseudo states
       const subPseudoStates = getMixedPseudoStates(this.pseudoState);
@@ -152,28 +155,6 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
       }
     }
   }
-
-  /*
-    applyAttribute(
-        selector: string | null,
-        hostElement: HTMLElement,
-        attribute: AttributeStatesObj | PermutationStatsObj
-      ) {
-        this.renderer.setAttribute(
-          hostElement,
-          attribute.attr,
-          String(attribute.value)
-        );
-        // add also to host element
-        if (selector && this.componentSelector) {
-          this.renderer.setAttribute(
-            this.story.nativeElement.querySelector(this.componentSelector),
-            attribute.attr,
-            String(attribute.value)
-          );
-        }
-      }
-      */
 
   /**
    * Wrapper method to use utility method in template.

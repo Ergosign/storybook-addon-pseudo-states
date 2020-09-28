@@ -1,10 +1,4 @@
-import {
-  addons,
-  makeDecorator,
-  OptionsParameter,
-  StoryContext,
-  StoryGetter,
-} from '@storybook/addons';
+import { addons, makeDecorator, OptionsParameter, StoryContext, StoryGetter } from '@storybook/addons';
 import {
   AttributesStatesDefault,
   PseudoStatesDefault,
@@ -130,22 +124,19 @@ export const withPseudo = makeDecorator({
     }
 
     let permutationsAndAttributes: Array<AttributeStatesObj> = [];
-    if (parameters.permutations && parameters.attributes) {
-      permutationsAndAttributes = [
-        ...parameters.permutations.map((item) =>
+    if (parameters.permutations?.length) {
+      permutationsAndAttributes = permutationsAndAttributes.concat(
+        parameters.permutations.map((item) =>
           AttributeStatesObj.fromAttributeState(item)
-        ),
-        ...parameters.attributes.map((item) =>
-          AttributeStatesObj.fromAttributeState(item)
-        ),
-      ];
-    } else if (parameters.attributes) {
-      permutationsAndAttributes = parameters.attributes.map((item) =>
-        AttributeStatesObj.fromAttributeState(item)
+        )
       );
-    } else if (parameters.permutations) {
-      permutationsAndAttributes = parameters.permutations.map((item) =>
-        AttributeStatesObj.fromAttributeState(item)
+    }
+
+    if (parameters.attributes?.length) {
+      permutationsAndAttributes = permutationsAndAttributes.concat(
+        parameters.attributes.map((item) =>
+          AttributeStatesObj.fromAttributeState(item)
+        )
       );
     }
 
