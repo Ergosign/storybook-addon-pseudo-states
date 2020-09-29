@@ -17,7 +17,7 @@ function getModuleMetadata(metadata: any) {
 
   if (component && !moduleMetadata) {
     moduleMetadata = {
-      declarations: [metadata.component],
+      declarations: [component],
     };
   } else if (moduleMetadata && !moduleMetadata.declarations) {
     moduleMetadata = {

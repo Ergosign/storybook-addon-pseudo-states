@@ -113,6 +113,8 @@ module.exports = {
 
 #### Component Story Format (CSF, recommended)
 
+The `component` field is required because it is used by the addon to register the component to an internal used module (Module Metadata declarations).
+
 ```js
 import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-angular';
 
