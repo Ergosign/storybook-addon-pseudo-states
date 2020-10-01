@@ -1,4 +1,4 @@
-name: Publish
+name: Publish Prerelease
 
 on: workflow_dispatch
 
@@ -23,6 +23,6 @@ jobs:
           node-version: 14
           registry-url: https://registry.npmjs.org/
       - run: npm ci
-      - run: npm run lerna:publish -- --yes --force-publish
+      - run: npm run lerna:publish-prerelease
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
