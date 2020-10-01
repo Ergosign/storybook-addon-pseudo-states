@@ -41,8 +41,8 @@
     "lerna:bootstrap": "lerna bootstrap",
     "lerna:version": "lerna version",
     "lerna:build-all": "lerna run build",
-    "lerna:publish": "lerna publish --force-publish",
-    "lerna:publish-version": "lerna publish 0.0.1-alpha.35 --conventional-commits",
+    "lerna:publish": "lerna publish prerelease",
+    "lerna:publish-version": "lerna publish prerelease --force-publish --conventional-commits --create-release github",
     "lerna:publish:github": "lerna publish --registry https://npm.pkg.github.com/",
     "publish-manual": "npm publish --access public",
     "test": "jest"

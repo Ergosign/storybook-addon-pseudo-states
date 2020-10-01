@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.1-alpha.36](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.35...v0.0.1-alpha.36) (2020-10-01)
+
+
+### Bug Fixes
+
+* **angular:** enable/disable working with permutations ([4171d6f](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/4171d6f103b99088ff1132206c4f12892b1aaaf8))
+
+
+
+
+
 ## [0.0.1-alpha.35](https://github.com/Ergosign/storybook-addon-pseudo-states/compare/v0.0.1-alpha.34...v0.0.1-alpha.35) (2020-09-28)
 
 
