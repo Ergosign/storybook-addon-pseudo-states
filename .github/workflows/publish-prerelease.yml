@@ -3,18 +3,7 @@ name: Publish Prerelease
 on: workflow_dispatch
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2.3.3
-      - uses: actions/setup-node@v1.4.3
-        with:
-          node-version: 14
-      - run: npm ci
-      - run: npm run lerna:build-all
-
   publish-npm:
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.3
@@ -26,6 +15,7 @@ jobs:
           node-version: 14
           registry-url: https://registry.npmjs.org/
       - run: npm ci
+      - run: npm run lerna:build-all
       - run: npm run lerna:publish-prerelease
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
