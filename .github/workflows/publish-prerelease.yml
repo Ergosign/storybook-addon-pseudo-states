@@ -18,10 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.3
-      - uses: fusion-engineering/setup-git-credentials@v2.0.1
+      - uses: oleksiyrudenko/gha-git-credentials@v1
         with:
-          # git credentials use
-          token: ${{secrets.GH_TOKEN}}
+          token: '${{ secrets.GITHUB_TOKEN }}'
       - uses: actions/setup-node@v1.4.3
         with:
           node-version: 14
