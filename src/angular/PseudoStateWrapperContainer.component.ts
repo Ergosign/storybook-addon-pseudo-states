@@ -20,36 +20,35 @@ import { PermutationStatsObj } from '../share/PermutationsStatesObj';
 @Component({
   selector: 'pseudo-state-wrapper-container',
   template: `
-      <div
-              class="pseudo-states-addon__story pseudo-states-addon__story--{{
+    <div
+      class="pseudo-states-addon__story pseudo-states-addon__story--{{
         sanitizePseudoNameFn(pseudoState)
       }}"
-              [class.row]="rowOrientation"
-      >
-          <div class="pseudo-states-addon__story__header"
-               *ngIf="!addonDisabled">
-              {{ pseudoState }}:
-          </div>
-          <div
-                  class="pseudo-states-addon__story__container"
-                  [class.addonDisabled]="addonDisabled"
-                  #origStoryWrapper
-          >
-              <ng-container
-                      [ngTemplateOutlet]="template"
-                      [ngTemplateOutletContext]="context"
-                      #viewRef
-              ></ng-container>
-          </div>
+      [class.row]="rowOrientation"
+    >
+      <div class="pseudo-states-addon__story__header" *ngIf="!addonDisabled">
+        {{ pseudoState }}:
       </div>
+      <div
+        class="pseudo-states-addon__story__container"
+        [class.addonDisabled]="addonDisabled"
+        #origStoryWrapper
+      >
+        <ng-container
+          [ngTemplateOutlet]="template"
+          [ngTemplateOutletContext]="context"
+          #viewRef
+        ></ng-container>
+      </div>
+    </div>
   `,
   encapsulation: ViewEncapsulation.None,
   styles: [
-      `
-          :host,
-          pseudo-state-wrapper-container {
-              display: flex;
-          }
+    `
+      :host,
+      pseudo-state-wrapper-container {
+        display: flex;
+      }
     `,
     story,
     storyHeader,
@@ -84,8 +83,7 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
 
   @ViewChild('origStoryWrapper', { static: true }) story!: ElementRef;
 
-  constructor(private renderer: Renderer2) {
-  }
+  constructor(private renderer: Renderer2) {}
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -136,7 +134,7 @@ export class PseudoStateWrapperContainer implements AfterViewInit, OnDestroy {
       hostElement = this.story.nativeElement.querySelector(selector);
     } else {
       hostElement = this.story.nativeElement.querySelector(
-        this.componentSelector,
+        this.componentSelector
       );
     }
 

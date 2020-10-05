@@ -1,4 +1,10 @@
-import { addons, makeDecorator, OptionsParameter, StoryContext, StoryGetter } from '@storybook/addons';
+import {
+  addons,
+  makeDecorator,
+  OptionsParameter,
+  StoryContext,
+  StoryGetter,
+} from '@storybook/addons';
 import {
   AttributesStatesDefault,
   PseudoStatesDefault,
@@ -50,17 +56,19 @@ const isValidInputOrOutputOfComponent = (
   // eslint-disable-next-line camelcase
   const componentProperty = storyComponent?.__prop__metadata__[property];
 
+  // eslint-disable-next-line no-proto
   if (!componentProperty && storyComponent?.__proto__) {
     // look in abstract component
+    // eslint-disable-next-line no-proto
     return isValidInputOrOutputOfComponent(storyComponent?.__proto__, property);
   }
   const isDef = componentProperty.length > 0;
 
   if (isDef) {
     const p = componentProperty[0];
+    // eslint-disable-next-line no-proto
     const proto = p?.__proto__;
-    const meta = proto?.ngMetadataName;
-    return meta;
+    return proto?.ngMetadataName;
   }
   return undefined;
 };
@@ -70,7 +78,6 @@ export const withPseudo = makeDecorator({
   parameterName: 'withPseudo',
   // This means don't run this decorator if the withPseudo decorator is not set
   skipIfNoParametersOrOptions: false,
-  allowDeprecatedUsage: false,
   wrapper: (
     getStory: StoryGetter,
     context: StoryContext,
@@ -160,7 +167,7 @@ export const withPseudo = makeDecorator({
       let propertyString = '';
 
       for (const property in story?.props) {
-        if (story?.props.hasOwnProperty(property)) {
+        if (Object.prototype.hasOwnProperty.call(story?.props, property)) {
           // check if component has property with the same key
           if (story?.component) {
             const ioType = isValidInputOrOutputOfComponent(

@@ -6,7 +6,8 @@ import {
 } from './types';
 import { AttributeStatesObj } from './AttributeStatesObj';
 
-export class PermutationStatsObj extends AttributeStatesObj
+export class PermutationStatsObj
+  extends AttributeStatesObj
   implements PermutationStatesObject {
   type = PermutationStatesObjectType.PROPERTY;
 

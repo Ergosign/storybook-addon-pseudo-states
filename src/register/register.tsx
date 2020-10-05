@@ -1,5 +1,5 @@
 import React from 'react';
-import addons, { MatchOptions, types } from '@storybook/addons';
+import addons, { types } from '@storybook/addons';
 import { API } from '@storybook/api';
 import { PseudoStateTool } from '../share/PseudoStateTool';
 import { ADDON_ID, TOOL_ID, TOOL_TITLE } from '../share/constants';
@@ -10,7 +10,7 @@ addons.register(ADDON_ID, (api: API): void => {
   addons.add(TOOL_ID, {
     title: TOOL_TITLE,
     type: types.TOOL,
-    match: ({ viewMode }: MatchOptions) => viewMode === 'story',
+    match: ({ viewMode }) => viewMode === 'story',
     render: () => <PseudoStateTool api={api} />,
   });
 
