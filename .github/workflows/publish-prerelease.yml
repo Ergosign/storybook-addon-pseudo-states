@@ -26,3 +26,4 @@ jobs:
       - run: npm run lerna:publish-prerelease
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          GH_TOKEN: ${{secrets.GH_TOKEN}}
