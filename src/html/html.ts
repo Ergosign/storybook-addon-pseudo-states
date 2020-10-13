@@ -7,7 +7,6 @@ import {
 } from '@storybook/addons';
 import {
   AttributesStatesDefault,
-  AttributeStatesObject,
   PseudoState,
   PseudoStatesDefault,
   PseudoStatesDefaultPrefix,
@@ -18,6 +17,7 @@ import { styles } from '../share/styles';
 import { addonParameters } from '../share/constants';
 import { SAPS_INIT_PSEUDO_STATES } from '../share/events';
 import { AttributeStatesObj } from '../share/AttributeStatesObj';
+import { PermutationStatsObj } from '../share/PermutationsStatesObj';
 
 function enablePseudoState(
   story: any,
@@ -25,7 +25,15 @@ function enablePseudoState(
   selector: string | Array<string> | null,
   prefix: string
 ) {
-  const element = story.cloneNode(true);
+  let tmpStroy = story;
+  if (typeof story === 'string') {
+    const storyNode = new DOMParser().parseFromString(story, 'text/html');
+    if (storyNode.body.childNodes && storyNode.body.childNodes[0]) {
+      tmpStroy = storyNode.body.childNodes[0];
+    }
+  }
+
+  const element = tmpStroy.cloneNode(true);
 
   let stateHostElement: HTMLElement = element;
   if (selector) {
@@ -42,7 +50,15 @@ function enableAttributeState(
   attribute: AttributeStatesObj,
   selector: string | Array<string> | null
 ) {
-  const element = story.cloneNode(true);
+  let tmpStroy = story;
+  if (typeof story === 'string') {
+    const storyNode = new DOMParser().parseFromString(story, 'text/html');
+    if (storyNode.body.childNodes && storyNode.body.childNodes[0]) {
+      tmpStroy = storyNode.body.childNodes[0];
+    }
+  }
+
+  const element = tmpStroy.cloneNode(true);
 
   let stateHostElement: HTMLElement = element;
   if (selector) {
@@ -53,7 +69,7 @@ function enableAttributeState(
   }
 
   // set on host too
-  element.setAttribute(attribute, 'true');
+  element.setAttribute(attribute.attr, String(attribute.value));
   return element;
 }
 
@@ -64,21 +80,25 @@ function getStoryContainer() {
   return container;
 }
 
-function wrapStoryinStateContainer(
-  story: HTMLElement,
-  state: PseudoState | AttributeStatesObj
+function wrapStoryInStateContainer(
+  story: HTMLElement | string,
+  state: AttributeStatesObj
 ) {
   const stateContainer = document.createElement('div');
   const header = document.createElement('div');
-  if ((state as AttributeStatesObject).attr) {
-    header.innerHTML = (state as AttributeStatesObject).attr;
-  } else {
-    header.innerHTML = state as PseudoState;
-  }
+  header.innerHTML = state.attr;
   stateContainer.appendChild(header);
 
   const content = document.createElement('div');
-  content.appendChild(story);
+  if (typeof story === 'string') {
+    const storyNode = new DOMParser().parseFromString(story, 'text/html');
+    if (storyNode.body.childNodes && storyNode.body.childNodes[0]) {
+      content.appendChild(storyNode.body.childNodes[0]);
+    }
+  } else {
+    content.appendChild(story);
+  }
+
   stateContainer.appendChild(content);
 
   return stateContainer;
@@ -87,11 +107,15 @@ function wrapStoryinStateContainer(
 function renderStates(
   story: HTMLElement,
   container: Element,
-  params: PseudoStatesParameters
+  params: PseudoStatesParameters,
+  attributes: Array<AttributeStatesObj>,
+  permutations: Array<PermutationStatsObj>
 ) {
   // show default story at first
   if (params?.pseudos && params?.pseudos.length > 0) {
-    container.appendChild(wrapStoryinStateContainer(story, 'Default'));
+    container.appendChild(
+      wrapStoryInStateContainer(story, new AttributeStatesObj('Default'))
+    );
   }
 
   if (params?.pseudos) {
@@ -104,26 +128,29 @@ function renderStates(
         params.prefix || PseudoStatesDefaultPrefix // TODO
       );
       container.appendChild(
-        wrapStoryinStateContainer(elementWithPseudo, state)
+        wrapStoryInStateContainer(
+          elementWithPseudo,
+          new AttributeStatesObj(state)
+        )
       );
     }
   }
 
-  if (params?.attributes) {
-    // convert attributes to object notation
-    const attributesAsObject: Array<AttributeStatesObj> = [
-      ...params.attributes,
-    ].map((item) => AttributeStatesObj.fromAttributeState(item));
+  if (permutations) {
+    // TODO
+    console.log('permutations', 'not implemented');
+  }
 
+  if (attributes) {
     // create attribute states of story
-    for (const state of attributesAsObject) {
+    for (const state of attributes) {
       const elementWithPseudo = enableAttributeState(
         story,
         state,
         params.selector || null
       );
       container.appendChild(
-        wrapStoryinStateContainer(elementWithPseudo, state)
+        wrapStoryInStateContainer(elementWithPseudo, state)
       );
     }
   }
@@ -146,21 +173,6 @@ function pseudoStateFn(
   const parameters: PseudoStatesParameters = settings?.parameters || {};
 
   let addonDisabled = settings?.parameters?.disabled || false;
-  channel.on('saps/toolbutton-click', (value) => {
-    addonDisabled = value;
-    if (value) {
-      container.innerHTML = '';
-      container.append(story);
-    } else {
-      container.innerHTML = '';
-      renderStates(story, container, parameters);
-    }
-  });
-  channel.emit(SAPS_INIT_PSEUDO_STATES, addonDisabled);
-  // when disabled return default story
-  if (addonDisabled) {
-    return story;
-  }
 
   // use selector form parameters or if not set use settings selector or null
   parameters.selector = settings?.parameters?.selector || null;
@@ -169,15 +181,53 @@ function pseudoStateFn(
   // Use user values, default user options or default values
   parameters.pseudos =
     parameters?.pseudos || options?.pseudos || PseudoStatesDefault;
+
   parameters.attributes =
     parameters?.attributes || options?.attributes || AttributesStatesDefault;
+
+  const attributesAsObject: Array<AttributeStatesObj> = [
+    ...parameters?.attributes,
+  ].map((item) => AttributeStatesObj.fromAttributeState(item));
+
+  const permuttionsAsObject: Array<PermutationStatsObj> = [
+    ...parameters?.attributes,
+  ].map((item) => AttributeStatesObj.fromAttributeState(item));
 
   // Use prefix without `:` because angular add component scope before each `:`
   // Maybe not editable by user in angular context?
   parameters.prefix =
     parameters?.prefix || options?.prefix || PseudoStatesDefaultPrefix;
 
-  return renderStates(story, container, parameters);
+  channel.on('saps/toolbutton-click', (value) => {
+    addonDisabled = value;
+    if (value) {
+      container.innerHTML = '';
+      container.append(story);
+    } else {
+      container.innerHTML = '';
+      renderStates(
+        story,
+        container,
+        parameters,
+        attributesAsObject,
+        permuttionsAsObject
+      );
+    }
+  });
+
+  channel.emit(SAPS_INIT_PSEUDO_STATES, addonDisabled);
+  // when disabled return default story
+  if (addonDisabled) {
+    return story;
+  }
+
+  return renderStates(
+    story,
+    container,
+    parameters,
+    attributesAsObject,
+    permuttionsAsObject
+  );
 }
 
 export const withPseudo = makeDecorator({
