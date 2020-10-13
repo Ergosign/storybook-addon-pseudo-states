@@ -158,7 +158,7 @@ Enable the button by adding it to your `main.js` file (located in the Storybook 
 // main.js
 
 module.exports = {
-  addons: ['@ergosign/storybook-addon-pseudo-states-angular/register'],
+  addons: ['@ergosign/storybook-addon-pseudo-states-html/register'],
 };
 ```
 
