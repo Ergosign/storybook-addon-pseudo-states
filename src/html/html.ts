@@ -45,6 +45,15 @@ function enablePseudoState(
   return element;
 }
 
+// eslint-disable-next-line no-undef
+function stringToNode(input: string): ChildNode | null {
+  const storyNode = new DOMParser().parseFromString(input, 'text/html');
+  if (storyNode.body.childNodes && storyNode.body.childNodes[0]) {
+    return storyNode.body.childNodes[0];
+  }
+  return null;
+}
+
 function enableAttributeState(
   story: any,
   attribute: AttributeStatesObj,
@@ -52,12 +61,8 @@ function enableAttributeState(
 ) {
   let tmpStroy = story;
   if (typeof story === 'string') {
-    const storyNode = new DOMParser().parseFromString(story, 'text/html');
-    if (storyNode.body.childNodes && storyNode.body.childNodes[0]) {
-      tmpStroy = storyNode.body.childNodes[0];
-    }
+    tmpStroy = stringToNode(story);
   }
-
   const element = tmpStroy.cloneNode(true);
 
   let stateHostElement: HTMLElement = element;
@@ -73,10 +78,23 @@ function enableAttributeState(
   return element;
 }
 
-function getStoryContainer() {
+function getStoryContainer(parameters: PseudoStatesParameters) {
   const container = document.createElement('div');
   // container.classList.add('pseudo-states__container');
-  Object.assign(container.style, styles.style);
+  const attrLength = parameters?.attributes?.length || 0;
+  const pseudoLength = parameters?.pseudos?.length || 0;
+  const permutationLenth = parameters?.permutations?.length || 0;
+
+  // compute grid template
+  // TODO support row orientation
+  const gridContainer = {
+    ...styles.gridContainer,
+    gridTemplate: `repeat(${
+      1 + pseudoLength + attrLength
+    } , min-content) / repeat(${1 + permutationLenth}, 1fr)`,
+  };
+
+  Object.assign(container.style, gridContainer);
   return container;
 }
 
@@ -85,15 +103,23 @@ function wrapStoryInStateContainer(
   state: AttributeStatesObj
 ) {
   const stateContainer = document.createElement('div');
+  // TODO add orientation
+  stateContainer.classList.toggle('pseudo-states-addon__story', true);
+  stateContainer.classList.toggle(
+    `pseudo-states-addon__story--${state.attr}`,
+    true
+  );
   const header = document.createElement('div');
+  header.classList.toggle('pseudo-states-addon__story__header', true);
   header.innerHTML = state.attr;
   stateContainer.appendChild(header);
 
   const content = document.createElement('div');
+  content.classList.toggle('pseudo-states-addon__story__container', true);
   if (typeof story === 'string') {
-    const storyNode = new DOMParser().parseFromString(story, 'text/html');
-    if (storyNode.body.childNodes && storyNode.body.childNodes[0]) {
-      content.appendChild(storyNode.body.childNodes[0]);
+    const tmpStory = stringToNode(story);
+    if (tmpStory) {
+      content.appendChild(tmpStory);
     }
   } else {
     content.appendChild(story);
@@ -104,17 +130,30 @@ function wrapStoryInStateContainer(
   return stateContainer;
 }
 
-function renderStates(
+function renderStatePermuation(
   story: HTMLElement,
   container: Element,
   params: PseudoStatesParameters,
   attributes: Array<AttributeStatesObj>,
-  permutations: Array<PermutationStatsObj>
+  permutation: PermutationStatsObj | null
 ) {
+  let tmpStroy = story;
+  // enable permutation
+  if (permutation) {
+    tmpStroy = enableAttributeState(
+      tmpStroy,
+      permutation,
+      params.selector || null
+    );
+  }
+
   // show default story at first
   if (params?.pseudos && params?.pseudos.length > 0) {
     container.appendChild(
-      wrapStoryInStateContainer(story, new AttributeStatesObj('Default'))
+      wrapStoryInStateContainer(
+        tmpStroy,
+        new AttributeStatesObj(permutation?.attr || 'Default')
+      )
     );
   }
 
@@ -122,7 +161,7 @@ function renderStates(
     // create pseudo states of story
     for (const state of params?.pseudos) {
       const elementWithPseudo = enablePseudoState(
-        story,
+        tmpStroy,
         state,
         params.selector || null,
         params.prefix || PseudoStatesDefaultPrefix // TODO
@@ -136,24 +175,40 @@ function renderStates(
     }
   }
 
-  if (permutations) {
-    // TODO
-    console.log('permutations', 'not implemented');
-  }
-
   if (attributes) {
     // create attribute states of story
     for (const state of attributes) {
-      const elementWithPseudo = enableAttributeState(
-        story,
+      const elementWithAttribute = enableAttributeState(
+        tmpStroy,
         state,
         params.selector || null
       );
       container.appendChild(
-        wrapStoryInStateContainer(elementWithPseudo, state)
+        wrapStoryInStateContainer(elementWithAttribute, state)
       );
     }
   }
+
+  return container;
+}
+
+function renderStates(
+  story: HTMLElement,
+  container: Element,
+  params: PseudoStatesParameters,
+  attributes: Array<AttributeStatesObj>,
+  permutations: Array<PermutationStatsObj>
+) {
+  // render default  (not listed in permutations array)
+  renderStatePermuation(story, container, params, attributes, null);
+
+  // render permutations
+  if (permutations) {
+    for (const permutation of permutations) {
+      renderStatePermuation(story, container, params, attributes, permutation);
+    }
+  }
+
   return container;
 }
 
@@ -164,7 +219,6 @@ function pseudoStateFn(
 ) {
   const channel = addons.getChannel();
   const story = getStory(context);
-  const container = getStoryContainer();
 
   // are options set by user
   const options: OptionsParameter = settings?.options;
@@ -189,9 +243,14 @@ function pseudoStateFn(
     ...parameters?.attributes,
   ].map((item) => AttributeStatesObj.fromAttributeState(item));
 
-  const permuttionsAsObject: Array<PermutationStatsObj> = [
-    ...parameters?.attributes,
-  ].map((item) => AttributeStatesObj.fromAttributeState(item));
+  let permuttionsAsObject: Array<PermutationStatsObj> = [];
+  if (parameters.permutations) {
+    permuttionsAsObject = [...parameters?.permutations].map((item) =>
+      PermutationStatsObj.fromPermutationState(item)
+    );
+  }
+
+  const container = getStoryContainer(parameters);
 
   // Use prefix without `:` because angular add component scope before each `:`
   // Maybe not editable by user in angular context?
@@ -202,7 +261,15 @@ function pseudoStateFn(
     addonDisabled = value;
     if (value) {
       container.innerHTML = '';
-      container.append(story);
+
+      if (typeof story === 'string') {
+        const tmpStory = stringToNode(story);
+        if (tmpStory) {
+          container.appendChild(tmpStory);
+        }
+      } else {
+        container.appendChild(story);
+      }
     } else {
       container.innerHTML = '';
       renderStates(
@@ -218,7 +285,14 @@ function pseudoStateFn(
   channel.emit(SAPS_INIT_PSEUDO_STATES, addonDisabled);
   // when disabled return default story
   if (addonDisabled) {
-    return story;
+    if (typeof story === 'string') {
+      const tmpStory = stringToNode(story);
+      if (tmpStory) {
+        return tmpStory;
+      }
+    } else {
+      return story;
+    }
   }
 
   return renderStates(
