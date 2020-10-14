@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.0.1-alpha.39 (2020-10-14)
+
+
+### Features
+
+* **html:** added support for  ([#7](https://github.com/Ergosign/storybook-addon-pseudo-states/issues/7)) ([a19e900](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/a19e900da75aafaf03e124f42133bd7951696ca3))
+
+
+
+
+
 ## 0.0.1-alpha.38 (2020-10-05)
 
 **Note:** Version bump only for package @ergosign/storybook-addon-pseudo-states-lit
