@@ -3,7 +3,11 @@ export const styles = {
     display: 'inline-flex',
     flexDirection: 'column',
   },
-
+  gridContainer: {
+    display: 'grid',
+    gridAutoFlow: 'column',
+    'grid-gap': '15px',
+  },
   addonContainer: {},
   storyContainer: {
     'margin-bottom': '10px',
