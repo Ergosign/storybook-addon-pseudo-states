@@ -24,6 +24,7 @@ import {
 import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
 import { getMixedPseudoStates, sanitizePseudoName } from '../share/utils';
 import { AttributeStatesObj } from '../share/AttributeStatesObj';
+import { PermutationStatsObj } from '../share/PermutationsStatesObj';
 
 function pseudoStateFn(
   getStory: StoryGetter,
@@ -62,6 +63,16 @@ function pseudoStateFn(
   parameters.attributes =
     parameters?.attributes || options?.attributes || AttributesStatesDefault;
 
+  let permutationsAsObject: Array<PermutationStatsObj> = [];
+  if (parameters.permutations) {
+    permutationsAsObject = [...parameters?.permutations].map((item) =>
+      PermutationStatsObj.fromAttributeState(item)
+    );
+  }
+
+  // eslint-disable-next-line no-console
+  console.log(permutationsAsObject);
+
   const attributesAsObject: Array<AttributeStatesObj> = [
     ...parameters?.attributes,
   ].map((item) => AttributeStatesObj.fromAttributeState(item));
@@ -70,6 +81,7 @@ function pseudoStateFn(
   // Maybe not editable by user in angular context?
   parameters.prefix =
     parameters?.prefix || options?.prefix || PseudoStatesDefaultPrefix;
+  // eslint-disable-next-line no-undef
   const states: Array<JSX.Element> = [];
 
   // create story's new template
