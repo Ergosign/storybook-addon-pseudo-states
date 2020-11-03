@@ -76,12 +76,9 @@ function pseudoStateFn(
   let permutationsAsObject: Array<PermutationStatsObj> = [];
   if (parameters.permutations) {
     permutationsAsObject = [...parameters?.permutations].map((item) =>
-      PermutationStatsObj.fromAttributeState(item)
+      PermutationStatsObj.fromPermutationState(item)
     );
   }
-
-  // eslint-disable-next-line no-console
-  console.log(permutationsAsObject);
 
   const attributesAsObject: Array<AttributeStatesObj> = [
     ...parameters?.attributes,
@@ -102,7 +99,8 @@ function pseudoStateFn(
   // create story's new template
   for (const permutation of permutationsAsObject) {
     states.push({
-      name: permutation.attr,
+      // label = permuation name if not specified in parameters
+      name: permutation.label,
       permutation,
       states: createPseudos(
         story,
