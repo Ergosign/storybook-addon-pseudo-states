@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.0.1-alpha.40 (2020-11-03)
+
+
+### Features
+
+* **react:** show permutation.label if specified ([ae7630b](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/ae7630b2c5f76334bc2485aedfde3e103c4de988))
+
+
+
+
+
 ## 0.0.1-alpha.39 (2020-10-14)
 
 
