@@ -1,174 +1,127 @@
-# Storybook Addon Pseudo States
+# Storybook Addon Pseudo States for Vue
 
-Storybook Addon Pseudo States allows you to automatically display pseudo states (and attribute states) of a component in Storybook's preview area.
+This storybook addon allows you to automatically display pseudo states (and attribute states) of a component in Storybook's preview area.
 
-## Framework Support
+- [Example repository](https://github.com/andreasphil/vue-storybook-pseudo-states-example)
+- [Live Demo](#) (Todo)
+
+## Framework support
 
 | Framework | Display States | Tool-Button to show/hide |
 | --------- | :------------: | :----------------------: |
-| Angular   |       +        |           +              |
-| React     |       +        |           +              |
-| Lit       |       +        |           +              |
-| HTML      |       +        |           +              |
-| Vue       |       +        |           +              |
-
-
+| Angular   |       +        |            +             |
+| React     |       +        |            +             |
+| Lit       |       +        |            +             |
+| HTML      |       +        |            +             |
+| Vue       |       +        |            +             |
 
 ## Getting started
 
-First of all, you need to install Pseudo States into your project as a dev dependency.
+First, add the addon to your project as a dev dependency:
 
 ```sh
 npm install @ergosign/storybook-addon-pseudo-states-vue --save-dev
 ```
 
-Then, configure it as an addon by adding it to your addons.js file (located in the Storybook config directory).
-
-To display the pseudo states, you have to add specific css classes to your styling, see [Styling](###Styling)
-
-Then, you can set the decorator locally, see [Usage](###Usage).
-
-### Styling
-
-#### Automatically generated with PostCss Webpack config (recommended)
-
-Add [postcss-loader](https://github.com/postcss/postcss-loader) to a Storybook custom webpack config
+Next, enable it by adding it as an addon to `.storybook/main.js`, e.g.
 
 ```js
 module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.(scss|css)$/,
-        use: [
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              // ATTENTION when using css modules
-              modules: {
-                // !!! must not use [hash]'
-                localIdentName: '[path][name]__[local]',
-              },
-            },
-          },
-          // Add loader here
-          {
-            loader: 'postcss-loader',
-          },
-          {
-            loader: 'sass-loader',
-          },
-        ],
-      },
-    ],
-  },
+  stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
+  addons: [
+    '@storybook/addon-links',
+    '@storybook/addon-essentials',
+    '@ergosign/storybook-addon-pseudo-states-vue',
+  ],
 };
 ```
 
-Add [postcss-pseudo-classes](https://github.com/giuseppeg/postcss-pseudo-classes).
+Since there's no way to force an element to appear with a specific pseudo state, the addon relies on specific classes to simulate the state. The [Styling](#styling) section explains how to generate them.
 
-```bash
-npm install postcss-pseudo-classes --save-dev
+Once that's done, you can add the decorator to a story, as explained in [Usage](#usage).
+
+## Styling
+
+The recommended approach is to generate classes from your pseudo state CSS rules automatically. The easiest way is to use the [postcss-pseudo-classes](https://github.com/giuseppeg/postcss-pseudo-classes) PostCSS plugin.
+
+```sh
+npm i -D postcss-pseudo-classes
 ```
 
-And enable it in `postcss.config.js`
+Then add it to your `postcss.config.js`:
+
+```js
+module.exports = {
+  plugins: [require('postcss-pseudo-classes')],
+};
+```
+
+`postcss-pseudo-classes` extracts all pseudo states from your styling and creates a class for each of them by adding a prefix, e.g. `button:hover {}` becomes `button.\:hover {}`. The default prefix is `\:`, and `storybook-addon-pseudo-states-vue` is configured to work with that configuration. If you need a different prefix, pass it to the plugin options:
 
 ```js
 module.exports = {
   plugins: {
     'postcss-pseudo-classes': {
-      // prefix: 'pseudoclass--',
-      // blacklist: ':not'
+      prefix: 'pseudoclass--',
     },
   },
 };
 ```
 
-<details>
-<summary>When using a custom `prefix` parameter, use the same for postcss-pseudo-classes</summary>
+And update your story config accordingly (more on configuring stories below):
 
 ```js
-module.exports = {
-  plugins: {
-    'postcss-pseudo-classes': {
-      prefix: 'pseudoclass-example-prefix',
+{
+  parameters: {
+    withPseudo: {
+      selector: "element",
+      prefix: "pseudoclass--"
     },
   },
 };
 ```
 
-</details>
+If you're unsure about how to set up PostCSS, you can check out the [Vue CLI](https://cli.vuejs.org/guide/css.html#automatic-imports) or [PostCSS](https://github.com/postcss/postcss#usage) docs.
 
-#### Manually
+### Manually
 
-In addition to the standard pseudo state styling, you have to add fake classes consisting of `prefix` + `pseudostate` (`\:hover`, `\:focus`, `\:active`, `\:yourOwnState`) by yourself.
-Be aware that default prefix is `\:`. When using your own prefix, update your styling accordingly.
+Alternatively, you can code the pseudo state classes manually. The naming pattern is `prefix` + `pseudostate`. With the default `\:` prefix, it would look something like this:
 
 ```scss
 .element {
-  //element styling
+  // ...
 
   &:hover,
   &\:hover {
     // hover styling
   }
-}
-```
 
-<details>
-<summary>With a custom prefix</summary>
-
-custom prefix: `.pseudoclass--`
-
-```js
-// in your story
-parameters: {
-    withPseudo: {
-        selector: "element",
-        prefix: "pseudoclass--"
-    }
-}
-```
-
-```scss
-.element {
-  //element styling
-
-  &:hover,
-  &.pseudoclass--hover {
-    // hover styling
+  &:focus,
+  &\:focus {
+    // focus styling
   }
 }
 ```
 
-</details>
+## Show/hide toolbar button
 
-### Show/Hide Toolbar-Button
+You can enable a toolbar button that toggles the pseudo states in the preview area. See [framework support](#framework-support) for information on which frameworks support this feature.
 
-You can enable a toolbar button that toggles the Pseudo States in the Preview area.
-
-See [Framework Support](#framework-support) which Frameworks support this feature.
-
-Enable the button by adding it to your `main.js` file (located in the Storybook config directory):
+Enable the button by adding it to your `.storybook/main.js` file:
 
 ```js
-// main.js
-
 module.exports = {
-  addons: ['@ergosign/storybook-addon-pseudo-states-angular/register'],
+  addons: ['@ergosign/storybook-addon-pseudo-states-vue'],
 };
 ```
 
-### Usage
+## Usage
 
-> **WARNING**: `withPseudo` should always the first element in your `decorators` array because it alters the template of the story.
+> ⚠️ `withPseudo` should always come first in your `decorators` array because it alters the template of the story.
 
-#### General
+### General
 
-##### Component Story Format (CSF, recommended)
+#### Component Story Format (CSF, recommended)
 
 ```js
 import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-vue';
@@ -189,7 +142,7 @@ export const Story = () => {
 };
 ```
 
-##### storyOf Format
+#### storyOf Format
 
 ```js
 import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-vue';
@@ -212,30 +165,45 @@ There is a default configuration for `selector`, `pseudos` and `attributes`. Thu
 
 ```js
 import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-vue';
-import {
-  AttributesStateOrderDefault,
-  PseudoStateOrderDefault,
-} from '@ergosign/storybook-addon-pseudo-states-vue/dist/share/types';
-import MyButton from './MyButton';
+import { PseudoStateOrderDefault } from '@ergosign/storybook-addon-pseudo-states-vue/dist/share/types';
+import SimpleButton from '../components/SimpleButton.vue';
 
 export default {
-  title: 'Button',
+  title: 'Simple Button',
   decorators: [withPseudo],
   parameters: {
     withPseudo: {
-        pseudo: PseudoStateOrderDefault,
-        attributes: [...AttributesStateOrderDefault, 'selected', 'isDisabled'],
-      },
+      pseudo: PseudoStateOrderDefault,
+      attributes: ['disabled', { attr: 'appearance', value: 'primary' }],
+    },
+  },
+  argTypes: {
+    appearance: {
+      control: false,
+    },
   },
 };
 
-export const text = () => ({
-  components: { MyButton },
-  template: '<my-button @click="action">Hello Button</my-button>',
-  methods: { action: action('clicked') },
+const template = (args, { argTypes }) => ({
+  components: { SimpleButton },
+  props: Object.keys(argTypes),
+  template: '<simple-button :label="label" :disabled="disabled" />',
 });
+
+export const PseudoStates = template.bind({});
+PseudoStates.args = {
+  label: 'Hello World',
+  disabled: false,
+  appearance: false,
+};
 ```
 
-#### Parameters & Types
+### Parameters & Types
 
-See [Types](../share/types.ts)
+See [types.ts](../share/types.ts)
+
+## Known limitations
+
+
+- Vue 2.x support/not tested with Vue 3
+- Broken in docs view

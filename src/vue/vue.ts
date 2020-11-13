@@ -6,20 +6,20 @@ import {
   StoryGetter,
 } from '@storybook/addons';
 import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
+import Vue from 'vue';
+import { AttributeStatesObj } from '../share/AttributeStatesObj';
 import { addonParameters } from '../share/constants';
+import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
+import { styles } from '../share/styles';
 import {
   AttributesStatesDefault,
   PseudoState,
   PseudoStatesDefault,
   PseudoStatesDefaultPrefix,
   PseudoStatesParameters,
-  Selector,
   WrapperPseudoStateSettings,
 } from '../share/types';
-import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
 import { getMixedPseudoStates } from '../share/utils';
-import { styles } from '../share/styles';
-import { AttributeStatesObj } from '../share/AttributeStatesObj';
 
 const pseudoStateFn = (
   getStory: StoryGetter,
@@ -28,182 +28,216 @@ const pseudoStateFn = (
 ): any => {
   const channel = addons.getChannel();
 
-  // are options set by user
-  const options: OptionsParameter = settings?.options;
-
-  // Are parameters set by user
-  const parameters: PseudoStatesParameters = settings?.parameters || {};
-
   const addonDisabled = settings?.parameters?.disabled || false;
-
-  // notify toolbar button
   channel.emit(SAPS_INIT_PSEUDO_STATES, addonDisabled);
 
+  // Don't modify the story if the addon is disabled
   if (addonDisabled) {
     return getStory(context);
   }
 
-  // Use user values, default user options or default values
-  parameters.pseudos =
-    parameters?.pseudos || options?.pseudos || PseudoStatesDefault;
-  parameters.attributes =
-    parameters?.attributes || options?.attributes || AttributesStatesDefault;
+  // Assemble config
+  const opts: OptionsParameter = settings?.options || {};
+  const params: PseudoStatesParameters = settings?.parameters || {};
 
-  // convert attributes to object notation
-  const attributesAsObject: Array<AttributeStatesObj> = [
-    ...parameters.attributes,
-  ].map((item) => AttributeStatesObj.fromAttributeState(item));
+  const config: PseudoStatesParameters = {
+    ...params,
+    pseudos: params.pseudos || opts.pseudos || PseudoStatesDefault,
+    attributes: params.attributes || opts.attributes || AttributesStatesDefault,
+    prefix: params?.prefix || opts?.prefix || PseudoStatesDefaultPrefix,
+    selector: settings?.parameters?.selector || null,
+  };
 
-  // Use prefix without `:` because angular add component scope before each `:`
-  // Maybe not editable by user in angular context?
-  parameters.prefix =
-    parameters?.prefix || options?.prefix || PseudoStatesDefaultPrefix;
-
-  // use selector form addonParameters or if not set use settings selector or null
-  parameters.selector = settings?.parameters?.selector || null;
+  // Convert attributes to object notation
+  const attributes: Array<AttributeStatesObj> =
+    config.attributes?.map((item) =>
+      AttributeStatesObj.fromAttributeState(item)
+    ) || [];
 
   return {
     template: `
-        <div>
-            <div class="pseudo-states-addon__container"
-                 v-if="!isDisabled">
-                <!-- nomal -->
-                <div class="pseudo-states-addon__story pseudo-states-addon__story--Normal"
-                     :style="styles.storyContainer">
-                    <div class="pseudo-states-addon__story__header"
-                         :style="styles.storyHeader">Normal:
-                    </div>
-                    <div class="pseudo-states-addon__story__container">
-                        <story/>
-                    </div>
-                </div>
-
-                <!-- pseudo states -->
-                <div v-for="state in parameters.pseudos"
-                     class="pseudo-states-addon__story"
-                     :style="styles.storyContainer"
-                     :class="'pseudo-states-addon__story--' + state">
-                    <div class="pseudo-states-addon__story__header"
-                         :style="styles.storyHeader">{{state}}:
-                    </div>
-                    <div class="pseudo-states-addon__story__container">
-                        <story/>
-                    </div>
-                </div>
-
-                <!-- attributes -->
-                <div v-for="attr in attributesAsObject"
-                     class="pseudo-states-addon__story"
-                     :style="styles.storyContainer"
-                     :class="'pseudo-states-addon__story--attr-' + attr.attr">
-                    <div class="pseudo-states-addon__story__header"
-                         :style="styles.storyHeader">{{attr.attr}}:
-                    </div>
-                    <div class="pseudo-states-addon__story__container">
-                        <story ref="attr.attr"/>
-                    </div>
-                </div>
-
+      <div>
+        <div class="pseudo-states-addon__container" v-if="!isDisabled">
+          <!-- Normal -->
+          <div
+            class="pseudo-states-addon__story pseudo-states-addon__story--Normal"
+            :style="styles.storyContainer"
+          >
+            <div
+              class="pseudo-states-addon__story__header"
+              :style="styles.storyHeader"
+            >
+              normal:
             </div>
-            <!-- display original story when addon is disabled by toolbar -->
-            <div v-if="isDisabled">
-                <story/>
+            <div class="pseudo-states-addon__story__container">
+              <story />
             </div>
+          </div>
+
+          <!-- Pseudo states -->
+          <div
+            v-for="state in config.pseudos"
+            class="pseudo-states-addon__story"
+            :class="'pseudo-states-addon__story--' + state"
+            :style="styles.storyContainer"
+          >
+            <div
+              class="pseudo-states-addon__story__header"
+              :style="styles.storyHeader"
+            >
+              {{ state }}:
+            </div>
+            <div class="pseudo-states-addon__story__container">
+              <story :ref="state" />
+            </div>
+          </div>
+
+          <!-- Attributes -->
+          <div
+            v-for="attribute in attributes"
+            class="pseudo-states-addon__story"
+            :class="'pseudo-states-addon__story--attr-' + attribute.attr"
+            :style="styles.storyContainer"
+          >
+            <div
+              class="pseudo-states-addon__story__header"
+              :style="styles.storyHeader"
+            >
+              {{ attribute.attr }}:
+            </div>
+            <div class="pseudo-states-addon__story__container">
+              <story :ref="attribute.attr" />
+            </div>
+          </div>
         </div>
-    `,
-    data() {
-      return {
-        styles,
-        parameters,
-        attributesAsObject,
-        isDisabled: false,
-      };
-    },
-    mounted() {
-      channel.once(STORY_RENDERED, () => {
-        this.updatePseudoStates();
-        this.updateAttributes();
-      });
 
+        <!-- display original story when addon is disabled by toolbar -->
+        <div v-if="isDisabled">
+          <story />
+        </div>
+      </div>
+    `,
+
+    data: () => ({
+      styles,
+      config,
+      attributes,
+      isDisabled: false,
+    }),
+
+    mounted() {
+      // Initialize once the story has loaded
+      channel.once(STORY_RENDERED, () => this.refresh());
+
+      // React to toolbar events
       channel.addListener(SAPS_BUTTON_CLICK, (isDisabled: boolean) => {
         this.isDisabled = isDisabled;
       });
 
+      // Cleanup when the story is no longer active
       channel.once(STORY_CHANGED, () => {
         channel.removeAllListeners(SAPS_BUTTON_CLICK);
       });
     },
+
     updated() {
       if (!this.isDisabled) {
-        this.updatePseudoStates();
-        this.updateAttributes();
+        this.refresh();
       }
     },
+
     methods: {
-      updatePseudoStates() {
-        if (parameters.pseudos) {
-          for (const pState of parameters.pseudos) {
-            const container = document.querySelector(
-              `.pseudo-states-addon__story--${pState} .pseudo-states-addon__story__container`
-            );
-
-            const applyPseudoStateToHost = (
-              containerElem: Element,
-              selectorStr: Selector | null
-            ) => {
-              let host: Element | null = null;
-              if (!selectorStr) {
-                host = containerElem.children[0];
-              } else if (typeof selectorStr === 'string') {
-                host = containerElem.querySelector(selectorStr);
-              } else if (Array.isArray(selectorStr)) {
-                for (const s of selectorStr as Array<PseudoState>) {
-                  applyPseudoStateToHost(containerElem, s);
-                }
-              }
-
-              const subPseudoStates = getMixedPseudoStates(pState);
-              // and append pseudo class
-              for (const s of subPseudoStates) {
-                host?.classList.add(parameters.prefix + s.trim());
-              }
-            };
-
-            if (container) {
-              applyPseudoStateToHost(container, parameters.selector);
-            }
-          }
-        }
+      /**
+       * Applies pseudostates and attributes again when something has changed.
+       */
+      refresh() {
+        this.updatePseudoStates();
+        this.updateAttributes();
       },
-      updateAttributes() {
-        if (attributesAsObject) {
-          for (const attr of attributesAsObject) {
-            const container = document.querySelector(
-              `.pseudo-states-addon__story--attr-${attr.attr} .pseudo-states-addon__story__container`
-            );
 
-            const elem = container?.children[0];
-
-            // get vue component
-            // @ts-ignore
-            const vm = elem?.__vue__.$children[0];
-
-            if (vm) {
-              // set attribute to true
-              if (Object.prototype.hasOwnProperty.call(vm, attr.attr)) {
-                vm[attr.attr] = attr.value;
-              }
-
-              // set attribute to element to support :disabled, :readonly, etc.
-              if (vm?.$el.hasOwnProperty(attr)) {
-                vm.$el[attr.attr] = attr.value;
-              }
-
-              // force update
-              vm.$forceUpdate();
-            }
-          }
+      /**
+       * Applies pseudo state classes to a component or a selector within the component.
+       */
+      updatePseudoStates(this: any) {
+        if (!this.config?.pseudos) {
+          return;
         }
+
+        this.config.pseudos.forEach((state: PseudoState) => {
+          if (!this.$refs[state]) {
+            return;
+          }
+
+          const [component] = this.$refs[state];
+
+          if (component?.$el) {
+            this.applyPseudoState(component.$el, state, this.config);
+          }
+        });
+      },
+
+      /**
+       * Sets a prop or data attribute on a component.
+       */
+      updateAttributes(this: any) {
+        if (!this.attributes) {
+          return;
+        }
+
+        this.attributes.forEach((attr: AttributeStatesObj) => {
+          if (!this.$refs[attr.attr]) {
+            return;
+          }
+
+          const [vm] = this.$refs[attr.attr];
+
+          // This will cause Vue to warn about manipulating props and setting data at runtime.
+          // TODO: Check for a better way after upgrading to Vue 3
+          if (vm?.$children?.length > 0) {
+            Vue.set(vm.$children[0], attr.attr, attr.value);
+          }
+        });
+      },
+
+      /**
+       * Applies a state to an element based on the options.
+       *
+       * @param el Element to apply the state to
+       * @param state State name to add to the element
+       * @param options
+       */
+      applyPseudoState(
+        el: Element,
+        state: string,
+        options: Pick<PseudoStatesParameters, 'selector' | 'prefix'>
+      ) {
+        if (!el || !state) {
+          return;
+        }
+
+        const prefix = options.prefix || '';
+
+        const mixedStates = getMixedPseudoStates(state).map(
+          (mixed) => prefix + mixed.trim()
+        );
+
+        // Generate the list of hosts that the state should be applied to. If the selector option is
+        // empty, use the element itself. If the selector is a single element, use that. If the
+        // selector is a string, find all matches.
+        let hosts = [];
+        if (!options.selector) {
+          hosts = [el];
+        } else if (Array.isArray(options.selector)) {
+          hosts = options.selector.map((s) => el.querySelector(s));
+        } else {
+          hosts = [el.querySelector(options.selector)];
+        }
+
+        hosts.forEach((host) => {
+          if (host) {
+            host.classList.add(...mixedStates);
+          }
+        });
       },
     },
   };
@@ -218,6 +252,6 @@ export const withPseudo = makeDecorator({
   ) => pseudoStateFn(getStory, context, settings),
 });
 
-if (module && module.hot && module.hot.decline) {
+if (module?.hot?.decline) {
   module.hot.decline();
 }
