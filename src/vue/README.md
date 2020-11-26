@@ -3,7 +3,7 @@
 This storybook addon allows you to automatically display pseudo states (and attribute states) of a component in Storybook's preview area.
 
 - [Example repository](https://github.com/andreasphil/vue-storybook-pseudo-states-example)
-- [Live Demo](#) (Todo)
+- [Live Demo](https://vue-storybook-pseudo-states-example.netlify.app/?path=/story/simple-button--pseudo-states)
 
 ## Framework support
 
