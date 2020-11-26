@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.0.1-alpha.41 (2020-11-26)
+
+**Note:** Version bump only for package @ergosign/storybook-addon-pseudo-states-lit
+
+
+
+
+
 ## 0.0.1-alpha.40 (2020-11-03)
 
 
