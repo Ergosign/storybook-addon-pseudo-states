@@ -29,9 +29,9 @@ npm install @ergosign/storybook-addon-pseudo-states-react --save-dev
 
 Then, configure it as an addon by adding it to your addons.js file (located in the Storybook config directory).
 
-To display the pseudo states, you have to add specific css classes to your styling, see [Styling](###Styling)
+To display the pseudo states, you have to add specific css classes to your styling, see [Styling](#Styling)
 
-Then, you can set the decorator locally, see [Usage](###Usage).
+Then, you can set the decorator locally, see [Usage](#Usage).
 
 ### Styling
 
