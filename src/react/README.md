@@ -269,7 +269,7 @@ There is a default configuration for `selector`, `pseudos` and `attributes`. Thu
 
 ### With React
 
-When using [CSS Modules](https://github.com/css-modules/css-modules), you must use automatically styling generation via `postcss-loader` (see [Styling section](###Styling)).
+When using [CSS Modules](https://github.com/css-modules/css-modules), you must use automatically styling generation via `postcss-loader` (see [Styling section](#Styling)).
 
 `attributes` enable component's props.
 
