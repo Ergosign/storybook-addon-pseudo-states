@@ -33,6 +33,7 @@ interface IState {
   name: string;
   // eslint-disable-next-line no-undef
   states: Array<JSX.Element>;
+  pseudos?: PseudoStates;
   permutation?: PermutationStatsObj;
 }
 
@@ -94,13 +95,15 @@ function pseudoStateFn(
   // Create Normal states
   states.push({
     name: 'Normal',
+    pseudos: parameters.pseudos,
     states: createPseudos(story, parameters.pseudos, attributesAsObject),
   });
   // create story's new template
   for (const permutation of permutationsAsObject) {
     states.push({
-      // label = permuation name if not specified in parameters
-      name: permutation.label,
+      // label = permutation name if not specified in parameters
+      name: permutation.label || permutation.attr,
+      pseudos: parameters.pseudos,
       permutation,
       states: createPseudos(
         story,
@@ -111,50 +114,57 @@ function pseudoStateFn(
     });
   }
 
+  /**
+   *
+   * @param pseudoState
+   * @param containerTmp
+   * @param selectorTmp
+   * @param permutation
+   */
+  const applyPseudoStateToHost = (
+    pseudoState: PseudoState,
+    containerTmp: Element,
+    selectorTmp: Selector | null,
+    permutation: PermutationStatsObj | undefined
+  ) => {
+    let host;
+    if (!selectorTmp) {
+      host = containerTmp.children[0];
+    } else if (typeof selectorTmp === 'string') {
+      host = containerTmp.querySelector(selectorTmp);
+    } else if (Array.isArray(selectorTmp)) {
+      for (const s of selectorTmp as Array<PseudoState>) {
+        applyPseudoStateToHost(pseudoState, containerTmp, s, permutation);
+      }
+    }
+    // get css module [path][name]__[local] and remove [local]
+    // TODO test if first class represents always css module
+    let moduleClass = null;
+    // try to find css module prefix
+    if (host?.classList[0]) {
+      moduleClass = host?.classList[0].match(/(.+?)?__/) as Array<string>;
+    }
+
+    let cssModulePrefix = '';
+    if (moduleClass && moduleClass?.length >= 1) {
+      cssModulePrefix = `${moduleClass[1]}__`;
+    }
+
+    const subPseudoStates = getMixedPseudoStates(pseudoState);
+    if (permutation) {
+      subPseudoStates.concat([permutation.attr]);
+    }
+    for (const s of subPseudoStates) {
+      host?.classList.add(`${cssModulePrefix}${parameters.prefix}${s.trim()}`);
+    }
+  };
+
   // update pseudo states after story is rendered
   const updatePseudoStates = () => {
     if (parameters.pseudos) {
-      for (const permutation of permutationsAsObject) {
-        for (const pstateRaw of parameters.pseudos) {
+      for (const state of states) {
+        for (const pstateRaw of state.pseudos ?? []) {
           const pstate = sanitizePseudoName(pstateRaw);
-          const applyPseudoStateToHost = (
-            containerTmp: Element,
-            selectorTmp: Selector | null
-          ) => {
-            let host;
-            if (!selectorTmp) {
-              host = containerTmp.children[0];
-            } else if (typeof selectorTmp === 'string') {
-              host = containerTmp.querySelector(selectorTmp);
-            } else if (Array.isArray(selectorTmp)) {
-              for (const s of selectorTmp as Array<PseudoState>) {
-                applyPseudoStateToHost(containerTmp, s);
-              }
-            }
-            // get css module [path][name]__[local] and remove [local]
-            // TODO test if first class represents always css module
-            let moduleClass = null;
-            // try to find css module prefix
-            if (host?.classList[0]) {
-              moduleClass = host?.classList[0].match(/(.+?)?__/) as Array<
-                string
-              >;
-            }
-
-            let cssModulePrefix = '';
-            if (moduleClass && moduleClass?.length >= 1) {
-              cssModulePrefix = `${moduleClass[1]}__`;
-            }
-
-            const subPseudoStates = getMixedPseudoStates(pstateRaw).concat([
-              permutation.attr,
-            ]);
-            for (const s of subPseudoStates) {
-              host?.classList.add(
-                `${cssModulePrefix}${parameters.prefix}${s.trim()}`
-              );
-            }
-          };
 
           const containers = document.querySelectorAll(
             `.pseudo-states-addon__story--${pstate} .pseudo-states-addon__story__container`
@@ -167,7 +177,12 @@ function pseudoStateFn(
           if (containers && containers.length > 0) {
             containers.forEach((container) => {
               if (container) {
-                applyPseudoStateToHost(container, selector);
+                applyPseudoStateToHost(
+                  pstateRaw,
+                  container,
+                  selector,
+                  state.permutation
+                );
               }
             });
           }
