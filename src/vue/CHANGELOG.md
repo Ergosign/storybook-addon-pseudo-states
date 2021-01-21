@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.0.1-alpha.42 (2021-01-21)
+
+
+### Bug Fixes
+
+* **react:** render pseudo states without permutations ([d6c189e](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/d6c189ec86358836241d4817147650762e3523bf))
+
+
+
+
+
 ## 0.0.1-alpha.41 (2020-11-26)
 
 **Note:** Version bump only for package @ergosign/storybook-addon-pseudo-states-vue
