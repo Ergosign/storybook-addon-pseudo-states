@@ -35,7 +35,7 @@ Then, you can set the decorator locally, see [Usage](#Usage).
 
 ### Styling
 
-### With Preset
+#### With Preset
 
 Preset-Postcss adds [postcss-loader](https://github.com/postcss/postcss-loader) to Storybook's custom webpack config.
 
