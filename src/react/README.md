@@ -27,7 +27,39 @@ First of all, you need to install Pseudo States into your project as a dev depen
 npm install @ergosign/storybook-addon-pseudo-states-react --save-dev
 ```
 
-Then, configure it as an addon by adding it to your addons.js file (located in the Storybook config directory).
+Then, configure it as an addon for your Storybook environment (located in the Storybook config directory).
+
+<details>
+<summary>For version < 5.3.x</summary>
+
+Import the addon in your *addons.js* file:
+
+```js
+import "@ergosign/storybook-addon-pseudo-states-react/preset-postcss";
+```
+
+</details>
+
+<details>
+<summary>For version >= 5.3.x</summary>
+
+Add it to the *addons* section in your *main.js* file.
+
+```js
+module.exports = {
+  "stories": [
+    "../src/**/*.stories.mdx",
+    "../src/**/*.stories.@(js|jsx|ts|tsx)"
+  ],
+  "addons": [
+    "@storybook/addon-essentials",
+    "@storybook/preset-create-react-app",
+    '@ergosign/storybook-addon-pseudo-states-react/preset-postcss',
+  ]
+}
+```
+
+</details>
 
 To display the pseudo states, you have to add specific css classes to your styling, see [Styling](#Styling)
 
