@@ -65,21 +65,37 @@ To see what's needed to use the pseudo addon, have a look at the [Usage](#usage)
 
 #### With PostCSS Preset
 
-Preset-Postcss adds [postcss-loader](https://github.com/postcss/postcss-loader) to Storybook's custom webpack config.
-
 > This project comes with a dependency to the [postcss-pseudo-classes](https://github.com/giuseppeg/postcss-pseudo-classes) package.
 > Unfortunately, the latest version is only tagged and not released.
 
+We provide a *preset-postcss* preset that adds [postcss-loader](https://github.com/postcss/postcss-loader) to Storybook's custom webpack config.
+Add this preset to your configuration (located in the Storybook config directory)
 
-Then add the preset `preset-postcss` to your configuration in `main.js` (located in the Storybook config directory):
+<details>
+<summary>For version < 5.3.x</summary>
+
+Import the addon in your *addons.js* file:
 
 ```js
-main.js;
-
-module.exports = {
-  presets: ['@ergosign/storybook-addon-pseudo-states-react/preset-postcss'],
-};
+import "@ergosign/storybook-addon-pseudo-states-react/preset-postcss";
 ```
+
+</details>
+
+<details>
+<summary>For version >= 5.3.x</summary>
+
+Add it to the *addons* section in your *main.js* file.
+
+```js
+module.exports = {
+  "addons": [
+    '@ergosign/storybook-addon-pseudo-states-react/preset-postcss'
+  ]
+}
+```
+
+</details>
 
 This creates for each css pseudo class an equivalent as normal css class (for instance `:hover` to `\:hover`), so that 
 you can use it in element's class attribute (`<div class=":hover">Element in hover state</div>`).
@@ -117,7 +133,13 @@ addParameters({
 
 #### Own Webpack config (but automatically generated with PostCss)
 
-Add [postcss-loader](https://github.com/postcss/postcss-loader) to a Storybook custom webpack config
+When you have configured your own webpack config but still want to use this addon
+with PostCSS, add [postcss-loader](https://github.com/postcss/postcss-loader) to you
+webpack config.
+
+> **ATTENTION**:
+> When using CSS-Modules, you have to take care that no `[hash]` is used as *localIdentName*
+> in your *css-loader* options.
 
 ```js
 module.exports = {
@@ -153,13 +175,7 @@ module.exports = {
 };
 ```
 
-Add [postcss-pseudo-classes](https://github.com/giuseppeg/postcss-pseudo-classes).
-
-```bash
-npm install postcss-pseudo-classes --save-dev
-```
-
-And enable it in `postcss.config.js`
+Aditionally, you have to enable the postcss-peudo-classes module it your `postcss.config.js`
 
 ```js
 module.exports = {
