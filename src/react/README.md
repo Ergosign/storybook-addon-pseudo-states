@@ -47,14 +47,8 @@ Add it to the *addons* section in your *main.js* file.
 
 ```js
 module.exports = {
-  "stories": [
-    "../src/**/*.stories.mdx",
-    "../src/**/*.stories.@(js|jsx|ts|tsx)"
-  ],
   "addons": [
-    "@storybook/addon-essentials",
-    "@storybook/preset-create-react-app",
-    '@ergosign/storybook-addon-pseudo-states-react/preset-postcss',
+    '@ergosign/storybook-addon-pseudo-states-react/preset-postcss'
   ]
 }
 ```
