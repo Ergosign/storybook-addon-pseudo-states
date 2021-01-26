@@ -210,7 +210,7 @@ your own rule on which the plugin looks for your css classes.
 Per default, the prefix used in the addon to look for css classes is `\:`.
 To add the needed styles you have to add fakle classes consisting of `prefix` + `pseudostate` by yourself.
 
-For example: When you want to the states of *hover* and *focus* to be shown by the plugin, you
+For example: When you want the *hover* and *focus* states to be shown by the plugin, you
 have to add `\:hover` and `\:focus` classes to your styles by yourself.
 
 For the default prefix this may look like this:
