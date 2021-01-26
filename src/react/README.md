@@ -299,39 +299,6 @@ storiesOf('Button', module)
 
 There is a default configuration for `selector`, `pseudos` and `attributes`. Thus, you can leave `withPseudo` options empty.
 
-### With React
-
-When using [CSS Modules](https://github.com/css-modules/css-modules), you must use automatically styling generation via `postcss-loader` (see [Styling section](#Styling)).
-
-`attributes` enable component's props.
-
-```js
-import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-react';
-
-storiesOf('Button', module)
-  .addDecorator(withPseudo)
-  .addParameters({
-    withPseudo: {
-      attributes: [], // no attributes to show --> overwrite default [DISABLE]
-    },
-  })
-  .add('Button', () => <Button label="I'm a normal button" />)
-
-  .addParameters({
-    withPseudo: {
-        pseudo: [...PseudoStatesDefault, 'hover & focus'],
-        attributes: [
-          ...AttributesStatesDefault,
-          'selected',
-          'error',
-          'isLoading',
-          'isReady',
-        ]
-    },
-  })
-  .add('Button', () => <Button label="I'm a normal button" />);
-```
-
 #### Parameters & Types
 
 See [Types](../share/types.ts)
