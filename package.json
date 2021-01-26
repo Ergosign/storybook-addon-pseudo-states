@@ -54,6 +54,9 @@
   },
   "author": "philippone",
   "license": "MIT",
+  "dependencies": {
+    "postcss-pseudo-classes": "0.3.0"
+  },
   "devDependencies": {
     "@angular/core": "9.1.7",
     "@babel/core": "7.11.6",
@@ -92,7 +95,6 @@
     "lint-staged": "10.4.0",
     "lit-html": "1.3.0",
     "postcss-loader": "4.0.2",
-    "postcss-pseudo-classes": "0.3.0",
     "prettier": "2.1.2",
     "pretty-quick": "3.0.2",
     "ts-jest": "26.4.1",
