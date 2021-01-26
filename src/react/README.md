@@ -27,7 +27,8 @@ First of all, you need to install Pseudo States into your project as a dev depen
 npm install @ergosign/storybook-addon-pseudo-states-react --save-dev
 ```
 
-Then, configure it as an addon for your Storybook environment (located in the Storybook config directory).
+When using *create-react-app* and the related preset, configure it as an addon
+for your Storybook environment (located in the Storybook config directory).
 
 <details>
 <summary>For version < 5.3.x</summary>
@@ -55,22 +56,20 @@ module.exports = {
 
 </details>
 
-To display the pseudo states, you have to add specific css classes to your styling, see [Styling](#Styling)
+In case you have an other project configuration, check out the [Manual Setup](#manual-settup)
+section, to see how to get it working with different settings.
 
-Then, you can set the decorator locally, see [Usage](#Usage).
+To see what's needed to use the pseudo addon, have a look at the [Usage](#usage) section.
 
-### Styling
+### Setup
 
-#### With Preset
+#### With PostCSS Preset
 
 Preset-Postcss adds [postcss-loader](https://github.com/postcss/postcss-loader) to Storybook's custom webpack config.
 
-You must also install [postcss-pseudo-classes](https://github.com/giuseppeg/postcss-pseudo-classes).
-Unfortunately, latest version is only tagged and not released. Please use at least [tagged version 0.3.0](https://github.com/giuseppeg/postcss-pseudo-classes/releases/tag/v0.3.0)
+> This project comes with a dependency to the [postcss-pseudo-classes](https://github.com/giuseppeg/postcss-pseudo-classes) package.
+> Unfortunately, the latest version is only tagged and not released.
 
-```bash
-npm install postcss-pseudo-classes@0.3.0 --save-dev
-```
 
 Then add the preset `preset-postcss` to your configuration in `main.js` (located in the Storybook config directory):
 
