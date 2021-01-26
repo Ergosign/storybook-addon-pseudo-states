@@ -204,8 +204,16 @@ module.exports = {
 
 #### Manually
 
-In addition to the standard pseudo state styling, you have to add fake classes consisting of `prefix` + `pseudostate` (`\:hover`, `\:focus`, `\:active`, `\:yourOwnState`) by yourself.
-Be aware that default prefix is `\:`. When using your own prefix, update your styling accordingly.
+When you do not want that the pseudo classes are generated for you, you can provide
+your own rule on which the plugin looks for your css classes.
+
+Per default, the prefix used in the addon to look for css classes is `\:`.
+To add the needed styles you have to add fakle classes consisting of `prefix` + `pseudostate` by yourself.
+
+For example: When you want to the states of *hover* and *focus* to be shown by the plugin, you
+have to add `\:hover` and `\:focus` classes to your styles by yourself.
+
+For the default prefix this may look like this:
 
 ```scss
 .element {
@@ -221,7 +229,9 @@ Be aware that default prefix is `\:`. When using your own prefix, update your st
 <details>
 <summary>With a custom prefix</summary>
 
-custom prefix: `.pseudoclass--`
+If you want to specify your own prefix, set it as *prefix* value in the addons *parameters* object.
+
+To change the prefix to `.pseudoclass--` you have to adjust the parameter like this:
 
 ```js
 // in your story
@@ -232,6 +242,8 @@ parameters: {
     }
 }
 ```
+
+And use the specified prefix in your styling definition:
 
 ```scss
 .element {
