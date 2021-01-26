@@ -243,15 +243,32 @@ You can enable a toolbar button that toggles the Pseudo States in the Preview ar
 
 See [Framework Support](#framework-support) which Frameworks support this feature.
 
-Enable the button by adding it to your `main.js` file (located in the Storybook config directory):
+Enable the button by adding it to your addon configuration file (located in the Storybook config directory)
+
+<details>
+<summary>For version < 5.3.x</summary>
+
+Import the addon in your *addons.js* file:
 
 ```js
-// main.js
-
-module.exports = {
-  addons: ['@ergosign/storybook-addon-pseudo-states-react/register'],
-};
+import "@ergosign/storybook-addon-pseudo-states-react/register";
 ```
+</details>
+
+<details>
+<summary>For version >= 5.3.x</summary>
+
+Add it to the *addons* section in your *main.js* file.
+
+```js
+module.exports = {
+  "addons": [
+    '@ergosign/storybook-addon-pseudo-states-react/register'
+  ]
+}
+```
+
+</details>
 
 ### Usage
 
