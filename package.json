@@ -58,7 +58,7 @@
     "postcss-pseudo-classes": "0.3.0"
   },
   "peerDependencies": {
-    "postcss-loader": "4"
+    "postcss-loader": "^4"
   },
   "devDependencies": {
     "@angular/core": "9.1.7",
