@@ -27,34 +27,75 @@ First of all, you need to install Pseudo States into your project as a dev depen
 npm install @ergosign/storybook-addon-pseudo-states-react --save-dev
 ```
 
-Then, configure it as an addon by adding it to your addons.js file (located in the Storybook config directory).
+When using *create-react-app* and the related preset, configure it as an addon
+for your Storybook environment (located in the Storybook config directory).
 
-To display the pseudo states, you have to add specific css classes to your styling, see [Styling](#Styling)
+<details>
+<summary>For version < 5.3.x</summary>
 
-Then, you can set the decorator locally, see [Usage](#Usage).
-
-### Styling
-
-### With Preset
-
-Preset-Postcss adds [postcss-loader](https://github.com/postcss/postcss-loader) to Storybook's custom webpack config.
-
-You must also install [postcss-pseudo-classes](https://github.com/giuseppeg/postcss-pseudo-classes).
-Unfortunately, latest version is only tagged and not released. Please use at least [tagged version 0.3.0](https://github.com/giuseppeg/postcss-pseudo-classes/releases/tag/v0.3.0)
-
-```bash
-npm install postcss-pseudo-classes@0.3.0 --save-dev
-```
-
-Then add the preset `preset-postcss` to your configuration in `main.js` (located in the Storybook config directory):
+Import the addon in your *addons.js* file:
 
 ```js
-main.js;
-
-module.exports = {
-  presets: ['@ergosign/storybook-addon-pseudo-states-react/preset-postcss'],
-};
+import "@ergosign/storybook-addon-pseudo-states-react/preset-postcss";
 ```
+
+</details>
+
+<details>
+<summary>For version >= 5.3.x</summary>
+
+Add it to the *addons* section in your *main.js* file.
+
+```js
+module.exports = {
+  "addons": [
+    '@ergosign/storybook-addon-pseudo-states-react/preset-postcss'
+  ]
+}
+```
+
+</details>
+
+In case you have an other project configuration, check out the [Advanced setup](#advanced-settup)
+section, to see how to get it working with different settings.
+
+To see what's needed to use the pseudo addon, have a look at the [Usage](#usage) section.
+
+### Advanced setup
+
+#### With PostCSS Preset
+
+> This project comes with a dependency to the [postcss-pseudo-classes](https://github.com/giuseppeg/postcss-pseudo-classes) package.
+> Unfortunately, the latest version is only tagged and not released.
+
+We provide a *preset-postcss* preset that adds [postcss-loader](https://github.com/postcss/postcss-loader) to Storybook's custom webpack config.
+Add this preset to your configuration (located in the Storybook config directory)
+
+<details>
+<summary>For version < 5.3.x</summary>
+
+Import the addon in your *addons.js* file:
+
+```js
+import "@ergosign/storybook-addon-pseudo-states-react/preset-postcss";
+```
+
+</details>
+
+<details>
+<summary>For version >= 5.3.x</summary>
+
+Add it to the *addons* section in your *main.js* file.
+
+```js
+module.exports = {
+  "addons": [
+    '@ergosign/storybook-addon-pseudo-states-react/preset-postcss'
+  ]
+}
+```
+
+</details>
 
 This creates for each css pseudo class an equivalent as normal css class (for instance `:hover` to `\:hover`), so that 
 you can use it in element's class attribute (`<div class=":hover">Element in hover state</div>`).
@@ -92,7 +133,13 @@ addParameters({
 
 #### Own Webpack config (but automatically generated with PostCss)
 
-Add [postcss-loader](https://github.com/postcss/postcss-loader) to a Storybook custom webpack config
+When you have configured your own webpack config but still want to use this addon
+with PostCSS, add [postcss-loader](https://github.com/postcss/postcss-loader) to you
+webpack config.
+
+> **ATTENTION**:
+> When using CSS-Modules, you have to take care that no `[hash]` is used as *localIdentName*
+> in your *css-loader* options.
 
 ```js
 module.exports = {
@@ -128,13 +175,7 @@ module.exports = {
 };
 ```
 
-Add [postcss-pseudo-classes](https://github.com/giuseppeg/postcss-pseudo-classes).
-
-```bash
-npm install postcss-pseudo-classes --save-dev
-```
-
-And enable it in `postcss.config.js`
+Aditionally, you have to enable the postcss-peudo-classes module it your `postcss.config.js`
 
 ```js
 module.exports = {
@@ -163,8 +204,16 @@ module.exports = {
 
 #### Manually
 
-In addition to the standard pseudo state styling, you have to add fake classes consisting of `prefix` + `pseudostate` (`\:hover`, `\:focus`, `\:active`, `\:yourOwnState`) by yourself.
-Be aware that default prefix is `\:`. When using your own prefix, update your styling accordingly.
+When you do not want that the pseudo classes are generated for you, you can provide
+your own rule on which the plugin looks for your css classes.
+
+Per default, the prefix used in the addon to look for css classes is `\:`.
+To add the needed styles you have to add fakle classes consisting of `prefix` + `pseudostate` by yourself.
+
+For example: When you want the *hover* and *focus* states to be shown by the plugin, you
+have to add `\:hover` and `\:focus` classes to your styles by yourself.
+
+For the default prefix this may look like this:
 
 ```scss
 .element {
@@ -180,7 +229,9 @@ Be aware that default prefix is `\:`. When using your own prefix, update your st
 <details>
 <summary>With a custom prefix</summary>
 
-custom prefix: `.pseudoclass--`
+If you want to specify your own prefix, set it as *prefix* value in the addons *parameters* object.
+
+To change the prefix to `.pseudoclass--` you have to adjust the parameter like this:
 
 ```js
 // in your story
@@ -191,6 +242,8 @@ parameters: {
     }
 }
 ```
+
+And use the specified prefix in your styling definition:
 
 ```scss
 .element {
@@ -211,15 +264,32 @@ You can enable a toolbar button that toggles the Pseudo States in the Preview ar
 
 See [Framework Support](#framework-support) which Frameworks support this feature.
 
-Enable the button by adding it to your `main.js` file (located in the Storybook config directory):
+Enable the button by adding it to your addon configuration file (located in the Storybook config directory)
+
+<details>
+<summary>For version < 5.3.x</summary>
+
+Import the addon in your *addons.js* file:
 
 ```js
-// main.js
-
-module.exports = {
-  addons: ['@ergosign/storybook-addon-pseudo-states-react/register'],
-};
+import "@ergosign/storybook-addon-pseudo-states-react/register";
 ```
+</details>
+
+<details>
+<summary>For version >= 5.3.x</summary>
+
+Add it to the *addons* section in your *main.js* file.
+
+```js
+module.exports = {
+  "addons": [
+    '@ergosign/storybook-addon-pseudo-states-react/register'
+  ]
+}
+```
+
+</details>
 
 ### Usage
 
@@ -266,39 +336,6 @@ storiesOf('Button', module)
 ```
 
 There is a default configuration for `selector`, `pseudos` and `attributes`. Thus, you can leave `withPseudo` options empty.
-
-### With React
-
-When using [CSS Modules](https://github.com/css-modules/css-modules), you must use automatically styling generation via `postcss-loader` (see [Styling section](###Styling)).
-
-`attributes` enable component's props.
-
-```js
-import { withPseudo } from '@ergosign/storybook-addon-pseudo-states-react';
-
-storiesOf('Button', module)
-  .addDecorator(withPseudo)
-  .addParameters({
-    withPseudo: {
-      attributes: [], // no attributes to show --> overwrite default [DISABLE]
-    },
-  })
-  .add('Button', () => <Button label="I'm a normal button" />)
-
-  .addParameters({
-    withPseudo: {
-        pseudo: [...PseudoStatesDefault, 'hover & focus'],
-        attributes: [
-          ...AttributesStatesDefault,
-          'selected',
-          'error',
-          'isLoading',
-          'isReady',
-        ]
-    },
-  })
-  .add('Button', () => <Button label="I'm a normal button" />);
-```
 
 #### Parameters & Types
 
