@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.0.1-alpha.43 (2021-01-28)
+
+**Note:** Version bump only for package @ergosign/storybook-addon-pseudo-states-react
+
+
+
+
+
 ## 0.0.1-alpha.42 (2021-01-21)
 
 
