@@ -111,7 +111,7 @@ module.exports = {
                 rules: [/\.scss$|\.sass$/, ".sass", ...],
                 cssLoaderOptions: CssLoaderOptions,
                 postCssLoaderPseudoClassesPluginOptions: {
-                    prefix: 'pseudo-sates--', // default for angular
+                    prefix: 'pseudo-states--', // default for angular
                     blacklist: [':nth-child', ':nth-of-type']
                 }
             }
