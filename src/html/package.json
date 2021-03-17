@@ -13,7 +13,9 @@
     "components",
     "tool",
     "ui",
-    "user interface"
+    "user interface",
+    "storybook-addon",
+    "style"
   ],
   "repository": {
     "type": "git",
@@ -51,5 +53,8 @@
     "access": "public",
     "scope": "@ergosign"
   },
-  "gitHead": "813bbe45fb060b4a4bfd5fecd2cf62ae9c46df5f"
+  "gitHead": "813bbe45fb060b4a4bfd5fecd2cf62ae9c46df5f",
+  "storybook": {
+    "icon": "https://avatars2.githubusercontent.com/u/12492523?s=200&v=4"
+  }
 }
