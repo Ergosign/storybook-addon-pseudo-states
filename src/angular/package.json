@@ -1,6 +1,6 @@
 {
   "name": "@ergosign/storybook-addon-pseudo-states-angular",
-  "version": "0.0.1-alpha.43",
+  "version": "0.0.1-alpha.44",
   "description": "Storybook decorator to enable automatic generation and displaying of CSS pseudo states for components.",
   "keywords": [
     "storybook",
