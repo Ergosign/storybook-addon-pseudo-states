@@ -1,5 +1,5 @@
 import { logger } from '@storybook/node-logger';
-import { Configuration } from 'webpack';
+import { Configuration, RuleSetRule } from 'webpack';
 import * as util from 'util';
 import {
   addPostCSSLoaderToRules,
@@ -59,20 +59,24 @@ export function webpackFinal(
   // );
 
   if (webpackConfig?.module?.rules) {
-    const postCssLoaderOptions = options?.postCssLoaderPseudoClassesPluginOptions
-      ? {
-          prefix: PseudoStatesDefaultPrefixAlternative,
-          ...postCSSOptionsDefault,
-          ...options.postCssLoaderPseudoClassesPluginOptions,
-        }
-      : {
-          prefix: PseudoStatesDefaultPrefixAlternative,
-          ...postCSSOptionsDefault,
-        };
+    const postCssLoaderOptions =
+      options?.postCssLoaderPseudoClassesPluginOptions
+        ? {
+            prefix: PseudoStatesDefaultPrefixAlternative,
+            ...postCSSOptionsDefault,
+            ...options.postCssLoaderPseudoClassesPluginOptions,
+          }
+        : {
+            prefix: PseudoStatesDefaultPrefixAlternative,
+            ...postCSSOptionsDefault,
+          };
 
     const rulesToApply = options?.rules;
     if (rulesToApply && rulesToApply.length > 0) {
-      const rules = filterRules(webpackConfig.module.rules, rulesToApply);
+      const rules = filterRules(
+        webpackConfig.module.rules as Array<RuleSetRule>,
+        rulesToApply
+      );
 
       logger.info(
         `== webpack() ==> found rules ${util.inspect(rules, {
@@ -91,10 +95,10 @@ export function webpackFinal(
       );
     } else {
       // find scss rules and apply postscss addon to those
-      const rules = filterRules(webpackConfig.module.rules, [
-        /\.scss$|\.sass$/,
-        /\.(scss|sass)$/,
-      ]);
+      const rules = filterRules(
+        webpackConfig.module.rules as Array<RuleSetRule>,
+        [/\.scss$|\.sass$/, /\.(scss|sass)$/]
+      );
       addPostCSSLoaderToRules(rules, postCssLoaderOptions);
     }
   }

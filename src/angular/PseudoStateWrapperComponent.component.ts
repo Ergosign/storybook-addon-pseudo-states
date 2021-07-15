@@ -141,10 +141,9 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
         this.storyParams?.styles?.orientation === Orientation.ROW;
       this.hostOrientationClass = this.rowOrientation ? 'row' : 'column';
       this.pseudoStates = this.storyParams?.pseudos as PseudoStates;
-      this.attributeStates = (this.storyParams
-        ?.attributes as AttributeStates).map((item) =>
-        AttributeStatesObj.fromAttributeState(item)
-      );
+      this.attributeStates = (
+        this.storyParams?.attributes as AttributeStates
+      ).map((item) => AttributeStatesObj.fromAttributeState(item));
 
       if (
         this.storyParams?.permutations &&

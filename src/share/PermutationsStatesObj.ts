@@ -8,7 +8,8 @@ import { AttributeStatesObj } from './AttributeStatesObj';
 
 export class PermutationStatsObj
   extends AttributeStatesObj
-  implements PermutationStatesObject {
+  implements PermutationStatesObject
+{
   label: string;
 
   type = PermutationStatesObjectType.PROPERTY;

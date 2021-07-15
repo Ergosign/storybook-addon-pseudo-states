@@ -7,18 +7,20 @@ declare module 'postcss-pseudo-classes' {
     // pseudo-class postcss addon option prefix
     prefix?: string;
     preserveBeforeAfter?: boolean;
+    restrictTo?: Array<string>;
+    allCombinations?: boolean;
   }
 
-  const postcssPseudoClasses = (
+  export const postcssPseudoClasses = (
     option: PostCssLoaderPseudoClassesPluginOptions
   ): ((css: Array<any>) => void) => {};
 
-  const createCombinations = (a: string, b: string): Array<string> => {};
+  export const createCombinations = (a: string, b: string): Array<string> => {};
 
-  const createSerialCombinations = (
-    arr: Array<T>,
-    fn: (combination: string, element: T) => T
-  ): Array<T> => {};
+  export const createSerialCombinations = (
+    arr: Array<unknown>,
+    fn: (combination: string, element: unknown) => unknown
+  ): Array<unknown> => {};
 
   export default postcssPseudoClasses;
 }

@@ -1,9 +1,4 @@
-import {
-  RuleSetCondition,
-  RuleSetLoader,
-  RuleSetRule,
-  RuleSetUse,
-} from 'webpack';
+import { RuleSetCondition, RuleSetRule, RuleSetUse } from 'webpack';
 import postcssPseudoClasses, {
   PostCssLoaderPseudoClassesPluginOptions,
 } from 'postcss-pseudo-classes';
@@ -41,6 +36,7 @@ export interface PseudoStatesPresetOptions {
   // rules to apply postcss plugin, if empty set to existing scss rules
   rules?: Array<RuleSetCondition>;
   cssLoaderOptions?: CssLoaderOptions;
+  // webpack: 'webpack4' | 'webpack5';
 }
 
 const postCssLoaderName = 'postcss-loader';
@@ -71,17 +67,24 @@ export const filterRules = (
   const ruleReferences: Array<RuleSetRule> = [];
 
   for (const rule of rules) {
-    if (rule.test) {
+    if (rule?.test) {
       const ruleCondition: RuleSetCondition = rule.test;
 
       // compare conditions item with rule
-      for (const condition of conditions) {
-        if (ruleCondition === rule) {
+      for (let i = 0; i < conditions.length; i += 1) {
+        const condition: RuleSetCondition = conditions[i];
+
+        if (
+          typeof condition === 'string' &&
+          ruleCondition.toString().includes(condition as string)
+        ) {
+          ruleReferences.push(rule);
+        } else if (condition instanceof RegExp && ruleCondition === condition) {
           ruleReferences.push(rule);
         }
 
         // TODO test if this is working for all types of ruleCondition
-        if (ruleCondition.toString() === condition.toString()) {
+        else if (ruleCondition.toString() === condition.toString()) {
           ruleReferences.push(rule);
         }
       }
@@ -101,6 +104,65 @@ export const filterRules = (
 };
 
 /**
+ * Check whether pseudo classes is already available in postcss plugins.
+ */
+const hasAlreadyPseudoClassesPlugin = (
+  plugins: string | Array<string | Function> | Function | Object
+): boolean => {
+  if (typeof plugins === 'string') {
+    return plugins.includes('pseudo-states');
+  }
+  if (Array.isArray(plugins)) {
+    for (const e of plugins) {
+      if (hasAlreadyPseudoClassesPlugin(e)) return true;
+    }
+  }
+  if (typeof plugins === 'function' || typeof plugins === 'object') {
+    // @ts-ignore
+    return plugins?.postcssPlugin === 'postcss-pseudo-classes';
+  }
+
+  return false;
+};
+
+/**
+ * Add postcss pseudo classes plugin options to post-css loader object
+ * @param plugins
+ * @param postCssLoaderOptions
+ */
+const addPostCssClassesPluginOptions = (
+  plugins: string | Array<any> | Function | Object,
+  postCssLoaderOptions: PostCssLoaderPseudoClassesPluginOptions
+): void => {
+  if (plugins) {
+    if (typeof plugins === 'string') {
+      if (!hasAlreadyPseudoClassesPlugin(plugins)) {
+        // eslint-disable-next-line no-param-reassign
+        plugins = [postcssPseudoClasses(postCssLoaderOptions)];
+      }
+    } else if (Array.isArray(plugins)) {
+      if (!hasAlreadyPseudoClassesPlugin(plugins)) {
+        plugins.push(postcssPseudoClasses(postCssLoaderOptions));
+        plugins.push(() => postcssPseudoClasses(postCssLoaderOptions));
+      }
+    } else if (typeof plugins === 'function') {
+      if (!hasAlreadyPseudoClassesPlugin(plugins)) {
+        // eslint-disable-next-line no-param-reassign
+        plugins = postcssPseudoClasses(postCssLoaderOptions);
+        // plugins = () => [plugins, postcssPseudoClasses(postCssLoaderOptions)];
+      }
+    } else {
+      // is object
+      // eslint-disable-next-line no-param-reassign
+      plugins = {
+        ...plugins,
+        ...() => postcssPseudoClasses(postCssLoaderOptions),
+      };
+    }
+  }
+};
+
+/**
  * add 'postcss-pseudo-classes' plugin to 'postcss-loader`.
  * If 'postcss-loader` is not available in rule's use add it ,
  * if 'postcss-loader` is already available, append plugin
@@ -116,7 +178,10 @@ const addPostCssLoader = (
     return {
       loader: postCssLoaderName,
       options: {
-        plugins: () => [postcssPseudoClasses(postCssLoaderOptions)],
+        // webpack 4
+        // plugins: () => [postcssPseudoClasses(postCssLoaderOptions)],
+        // webpack 5
+        postcssOptions: () => [postcssPseudoClasses(postCssLoaderOptions)],
       },
     };
   }
@@ -138,54 +203,67 @@ const addPostCssLoader = (
   }
 
   // use is of type RuleSetLoader
-  const useItem = use as RuleSetLoader;
+  const useItem = use as RuleSetRule;
   if (useItem?.loader && useItem.loader.includes(postCssLoaderName)) {
-    if (useItem.options) {
-      const { plugins } = useItem.options as { plugins: any };
-
-      if (plugins) {
-        if (typeof plugins === 'string') {
-          // @ts-ignore
-          useItem.options.plugins = [
-            postcssPseudoClasses(postCssLoaderOptions),
-          ];
-        } else if (Array.isArray(plugins)) {
-          // @ts-ignore
-          useItem.options.plugins.add(
-            postcssPseudoClasses(postCssLoaderOptions)
-          );
-          // @ts-ignore
-          useItem.options.plugins.add(() =>
-            postcssPseudoClasses(postCssLoaderOptions)
-          );
-        } else if (typeof plugins === 'function') {
-          const overwrittenPostCssFn = () => [
-            plugins,
-            postcssPseudoClasses(postCssLoaderOptions),
-          ];
-          // @ts-ignore
-          useItem.options.plugins = overwrittenPostCssFn;
-        } else {
-          // is object
-          // @ts-ignore
-          useItem.options.plugins = {
-            ...plugins,
-            ...() => postcssPseudoClasses(postCssLoaderOptions),
-          };
-        }
-
-        // logger.info(
-        //   `==> useItem.options after ${util.inspect(useItem.options, {
-        //     showHidden: false,
-        //     depth: null,
-        //   })}`
-        // );
-      }
-    } else {
+    // add options if not available
+    if (!useItem.options) {
       useItem.options = {
+        // plugins: [postcssPseudoClasses(postCssLoaderOptions)],
+        postcssOptions: {
+          plugins: [postcssPseudoClasses(postCssLoaderOptions)],
+        },
+      };
+      return use;
+    }
+
+    // webpack 4 or older version of postcss-loader
+    // if options are available check if plugins are available
+    // const { plugins } = useItem.options as {
+    //   plugins: any;
+    //   postcssOptions: { plugins: Array<any> };
+    // };
+    // if (!plugins) {
+    //   // @ts-ignore
+    //   useItem.options.plugins = [postcssPseudoClasses(postCssLoaderOptions)];
+    // } else {
+    //   // add plugin to object
+    //   addPostCssClassesPluginOptions(plugins, postCssLoaderOptions);
+    // }
+
+    const { postcssOptions } = useItem.options as {
+      plugins: any;
+      postcssOptions: { plugins: Array<any> };
+    };
+    if (!postcssOptions) {
+      // @ts-ignore
+      useItem.options.postcssOptions = {
         plugins: [postcssPseudoClasses(postCssLoaderOptions)],
       };
+    } else if (typeof postcssOptions === 'function') {
+      // get function value and append 'postcss-pseudo-classes' to plugins
+      // @ts-ignore
+      useItem.options.postcssOptions = (loader: any) => {
+        // @ts-ignore
+        const _postcssOptions = postcssOptions(loader);
+        _postcssOptions.plugins = [
+          ..._postcssOptions.plugins,
+          postcssPseudoClasses(postCssLoaderOptions),
+        ];
+
+        return _postcssOptions;
+      };
+    } else if (typeof postcssOptions === 'object') {
+      if (!postcssOptions.plugins) {
+        // @ts-ignore
+        postcssOptions.plugins = [];
+      }
+      // add plugin to object
+      addPostCssClassesPluginOptions(
+        postcssOptions.plugins,
+        postCssLoaderOptions
+      );
     }
+
     return use;
   }
 
@@ -205,12 +283,19 @@ export const addPostCSSLoaderToRules = (
   postCssLoaderOptions: PostCssLoaderPseudoClassesPluginOptions
 ) => {
   for (const rule of rules) {
-    // check if RuleSetRule has use property
-    if (rule.use) {
+    if (rule?.rules) {
+      addPostCSSLoaderToRules(rule.rules, postCssLoaderOptions);
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+    if (rule?.use) {
       rule.use = addPostCssLoader(rule.use, postCssLoaderOptions);
+    } else if (rule?.oneOf) {
+      for (const r of rule.oneOf) {
+        addPostCssLoader(r?.use as RuleSetRule, postCssLoaderOptions);
+      }
     } else {
-      // TODO look deeper (does not work due to filterRules cannot look deeper to find equal rule)
-      // if there is no use: RuleSetUse, add your own and add PostCssLoader with Plugin
+      // TODO
     }
   }
 };
@@ -251,7 +336,7 @@ const modifyCssLoader = (
   }
 
   // use is of type RuleSetLoader
-  const useItem = use as RuleSetLoader;
+  const useItem = use as RuleSetRule;
   if (useItem?.loader && useItem.loader.includes(cssLoaderName)) {
     if (useItem.options) {
       const { modules } = useItem.options as { modules: any };
