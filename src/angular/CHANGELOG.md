@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.0.1-alpha.45 (2021-07-19)
+
+
+### Features
+
+* **react:** postcss >= 4.30 compatibility ([8001a29](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/8001a29eedc0ad22dd069ab7b43fd83d976b8b68))
+
+
+
+
+
 ## 0.0.1-alpha.44 (2021-03-31)
 
 **Note:** Version bump only for package @ergosign/storybook-addon-pseudo-states-angular
