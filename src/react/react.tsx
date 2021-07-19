@@ -81,9 +81,12 @@ function pseudoStateFn(
     );
   }
 
-  const attributesAsObject: Array<AttributeStatesObj> = [
-    ...parameters?.attributes,
-  ].map((item) => AttributeStatesObj.fromAttributeState(item));
+  let attributesAsObject: Array<AttributeStatesObj> = [];
+  if (parameters.attributes) {
+    attributesAsObject = [...parameters?.attributes].map((item) =>
+      AttributeStatesObj.fromAttributeState(item)
+    );
+  }
 
   // Use prefix without `:` because angular add component scope before each `:`
   // Maybe not editable by user in angular context?
@@ -156,6 +159,8 @@ function pseudoStateFn(
     }
     for (const s of subPseudoStates) {
       host?.classList.add(`${cssModulePrefix}${parameters.prefix}${s.trim()}`);
+      // add default without module prefix to ensure compatibility with BEM syntax
+      host?.classList.add(`${parameters.prefix}${s.trim()}`);
     }
   };
 

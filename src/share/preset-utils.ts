@@ -133,7 +133,7 @@ const hasAlreadyPseudoClassesPlugin = (
 const addPostCssClassesPluginOptions = (
   plugins: string | Array<any> | Function | Object,
   postCssLoaderOptions: PostCssLoaderPseudoClassesPluginOptions
-): void => {
+): string | Array<any> | Function | Object => {
   if (plugins) {
     if (typeof plugins === 'string') {
       if (!hasAlreadyPseudoClassesPlugin(plugins)) {
@@ -147,9 +147,17 @@ const addPostCssClassesPluginOptions = (
       }
     } else if (typeof plugins === 'function') {
       if (!hasAlreadyPseudoClassesPlugin(plugins)) {
+        const replaceFunction = (f: Function): Array<any> => {
+          return [
+            // TODO not correct in general but react-scripts returns array
+            // @ts-ignore
+            ...f(),
+            postcssPseudoClasses(postCssLoaderOptions),
+          ];
+        };
+
         // eslint-disable-next-line no-param-reassign
-        plugins = postcssPseudoClasses(postCssLoaderOptions);
-        // plugins = () => [plugins, postcssPseudoClasses(postCssLoaderOptions)];
+        plugins = replaceFunction(plugins);
       }
     } else {
       // is object
@@ -160,6 +168,7 @@ const addPostCssClassesPluginOptions = (
       };
     }
   }
+  return plugins;
 };
 
 /**
@@ -178,9 +187,9 @@ const addPostCssLoader = (
     return {
       loader: postCssLoaderName,
       options: {
-        // webpack 4
+        // postcss-loader <= 4.3.0 and react-scripts <= v4.0.3
         // plugins: () => [postcssPseudoClasses(postCssLoaderOptions)],
-        // webpack 5
+        // >= 4.3.0
         postcssOptions: () => [postcssPseudoClasses(postCssLoaderOptions)],
       },
     };
@@ -204,7 +213,11 @@ const addPostCssLoader = (
 
   // use is of type RuleSetLoader
   const useItem = use as RuleSetRule;
-  if (useItem?.loader && useItem.loader.includes(postCssLoaderName)) {
+  if (
+    useItem?.loader &&
+    typeof useItem?.loader === 'string' &&
+    useItem.loader.includes(postCssLoaderName)
+  ) {
     // add options if not available
     if (!useItem.options) {
       useItem.options = {
@@ -216,19 +229,17 @@ const addPostCssLoader = (
       return use;
     }
 
-    // webpack 4 or older version of postcss-loader
-    // if options are available check if plugins are available
-    // const { plugins } = useItem.options as {
-    //   plugins: any;
-    //   postcssOptions: { plugins: Array<any> };
-    // };
-    // if (!plugins) {
-    //   // @ts-ignore
-    //   useItem.options.plugins = [postcssPseudoClasses(postCssLoaderOptions)];
-    // } else {
-    //   // add plugin to object
-    //   addPostCssClassesPluginOptions(plugins, postCssLoaderOptions);
-    // }
+    // postcss-loader <= 4.3.0 and react-scripts <= v4.0.3 uses options.plugins instead of options.postcssOptions.plugins
+    // if options.plugins is available in >= 4.3.0 (for instance CRA) add postcss-pseudo-classes there, too
+    // @ts-ignore
+    if (useItem?.options?.plugins) {
+      // @ts-ignore
+      useItem.options.plugins = addPostCssClassesPluginOptions(
+        // @ts-ignore
+        useItem?.options?.plugins,
+        postCssLoaderOptions
+      );
+    }
 
     const { postcssOptions } = useItem.options as {
       plugins: any;
@@ -258,7 +269,8 @@ const addPostCssLoader = (
         postcssOptions.plugins = [];
       }
       // add plugin to object
-      addPostCssClassesPluginOptions(
+      // @ts-ignore
+      postcssOptions.plugins = addPostCssClassesPluginOptions(
         postcssOptions.plugins,
         postCssLoaderOptions
       );
@@ -292,7 +304,7 @@ export const addPostCSSLoaderToRules = (
       rule.use = addPostCssLoader(rule.use, postCssLoaderOptions);
     } else if (rule?.oneOf) {
       for (const r of rule.oneOf) {
-        addPostCssLoader(r?.use as RuleSetRule, postCssLoaderOptions);
+        addPostCssLoader(r?.use as RuleSetUse, postCssLoaderOptions);
       }
     } else {
       // TODO
@@ -337,7 +349,11 @@ const modifyCssLoader = (
 
   // use is of type RuleSetLoader
   const useItem = use as RuleSetRule;
-  if (useItem?.loader && useItem.loader.includes(cssLoaderName)) {
+  if (
+    useItem?.loader &&
+    typeof useItem?.loader === 'string' &&
+    useItem.loader.includes(cssLoaderName)
+  ) {
     if (useItem.options) {
       const { modules } = useItem.options as { modules: any };
 

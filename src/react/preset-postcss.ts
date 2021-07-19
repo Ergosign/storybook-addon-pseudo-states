@@ -1,7 +1,6 @@
 import { PostCssLoaderPseudoClassesPluginOptions } from 'postcss-pseudo-classes';
 import { logger } from '@storybook/node-logger';
-import { Configuration } from 'webpack';
-// import * as util from 'util';
+import { Configuration, RuleSetRule } from 'webpack';
 import {
   addPostCSSLoaderToRules,
   CssLoaderOptions,
@@ -25,27 +24,32 @@ export function webpackFinal(
   logger.info(`=> Loading Pseudo States Addon Webpack config (for CRA)`);
 
   if (webpackConfig?.module?.rules) {
-    const postCssLoaderOptions: PostCssLoaderPseudoClassesPluginOptions = options?.postCssLoaderPseudoClassesPluginOptions
-      ? {
-          ...postCSSOptionsDefault,
-          ...options.postCssLoaderPseudoClassesPluginOptions,
-        }
-      : postCSSOptionsDefault;
+    const postCssLoaderOptions: PostCssLoaderPseudoClassesPluginOptions =
+      options?.postCssLoaderPseudoClassesPluginOptions
+        ? {
+            ...postCSSOptionsDefault,
+            ...options.postCssLoaderPseudoClassesPluginOptions,
+          }
+        : postCSSOptionsDefault;
 
     const rulesToApply = options?.rules;
     let filteredRules;
     if (rulesToApply && rulesToApply.length > 0) {
-      filteredRules = filterRules(webpackConfig.module.rules, rulesToApply);
+      filteredRules = filterRules(
+        webpackConfig.module.rules as Array<RuleSetRule>,
+        rulesToApply
+      );
     } else {
       // regex from CRA: https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/config/webpack.config.js#L526
       const sassRegex = /\.(scss|sass)$/;
       const sassModuleRegex = /\.module\.(scss|sass)$/;
 
       // find scss rules and apply postscss addon to those
-      filteredRules = filterRules(webpackConfig.module.rules, [
-        sassModuleRegex,
-        sassRegex,
-      ]);
+      // eslint-disable-next-line no-undef
+      filteredRules = filterRules(
+        webpackConfig.module.rules as Array<RuleSetRule>,
+        [sassModuleRegex, sassRegex]
+      );
     }
 
     if (filteredRules) {
@@ -68,11 +72,11 @@ export function webpackFinal(
   //       depth: null,
   //     }
   //   )}`
+  // );x
+  //
+  // logger.info(
+  //   `=> Added PostCSS postcss-pseudo-classes to enable pseudo states styles.`
   // );
-
-  logger.info(
-    `=> Added PostCSS postcss-pseudo-classes to enable pseudo states styles.`
-  );
 
   return webpackConfig;
 }
