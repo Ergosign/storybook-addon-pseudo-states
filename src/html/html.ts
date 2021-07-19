@@ -7,6 +7,7 @@ import {
 } from '@storybook/addons';
 import {
   AttributesStatesDefault,
+  AttributeStates,
   PseudoState,
   PseudoStatesDefault,
   PseudoStatesDefaultPrefix,
@@ -236,11 +237,12 @@ function pseudoStateFn(
   parameters.pseudos =
     parameters?.pseudos || options?.pseudos || PseudoStatesDefault;
 
+  // ensure attributes are defined
   parameters.attributes =
     parameters?.attributes || options?.attributes || AttributesStatesDefault;
 
   const attributesAsObject: Array<AttributeStatesObj> = [
-    ...parameters?.attributes,
+    ...(parameters.attributes as AttributeStates),
   ].map((item) => AttributeStatesObj.fromAttributeState(item));
 
   let permuttionsAsObject: Array<PermutationStatsObj> = [];
