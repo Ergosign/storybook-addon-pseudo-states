@@ -41,7 +41,14 @@ export interface PseudoStatesPresetOptions {
 
 const postCssLoaderName = 'postcss-loader';
 export const postCSSOptionsDefault: PostCssLoaderPseudoClassesPluginOptions = {
-  blacklist: [':root', ':host', ':host-context', ':nth-child', ':nth-of-type'],
+  blacklist: [
+    ':root',
+    ':host',
+    ':host-context',
+    ':nth-child',
+    ':nth-of-type',
+    ':export',
+  ],
 };
 
 const cssLoaderName = 'css-loader';
