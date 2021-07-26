@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.0.1-alpha.46 (2021-07-26)
+
+
+### Features
+
+* added :export to disallowed list of postcss-pseudo-classes plugin ([4581aac](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/4581aacc5d2615f9cacfb5266222b53dbb627a2d))
+
+
+
+
+
 ## 0.0.1-alpha.45 (2021-07-19)
 
 
