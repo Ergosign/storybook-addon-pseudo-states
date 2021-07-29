@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.0.1-alpha.47 (2021-07-29)
+
+
+### Features
+
+* **vue:** added permitatios ([#7](https://github.com/Ergosign/storybook-addon-pseudo-states/issues/7)) ([6868198](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/6868198404de3ac725d1caa379ecf3331fe5ff9a))
+
+
+
+
+
 ## 0.0.1-alpha.46 (2021-07-26)
 
 
