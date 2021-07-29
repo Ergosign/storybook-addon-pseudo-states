@@ -13,6 +13,8 @@ import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
 import { styles } from '../share/styles';
 import {
   AttributesStatesDefault,
+  Orientation,
+  PermutationStatesObject,
   PseudoState,
   PseudoStatesDefault,
   PseudoStatesDefaultPrefix,
@@ -20,6 +22,7 @@ import {
   WrapperPseudoStateSettings,
 } from '../share/types';
 import { getMixedPseudoStates } from '../share/utils';
+import { PermutationStatsObj } from '../share/PermutationsStatesObj';
 
 const pseudoStateFn = (
   getStory: StoryGetter,
@@ -38,13 +41,14 @@ const pseudoStateFn = (
 
   // Assemble config
   const opts: OptionsParameter = settings?.options || {};
-  const params: PseudoStatesParameters = settings?.parameters || {};
+  const parameters: PseudoStatesParameters = settings?.parameters || {};
 
   const config: PseudoStatesParameters = {
-    ...params,
-    pseudos: params.pseudos || opts.pseudos || PseudoStatesDefault,
-    attributes: params.attributes || opts.attributes || AttributesStatesDefault,
-    prefix: params?.prefix || opts?.prefix || PseudoStatesDefaultPrefix,
+    ...parameters,
+    pseudos: parameters.pseudos || opts.pseudos || PseudoStatesDefault,
+    attributes:
+      parameters.attributes || opts.attributes || AttributesStatesDefault,
+    prefix: parameters?.prefix || opts?.prefix || PseudoStatesDefaultPrefix,
     selector: settings?.parameters?.selector || null,
   };
 
@@ -54,23 +58,98 @@ const pseudoStateFn = (
       AttributeStatesObj.fromAttributeState(item)
     ) || [];
 
+  // convert permutations to object notation
+  let permutationsAsObject: Array<PermutationStatsObj> = [];
+  if (parameters.permutations) {
+    permutationsAsObject = [...parameters?.permutations].map((item) =>
+      PermutationStatsObj.fromPermutationState(item)
+    );
+  }
+
+  if (permutationsAsObject.length > 0) {
+    config.permutations = permutationsAsObject;
+  }
+
+  const numberOfPseudos = config.pseudos ? config.pseudos.length : 0;
+  const numberOfAttributes = config.attributes ? config.attributes.length : 0;
+
   return {
     template: `
       <div>
-        <div class="pseudo-states-addon__container" v-if="!isDisabled">
+      <div class="pseudo-states-addon__container"
+           :style="{ ...styles.gridContainer, ...getGridStyles() }"
+           v-if="!isDisabled">
+        <!-- Normal -->
+        <div
+          class="pseudo-states-addon__story pseudo-states-addon__story--Normal"
+          :style="styles.storyContainer"
+        >
+          <div
+            class="pseudo-states-addon__story__header"
+            :style="styles.storyHeader"
+          >
+            normal:
+          </div>
+          <div class="pseudo-states-addon__story__container">
+            <story />
+          </div>
+        </div>
+
+        <!-- Pseudo states -->
+        <div
+          v-for="state in config.pseudos"
+          class="pseudo-states-addon__story"
+          :class="'pseudo-states-addon__story--' + state"
+          :style="styles.storyContainer"
+        >
+          <div
+            class="pseudo-states-addon__story__header"
+            :style="styles.storyHeader"
+          >
+            {{ state }}:
+          </div>
+          <div class="pseudo-states-addon__story__container">
+            <story :ref="state" />
+          </div>
+        </div>
+
+        <!-- Attributes -->
+        <div
+          v-for="attribute in attributes"
+          class="pseudo-states-addon__story"
+          :class="'pseudo-states-addon__story--attr-' + attribute.attr"
+          :style="styles.storyContainer"
+        >
+          <div
+            class="pseudo-states-addon__story__header"
+            :style="styles.storyHeader"
+          >
+            {{ attribute.attr }}:
+          </div>
+          <div class="pseudo-states-addon__story__container">
+            <story :ref="attribute.attr" />
+          </div>
+        </div>
+
+
+        <!-- Permutations -->
+        <template
+          v-for="permutation in config.permutations"
+        >
           <!-- Normal -->
           <div
-            class="pseudo-states-addon__story pseudo-states-addon__story--Normal"
+            class="pseudo-states-addon__story"
+            :class="'pseudo-states-addon__story--' + permutation.label"
             :style="styles.storyContainer"
-          >
+          > 
             <div
               class="pseudo-states-addon__story__header"
               :style="styles.storyHeader"
             >
-              normal:
+              {{ permutation.label }}
             </div>
             <div class="pseudo-states-addon__story__container">
-              <story />
+              <story :ref="permutation.attr" />
             </div>
           </div>
 
@@ -88,7 +167,7 @@ const pseudoStateFn = (
               {{ state }}:
             </div>
             <div class="pseudo-states-addon__story__container">
-              <story :ref="state" />
+              <story :ref="permutation.attr + '-'+ state" />
             </div>
           </div>
 
@@ -106,15 +185,16 @@ const pseudoStateFn = (
               {{ attribute.attr }}:
             </div>
             <div class="pseudo-states-addon__story__container">
-              <story :ref="attribute.attr" />
+              <story :ref="permutation.attr + '-'+ attribute.attr" />
             </div>
           </div>
-        </div>
 
-        <!-- display original story when addon is disabled by toolbar -->
-        <div v-if="isDisabled">
-          <story />
-        </div>
+        </template>
+      </div>
+      <!-- display original story when addon is disabled by toolbar -->
+      <div v-if="isDisabled">
+        <story />
+      </div>
       </div>
     `,
 
@@ -151,8 +231,10 @@ const pseudoStateFn = (
        * Applies pseudostates and attributes again when something has changed.
        */
       refresh() {
-        this.updatePseudoStates();
         this.updateAttributes();
+        setTimeout(() => {
+          this.updatePseudoStates();
+        });
       },
 
       /**
@@ -174,6 +256,25 @@ const pseudoStateFn = (
             this.applyPseudoState(component.$el, state, this.config);
           }
         });
+
+        if (!this.config?.permutations) {
+          return;
+        }
+        this.config.permutations.forEach(
+          (permutation: PermutationStatesObject) => {
+            this.config.pseudos.forEach((state: PseudoState) => {
+              if (!this.$refs[`${permutation.attr}-${state}`]) {
+                return;
+              }
+
+              const [component] = this.$refs[`${permutation.attr}-${state}`];
+
+              if (component?.$el) {
+                this.applyPseudoState(component.$el, state, this.config);
+              }
+            });
+          }
+        );
       },
 
       /**
@@ -197,6 +298,53 @@ const pseudoStateFn = (
             Vue.set(vm.$children[0], attr.attr, attr.value);
           }
         });
+
+        if (!this.config?.permutations) {
+          return;
+        }
+        this.config.permutations.forEach(
+          (permutation: PermutationStatesObject) => {
+            if (this.$refs[permutation.attr]) {
+              const [vm] = this.$refs[permutation.attr];
+
+              // This will cause Vue to warn about manipulating props and setting data at runtime.
+              // TODO: Check for a better way after upgrading to Vue 3
+              if (vm?.$children?.length > 0) {
+                Vue.set(vm.$children[0], permutation.attr, permutation.value);
+              }
+
+              this.config.pseudos.forEach((state: PseudoState) => {
+                if (this.$refs[`${permutation.attr}-${state}`]) {
+                  const [vm] = this.$refs[`${permutation.attr}-${state}`];
+
+                  // This will cause Vue to warn about manipulating props and setting data at runtime.
+                  // TODO: Check for a better way after upgrading to Vue 3
+                  if (vm?.$children?.length > 0) {
+                    Vue.set(
+                      vm.$children[0],
+                      permutation.attr,
+                      permutation.value
+                    );
+                  }
+                }
+              });
+
+              this.attributes.forEach((attr: AttributeStatesObj) => {
+                if (!this.$refs[`${permutation.attr}-${attr.attr}`]) {
+                  return;
+                }
+
+                const [vm] = this.$refs[`${permutation.attr}-${attr.attr}`];
+
+                // This will cause Vue to warn about manipulating props and setting data at runtime.
+                // TODO: Check for a better way after upgrading to Vue 3
+                if (vm?.$children?.length > 0) {
+                  Vue.set(vm.$children[0], attr.attr, attr.value);
+                }
+              });
+            }
+          }
+        );
       },
 
       /**
@@ -238,6 +386,38 @@ const pseudoStateFn = (
             host.classList.add(...mixedStates);
           }
         });
+      },
+
+      /**
+       * Grid can either be row or column oriented, depening on the
+       * parameters.styles variable (ROW or COLUMN). We flip the
+       * row / column count when ROW was given.
+       */
+      getGridStyles() {
+        switch (parameters.styles) {
+          case Orientation.ROW:
+            return {
+              gridTemplateRows: `repeat(${
+                1 + permutationsAsObject.length
+              }, min-content)`,
+              gridTemplateColumns: `repeat(${
+                1 + numberOfPseudos + numberOfAttributes
+              }, max-content)`,
+              gridAutoFlow: 'row',
+            };
+
+          case Orientation.COLUMN:
+          default:
+            return {
+              gridTemplateRows: `repeat(${
+                1 + numberOfPseudos + numberOfAttributes
+              }, min-content)`,
+              gridTemplateColumns: `repeat(${
+                1 + permutationsAsObject.length
+              }, min-content)`,
+              gridAutoFlow: 'column',
+            };
+        }
       },
     },
   };
