@@ -328,7 +328,7 @@ storiesOf('Button', module)
   .addParameters({
     withPseudo: {
       selector: 'button', // css selector of pseudo state's host element
-      pseudo: ['focus', 'hover', 'hover & focus', 'active'],
+      pseudos: ['focus', 'hover', 'hover & focus', 'active'],
       attributes: ['disabled', 'readonly', 'error'],
     },
   })
