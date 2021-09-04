@@ -209,6 +209,12 @@ const pseudoStateFn = (
       // Initialize once the story has loaded
       channel.once(STORY_RENDERED, () => this.refresh());
 
+      /**
+       * Listen for changes of dark mode add-on and re-apply pseudo states.
+       * https://github.com/hipstersmoothie/storybook-dark-mode
+       */
+      channel.on('DARK_MODE', this.updatePseudoStates);
+
       // React to toolbar events
       channel.addListener(SAPS_BUTTON_CLICK, (isDisabled: boolean) => {
         this.isDisabled = isDisabled;
@@ -217,6 +223,7 @@ const pseudoStateFn = (
       // Cleanup when the story is no longer active
       channel.once(STORY_CHANGED, () => {
         channel.removeAllListeners(SAPS_BUTTON_CLICK);
+        channel.off('DARK_MODE', this.updatePseudoStates);
       });
     },
 
