@@ -257,6 +257,48 @@ And use the specified prefix in your styling definition:
 ```
 
 </details>
+  
+#### With babel plugin for Emotion.js
+
+If you use [emotion.js](https://emotion.sh) to style your components might want to consider using [babel-plugin-storybook-addon-pseudo-states-emotion](https://www.npmjs.com/package/babel-plugin-storybook-addon-pseudo-states-emotion). It will create pseudo-classes for your components.
+
+
+<details>
+<summary>With a babel-plugin-storybook-addon-pseudo-states-emotion</summary>
+  
+This babel-plugin was made for this exact use-case. If you have questions or issues please look at the [documentation](https://github.com/dekk-app/design-system/tree/main/tools/babel-plugin-storybook-addon-pseudo-states-emotion) or contact the repository owners.
+
+**Configure:**
+  
+Please look at the options for babel or webpack configurations in storybook: 
+  
+1. https://storybook.js.org/docs/react/configure/babel
+2. https://storybook.js.org/docs/react/configure/webpack#extending-storybooks-webpack-config
+  
+Here's an example of the plugin configuration. (please refer to the [original documentation](https://github.com/dekk-app/design-system/tree/main/tools/babel-plugin-storybook-addon-pseudo-states-emotion))  
+  
+ **Basic integration**
+  
+```json
+{
+  "plugins": ["babel-plugin-storybook-addon-pseudo-states-emotion"]
+}
+```
+  
+ **Adding a custom prefix as supported by the addon**
+
+```json
+{
+  "plugins": [
+    [
+      "babel-plugin-storybook-addon-pseudo-states-emotion",
+      {"prefix": "pseudoclass--" }
+    ]
+  ]
+}
+```
+
+</details>
 
 ### Show/Hide Toolbar-Button
 
