@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.0.1-alpha.48 (2021-09-04)
+
+
+### Features
+
+* **vue:** added support for dark mode adon ([5e1fb36](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/5e1fb368679e3c0877933b5fb86a974774c0cf06))
+
+
+
+
+
 ## 0.0.1-alpha.47 (2021-07-29)
 
 
