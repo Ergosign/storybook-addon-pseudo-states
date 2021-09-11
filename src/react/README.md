@@ -266,7 +266,7 @@ If you use [emotion.js](https://emotion.sh) to style your components might want 
 <details>
 <summary>With a babel-plugin-storybook-addon-pseudo-states-emotion</summary>
   
-This babel-plugin was made for this exact use-case. If you have questions or issues please look at the [documentation](https://github.com/dekk-app/design-system/tree/main/tools/babel-plugin-storybook-addon-pseudo-states-emotion) or contact the repository owners.
+This babel-plugin was made for this exact use-case. If you have questions or issues please look at the [documentation](https://github.com/dekk-app/babel-plugin-storybook-addon-pseudo-states-emotion) or contact the repository owners.
 
 **Configure:**
   
@@ -275,7 +275,7 @@ Please look at the options for babel or webpack configurations in storybook:
 1. https://storybook.js.org/docs/react/configure/babel
 2. https://storybook.js.org/docs/react/configure/webpack#extending-storybooks-webpack-config
   
-Here's an example of the plugin configuration. (please refer to the [original documentation](https://github.com/dekk-app/design-system/tree/main/tools/babel-plugin-storybook-addon-pseudo-states-emotion))  
+Here's an example of the plugin configuration. (please refer to the [original documentation](https://github.com/dekk-app/babel-plugin-storybook-addon-pseudo-states-emotion))  
   
  **Basic integration**
   
