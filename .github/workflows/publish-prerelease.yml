@@ -23,7 +23,7 @@ jobs:
           npm ci
           npm run lerna:build-all
       - name: Publish
-        run: npm run lerna:publish-prerelease
+        run: npm run lerna:publish-prerelease -- --no-verify-access
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
           GH_TOKEN: ${{secrets.GH_TOKEN}}
