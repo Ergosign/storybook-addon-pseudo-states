@@ -11,9 +11,12 @@ jobs:
       - name: Configure Git User
         uses: oleksiyrudenko/gha-git-credentials@v2
         with:
+          global: true
           email: '${{secrets.EMAIL_GITHUB}}'
           actor: '${{secrets.USER_GITHUB}}'
           token: '${{ secrets.GITHUB_TOKEN }}'
+      - name: Github User Test
+        run: npm whoami
       - name: Node Setup
         uses: actions/setup-node@v2.1.2
         with:
