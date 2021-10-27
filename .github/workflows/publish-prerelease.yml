@@ -6,18 +6,26 @@ jobs:
   publish-npm:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
-      - uses: oleksiyrudenko/gha-git-credentials@v2
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+      - name: Configure Git User
+      uses: oleksiyrudenko/gha-git-credentials@v2
         with:
+          email: '${{secrets.EMAIL_GITHUB}}'
+          actor: '${{secrets.USER_GITHUB}}'
           token: '${{ secrets.GITHUB_TOKEN }}'
-      - uses: actions/setup-node@v2.1.2
+      - name: Node Setup
+        uses: actions/setup-node@v2.1.2
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
-      - run: npm whoami
-#      - run: npm ci
-#      - run: npm run lerna:build-all
-#      - run: npm run lerna:publish-prerelease
+        run: npm whoami
+      - name: Build
+        run: |
+          npm ci
+          npm run lerna:build-all
+      - name: Publish
+        run: npm run lerna:publish-prerelease
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
           GH_TOKEN: ${{secrets.GH_TOKEN}}
