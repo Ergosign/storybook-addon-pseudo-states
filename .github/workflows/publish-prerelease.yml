@@ -19,10 +19,9 @@ jobs:
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
-      - name: User Test
-        run: npm whoami
       - name: Build
         run: |
+          npm whoami
           npm ci
           npm run lerna:build-all
       - name: Publish
