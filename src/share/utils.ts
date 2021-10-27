@@ -5,7 +5,11 @@ import { PseudoState } from './types';
  */
 export const sanitizePseudoName = (pseudoStateName: PseudoState): string =>
   // remove whitespace
-  pseudoStateName.replace(/\s/g, '').replace(/\W/g, '').replace('&', '-');
+  pseudoStateName
+    .replace(/\s/g, '')
+    // remove not allowed characters
+    .replace(/[^a-zA-Z0-9_-]/g, '')
+    .replace('&', '-');
 
 /**
  * Get mixed pseudo states
@@ -17,4 +21,6 @@ export const getMixedPseudoStates = (
   // split at &
   // replace non-word character
   // trim
-  pseudoState.split('&').map((item: string) => item.replace(/\W/g, '').trim());
+  pseudoState
+    .split('&')
+    .map((item: string) => item.replace(/[^a-zA-Z0-9_-]/g, '').trim());
