@@ -21,7 +21,6 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Build
         run: |
-          npm whoami
           npm ci
           npm run lerna:build-all
       - name: Publish
