@@ -9,7 +9,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.4
       - name: Configure Git User
-      uses: oleksiyrudenko/gha-git-credentials@v2
+        uses: oleksiyrudenko/gha-git-credentials@v2
         with:
           email: '${{secrets.EMAIL_GITHUB}}'
           actor: '${{secrets.USER_GITHUB}}'
