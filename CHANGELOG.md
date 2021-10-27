@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.0.1-alpha.49 (2021-10-27)
+
+
+### Bug Fixes
+
+* **shared:** pseudo name/class sanitization fix ([2be7fc9](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/2be7fc90ed1565d1f8aec1f3ca1c6c22fc1e2947))
+
+
+
+
+
 ## 0.0.1-alpha.48 (2021-09-04)
 
 
