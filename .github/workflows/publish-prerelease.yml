@@ -19,6 +19,7 @@ jobs:
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
+      - name: User Test
         run: npm whoami
       - name: Build
         run: |
