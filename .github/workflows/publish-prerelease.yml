@@ -13,8 +13,6 @@ jobs:
         with:
           global: true
           token: '${{ secrets.GITHUB_TOKEN }}'
-      - name: User Test
-        run: npm whoami
       - name: Node Setup
         uses: actions/setup-node@v2.1.2
         with:
