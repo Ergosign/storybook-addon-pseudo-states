@@ -85,8 +85,11 @@ export const withPseudo = makeDecorator({
   ) => {
     const story = getStory(context);
     const channel = addons.getChannel();
-    const compInternal = (story.component || context.parameters.component)
-      ?.__annotations__[0];
+    const compInternal = (
+      story?.component ??
+      context?.component ??
+      context?.parameters?.component
+    )?.__annotations__[0];
 
     // are options set by user
     const options: OptionsParameter = settings?.options;
