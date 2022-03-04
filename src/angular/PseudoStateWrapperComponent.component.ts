@@ -188,15 +188,15 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
     if (this.rowOrientation) {
       return `repeat(${
         1 + this.permutationStates.length
-      }, min-content) / repeat(${
+      }, minmax(min-content, max-content)) / repeat(${
         1 + this.pseudoStates.length + this.attributeStates.length
-      }, min-content)`;
+      }, minmax(min-content, max-content))`;
     }
     return `repeat(${
       1 + this.pseudoStates.length + this.attributeStates.length
-    }, min-content) / repeat(${
+    }, minmax(min-content, max-content)) / repeat(${
       1 + this.permutationStates.length
-    }, min-content)`;
+    }, minmax(min-content, max-content))`;
   }
 
   constructor(private ngZone: NgZone) {}

@@ -406,10 +406,10 @@ const pseudoStateFn = (
             return {
               gridTemplateRows: `repeat(${
                 1 + permutationsAsObject.length
-              }, min-content)`,
+              }, minmax(min-content, max-content))`,
               gridTemplateColumns: `repeat(${
                 1 + numberOfPseudos + numberOfAttributes
-              }, max-content)`,
+              }, minmax(min-content, max-content))`,
               gridAutoFlow: 'row',
             };
 
@@ -418,10 +418,10 @@ const pseudoStateFn = (
             return {
               gridTemplateRows: `repeat(${
                 1 + numberOfPseudos + numberOfAttributes
-              }, min-content)`,
+              }, minmax(min-content, max-content))`,
               gridTemplateColumns: `repeat(${
                 1 + permutationsAsObject.length
-              }, min-content)`,
+              }, minmax(min-content, max-content))`,
               gridAutoFlow: 'column',
             };
         }

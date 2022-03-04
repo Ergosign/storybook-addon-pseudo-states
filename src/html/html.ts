@@ -92,7 +92,9 @@ function getStoryContainer(parameters: PseudoStatesParameters) {
     ...styles.gridContainer,
     gridTemplate: `repeat(${
       1 + pseudoLength + attrLength
-    } , min-content) / repeat(${1 + permutationLenth}, 1fr)`,
+    } , minmax(min-content, max-content)) / repeat(${
+      1 + permutationLenth
+    }, 1fr)`,
   };
 
   Object.assign(container.style, gridContainer);
