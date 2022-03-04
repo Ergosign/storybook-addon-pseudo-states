@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.0.1-alpha.55 (2022-03-04)
+
+
+### Features
+
+* grid styling ([91c79d3](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/91c79d372662d6adbf400d42a53c1eca0a7d6958))
+
+
+
+
+
 ## 0.0.1-alpha.54 (2021-10-27)
 
 **Note:** Version bump only for package @ergosign/storybook-addon-pseudo-states-angular
