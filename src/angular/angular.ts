@@ -17,9 +17,9 @@ import { PseudoStateWrapperComponent } from './PseudoStateWrapperComponent.compo
 import { PseudoStateWrapperContainer } from './PseudoStateWrapperContainer.component';
 import { AttributeStatesObj } from '../share/AttributeStatesObj';
 
-function getModuleMetadata(metadata: any) {
+function getModuleMetadata(metadata: any, context: StoryContext) {
   let moduleMetadata = metadata?.moduleMetadata;
-  const component = metadata?.component;
+  const component = metadata?.component ?? context.component;
 
   if (component && !moduleMetadata) {
     moduleMetadata = {
@@ -124,13 +124,13 @@ export const withPseudo = makeDecorator({
     storyParameters = escape(JSON.stringify(parameters));
 
     let storyComponent = null;
-    if (story.component && compInternal) {
+    if (compInternal) {
       storyComponent = escape(JSON.stringify(compInternal));
     } else {
       // eslint-disable-next-line no-console
       console.warn(
         'Pseudo States Addon:',
-        'add component property to your story'
+        'add component property to your meta data'
       );
     }
 
@@ -219,7 +219,7 @@ export const withPseudo = makeDecorator({
                         ${newTemplate}
                         </ng-template>
                     </pseudo-state-wrapper>`,
-      moduleMetadata: getModuleMetadata(story),
+      moduleMetadata: getModuleMetadata(story, context),
       props: {
         ...story.props,
       },
