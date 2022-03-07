@@ -8,6 +8,7 @@ import {
 import {
   AttributesStatesDefault,
   AttributeStates,
+  Orientation,
   PseudoState,
   PseudoStatesDefault,
   PseudoStatesDefaultPrefix,
@@ -88,14 +89,57 @@ function getStoryContainer(parameters: PseudoStatesParameters) {
 
   // compute grid template
   // TODO support row orientation
-  const gridContainer = {
+  let gridContainer = {
     ...styles.gridContainer,
-    gridTemplate: `repeat(${
-      1 + pseudoLength + attrLength
-    } , minmax(min-content, max-content)) / repeat(${
-      1 + permutationLenth
-    }, 1fr)`,
+    gridTemplate: '',
   };
+
+  if (parameters?.styles?.inlineGrid) {
+    gridContainer = {
+      ...gridContainer,
+      display: 'inline-grid',
+    };
+  }
+
+  if (permutationLenth > 1) {
+    // has permutations
+    if (parameters?.styles?.orientation === Orientation.ROW) {
+      gridContainer = {
+        ...gridContainer,
+        gridTemplate: `repeat(${
+          1 + permutationLenth
+        } , minmax(min-content, 1fr)) / repeat(${
+          1 + pseudoLength + attrLength
+        }, minmax(min-content, 1fr))`,
+      };
+    } else {
+      gridContainer = {
+        ...gridContainer,
+        gridTemplate: `repeat(${
+          1 + pseudoLength + attrLength
+        } , minmax(min-content, 1fr)) / repeat(${
+          1 + permutationLenth
+        }, minmax(min-content, 1fr))`,
+      };
+    }
+  } else {
+    // has no permutations
+    if (parameters?.styles?.orientation === Orientation.ROW) {
+      gridContainer = {
+        ...gridContainer,
+        gridTemplate: `minmax(min-content, 1fr) / repeat(${
+          1 + pseudoLength + attrLength
+        }, minmax(min-content, 1fr))`,
+      };
+    } else {
+      gridContainer = {
+        ...gridContainer,
+        gridTemplate: `repeat(${
+          1 + pseudoLength + attrLength
+        } , minmax(min-content, 1fr)) / minmax(min-content, 1fr)`,
+      };
+    }
+  }
 
   Object.assign(container.style, gridContainer);
   return container;
