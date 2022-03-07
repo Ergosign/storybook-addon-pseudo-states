@@ -139,6 +139,7 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
       this.storyParams = JSON.parse(unescape(value)) as PseudoStatesParameters;
       this.rowOrientation =
         this.storyParams?.styles?.orientation === Orientation.ROW;
+      this.inlineGrid = this.storyParams?.styles?.inlineGrid || false;
       this.hostOrientationClass = this.rowOrientation ? 'row' : 'column';
       this.pseudoStates = this.storyParams?.pseudos as PseudoStates;
       this.attributeStates = (
@@ -183,20 +184,48 @@ export class PseudoStateWrapperComponent implements OnInit, OnDestroy {
 
   @HostBinding('class') hostOrientationClass = 'column';
 
+  public get inlineGrid() {
+    return this._inlineGrid;
+  }
+
+  public set inlineGrid(value) {
+    this._inlineGrid = value;
+    if (value) {
+      this.gridDisplay = 'inline-grid';
+    } else {
+      this.gridDisplay = 'grid';
+    }
+  }
+
+  private _inlineGrid = false;
+
+  @HostBinding('style.display')
+  public gridDisplay = 'grid';
+
   @HostBinding('style.grid-template')
   get columnCount(): string {
-    if (this.rowOrientation) {
+    if (this.permutationStates.length > 1) {
+      if (this.rowOrientation) {
+        return `repeat(${
+          1 + this.permutationStates.length
+        }, minmax(min-content, 1fr)) / repeat(${
+          1 + this.pseudoStates.length + this.attributeStates.length
+        }, minmax(min-content, 1fr))`;
+      }
       return `repeat(${
-        1 + this.permutationStates.length
-      }, minmax(min-content, max-content)) / repeat(${
         1 + this.pseudoStates.length + this.attributeStates.length
-      }, minmax(min-content, max-content))`;
+      }, minmax(min-content, 1fr)) / repeat(${
+        1 + this.permutationStates.length
+      }, minmax(min-content, 1fr))`;
+    }
+    if (this.rowOrientation) {
+      return `minmax(min-content, 1fr) / repeat(${
+        1 + this.pseudoStates.length + this.attributeStates.length
+      }, minmax(min-content, 1fr))`;
     }
     return `repeat(${
       1 + this.pseudoStates.length + this.attributeStates.length
-    }, minmax(min-content, max-content)) / repeat(${
-      1 + this.permutationStates.length
-    }, minmax(min-content, max-content))`;
+    }, minmax(min-content, 1fr)) / minmax(min-content, 1fr)`;
   }
 
   constructor(private ngZone: NgZone) {}

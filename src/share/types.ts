@@ -92,6 +92,8 @@ export interface PseudoStatesParameters {
   styles?: {
     // orientation of pseudo states wrapper
     orientation?: Orientation;
+    // display: grid | inline-grid
+    inlineGrid?: boolean;
   };
   // [key: string]: any;
 }
