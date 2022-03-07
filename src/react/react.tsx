@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
   addons,
   makeDecorator,
@@ -8,10 +7,15 @@ import {
 } from '@storybook/addons';
 // import { useAddonState } from '@storybook/client-api';
 import { STORY_CHANGED, STORY_RENDERED } from '@storybook/core-events';
+import React, { useState } from 'react';
+import { AttributeStatesObj } from '../share/AttributeStatesObj';
 import {
-  ADDON_GLOBAL_DISABLE_STATE,
   addonParameters,
+  ADDON_GLOBAL_DISABLE_STATE,
 } from '../share/constants';
+import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
+import { PermutationStatsObj } from '../share/PermutationsStatesObj';
+import { styles } from '../share/styles';
 import {
   AttributesStatesDefault,
   Orientation,
@@ -23,11 +27,7 @@ import {
   Selector,
   WrapperPseudoStateSettings,
 } from '../share/types';
-import { SAPS_BUTTON_CLICK, SAPS_INIT_PSEUDO_STATES } from '../share/events';
 import { getMixedPseudoStates, sanitizePseudoName } from '../share/utils';
-import { AttributeStatesObj } from '../share/AttributeStatesObj';
-import { PermutationStatsObj } from '../share/PermutationsStatesObj';
-import { styles } from '../share/styles';
 
 interface IState {
   name: string;
@@ -238,29 +238,67 @@ function pseudoStateFn(
    * row / column count when ROW was given.
    */
   const getGridStyles = () => {
-    switch (parameters.styles) {
-      case Orientation.ROW:
-        return {
-          gridTemplateRows: `repeat(${
-            1 + permutationsAsObject.length
-          }, minmax(min-content, max-content))`,
-          gridTemplateColumns: `repeat(${
-            1 + numberOfPseudos + numberOfAttributes
-          }, minmax(min-content, max-content))`,
-          gridAutoFlow: 'row',
-        };
+    let gridStyles = {};
 
-      case Orientation.COLUMN:
-      default:
-        return {
-          gridTemplateRows: `repeat(${
-            1 + numberOfPseudos + numberOfAttributes
-          }, minmax(min-content, max-content))`,
-          gridTemplateColumns: `repeat(${
-            1 + permutationsAsObject.length
-          }, minmax(min-content, max-content))`,
-          gridAutoFlow: 'column',
-        };
+    // apply inline-grid
+    if (parameters?.styles?.inlineGrid) {
+      gridStyles = {
+        display: 'inline-grid',
+      };
+    }
+
+    if (permutationsAsObject.length > 1) {
+      // story has permutations
+      switch (parameters?.styles?.orientation) {
+        case Orientation.ROW:
+          return {
+            ...gridStyles,
+            gridTemplateRows: `repeat(${
+              1 + permutationsAsObject.length
+            }, minmax(min-content, max-content))`,
+            gridTemplateColumns: `repeat(${
+              1 + numberOfPseudos + numberOfAttributes
+            }, minmax(min-content, 1fr))`,
+            gridAutoFlow: 'row',
+          };
+
+        case Orientation.COLUMN:
+        default:
+          return {
+            ...gridStyles,
+            gridTemplateRows: `repeat(${
+              1 + numberOfPseudos + numberOfAttributes
+            }, minmax(min-content, 1fr))`,
+            gridTemplateColumns: `repeat(${
+              1 + permutationsAsObject.length
+            }, minmax(min-content, 1fr))`,
+            gridAutoFlow: 'column',
+          };
+      }
+    } else {
+      // story has no permutations
+      switch (parameters?.styles?.orientation) {
+        case Orientation.ROW:
+          return {
+            ...gridStyles,
+            gridTemplateRows: `minmax(min-content, max-content)`,
+            gridTemplateColumns: `repeat(${
+              1 + numberOfPseudos + numberOfAttributes
+            }, minmax(min-content, 1fr))`,
+            gridAutoFlow: 'row',
+          };
+
+        case Orientation.COLUMN:
+        default:
+          return {
+            ...gridStyles,
+            gridTemplateRows: `repeat(${
+              1 + numberOfPseudos + numberOfAttributes
+            }, minmax(min-content, 1fr))`,
+            gridTemplateColumns: `minmax(min-content, 1fr)`,
+            gridAutoFlow: 'column',
+          };
+      }
     }
   };
 
