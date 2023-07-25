@@ -1,5 +1,5 @@
 {
-  "version": "0.0.1-alpha.59",
+  "version": "0.0.1-alpha.60",
   "packages": [
     "src/angular",
     "src/html",

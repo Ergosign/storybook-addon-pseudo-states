@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.0.1-alpha.60 (2023-07-25)
+
+
+### Bug Fixes
+
+* **angular, vue:** peerDependencies pipe ([2137112](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/2137112ed3d062579bf77a48bda5644d5149f06d))
+
+
+
+
+
 ## 0.0.1-alpha.59 (2022-03-07)
 
 **Note:** Version bump only for package @ergosign/storybook-addon-pseudo-states-angular
