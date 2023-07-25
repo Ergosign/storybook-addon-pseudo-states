@@ -1,0 +1,63 @@
+{
+  "name": "@ergosign/storybook-addon-pseudo-states-svelte",
+  "version": "0.0.1-alpha.59",
+  "description": "Storybook decorator to enable automatic generation and displaying of CSS pseudo states for components.",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch --outDir dist",
+    "pack": "npm pack"
+  },
+  "peerDependencies": {
+    "@storybook/addons": "^7",
+    "@storybook/api": "^7",
+    "@storybook/components": "^7",
+    "@storybook/core-events": "^7",
+    "@storybook/node-logger": "^7",
+    "@sveltejs/kit": "^1.20.4",
+    "svelte": "^4.0.0",
+    "postcss-pseudo-classes": "git+https://github.com/philippone/postcss-pseudo-classes.git"
+  },
+  "author": "philippone",
+  "license": "MIT",
+  "main": "dist/react/public-api.js",
+  "browser": "dist/react/public-api.js",
+  "types": "dist/react/public-api.d.ts",
+  "files": [
+    "dist/**/*",
+    "docs/**/*",
+    "README.md",
+    "**/*.js",
+    "**/*.d.ts"
+  ],
+  "keywords": [
+    "storybook",
+    "storybookjs",
+    "addon",
+    "decorator",
+    "pseudo states",
+    "css",
+    "svelte",
+    "components",
+    "tool",
+    "ui",
+    "user interface",
+    "storybook-addon",
+    "style"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ergosign/storybook-addon-pseudo-states"
+  },
+  "directories": {
+    "test": "test",
+    "dist": "dist"
+  },
+  "publishConfig": {
+    "access": "public",
+    "scope": "@ergosign"
+  },
+  "storybook": {
+    "icon": "https://avatars2.githubusercontent.com/u/12492523?s=200&v=4",
+    "displayName": "Pseudo states for Svelte"
+  }
+}
