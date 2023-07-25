@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.0.1-alpha.61 (2023-07-25)
+
+
+### Bug Fixes
+
+* **angular, html, lit, react, vue:** peerDependencies >= tested version ([517e010](https://github.com/Ergosign/storybook-addon-pseudo-states/commit/517e010c68d9238c5c45053d536d284a1875d266))
+
+
+
+
+
 ## 0.0.1-alpha.60 (2023-07-25)
 
 
